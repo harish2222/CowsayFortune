@@ -52,7 +52,6 @@ Describe "Module Loading" {
 
 Describe "Config System" {
     BeforeAll {
-        $modulePath = Split-Path $PSScriptRoot -Parent
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
