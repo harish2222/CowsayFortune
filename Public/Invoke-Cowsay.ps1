@@ -109,6 +109,16 @@ function Invoke-Cowsay {
         $result = $newLines -join "`n"
     }
 
-        return "$message`n$result"
+    $output = "$message`n$result"
+
+    # Apply lolcat if enabled in config
+    $config2 = Get-CFConfig
+    if ($config2.lolcat -and $config2.lolcat.enabled) {
+        $output = Format-Lolcat -Text $output `
+            -Frequency $config2.lolcat.frequency `
+            -Truecolor:$config2.lolcat.truecolor
+    }
+
+    return $output
     }
 }
