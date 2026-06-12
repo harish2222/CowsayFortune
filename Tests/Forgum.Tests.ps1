@@ -2,7 +2,7 @@
 
 Describe "Module Loading" {
     BeforeAll {
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force -ErrorVariable errors
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force -ErrorVariable errors
     }
 
     It "loads without errors" {
@@ -53,7 +53,7 @@ Describe "Module Loading" {
 Describe "Config System" {
     BeforeAll {
         $modulePath = Split-Path $PSScriptRoot -Parent
-        Import-Module $modulePath -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
     Context "Default config" {
@@ -147,7 +147,7 @@ Describe "Config System" {
 
 Describe "Fortune System" {
     BeforeAll {
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
     It "returns a fortune" {
@@ -188,7 +188,7 @@ Describe "Fortune System" {
 
 Describe "Cow System" {
     BeforeAll {
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
     Context "Cow listing" {
@@ -293,7 +293,7 @@ Describe "Cow System" {
 
 Describe "Combined Forgum" {
     BeforeAll {
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
     It "outputs cowsay with fortune" {
@@ -323,7 +323,7 @@ Describe "Combined Forgum" {
 
 Describe "Lolcat Colorization" {
     BeforeAll {
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
     It "produces colored output when enabled with all options" {
@@ -361,7 +361,7 @@ Describe "Lolcat Colorization" {
         $config.lolcat.frequency = 0.1
         Set-CFConfig -Config $config
 
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
         $output = Invoke-Forgum
         $output | Should -Not -BeNullOrEmpty
         $esc = [char]27
@@ -379,7 +379,7 @@ Describe "Lolcat Colorization" {
         $config.lolcat.enabled = $false
         Set-CFConfig -Config $config
 
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
         $output = Invoke-Forgum
         $esc = [char]27
         $hasAnsi = $output -match "${esc}\[[0-9;]*m"
@@ -391,7 +391,7 @@ Describe "Lolcat Colorization" {
 
 Describe "Animation System" {
     BeforeAll {
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
     It "Show-CFAnimation runs without error" {
@@ -409,7 +409,7 @@ Describe "Animation System" {
 
 Describe "Security" {
     BeforeAll {
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
     It "does not execute code from cow files" {
@@ -433,7 +433,7 @@ Describe "Security" {
 
 Describe "Edge Cases" {
     BeforeAll {
-        Import-Module (Split-Path $PSScriptRoot -Parent) -Force
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
     }
 
     It "handles unicode in message" {
