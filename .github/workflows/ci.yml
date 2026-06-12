@@ -3,12 +3,14 @@ name: CI
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
 
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
         pwsh: ['7.4', '7.5']
@@ -29,8 +31,9 @@ jobs:
       - name: Install Pester
         shell: pwsh
         run: |
-          if ((Get-Module -ListAvailable -Name Pester).Version.Major -lt 5) {
-            Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser -MinimumVersion 5.0.0
+          $installed = Get-Module -ListAvailable -Name Pester | Sort-Object Version -Descending | Select-Object -First 1
+          if (-not $installed -or $installed.Version.Major -lt 3) {
+            Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser -MinimumVersion 3.0.0 -MaximumVersion 4.99.99
           }
 
       - name: Run Pester Tests
@@ -52,7 +55,7 @@ jobs:
         shell: pwsh
         run: |
           if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer)) {
-            Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+            Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -MinimumVersion 1.20.0
           }
 
       - name: Run PSScriptAnalyzer
@@ -75,9 +78,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get version from tag
+        id: version
+        run: echo "tag=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          name: "CowsayFortune v${{ steps.version.outputs.tag }}"
           generate_release_notes: true
           files: |
             CowsayFortune/**

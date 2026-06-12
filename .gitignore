@@ -1,5 +1,7 @@
 # PowerShell
 *.ps1xml
+*.psm1.backup
+*.psd1.backup
 
 # Editor
 .vscode/
@@ -7,22 +9,40 @@
 *.swp
 *.swo
 *~
+*.sublime-project
+*.sublime-workspace
 
 # OS
 .DS_Store
 Thumbs.db
 desktop.ini
+ehthumbs.db
 
 # Module artifacts
 *.nupkg
 *.snupkg
 modules/
 packages/
+*.nuspec
 
 # Test artifacts
 testResults/
 coverage/
 *.codecov
+PesterArtifacts/
 
 # Config (user-specific, not distributed)
 config.json
+config.json.bak
+
+# Graphify
+graphify-out/
+
+# Fastfetch
+fastfetch config/
+
+# Temp / scratch
+*.tmp
+*.temp
+~$*
+
