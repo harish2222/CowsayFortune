@@ -40,6 +40,11 @@ function Format-Lolcat {
             # Pass through ANSI escape sequences unchanged
             if ([int][char]$char -eq 27) {
                 [void]$sb.Append($char)
+                # Consume the rest of the CSI sequence (until a letter terminator)
+                for ($j = $i + 1; $j -lt $line.Length; $j++) {
+                    [void]$sb.Append($line[$j])
+                    if ($line[$j] -match '[A-Za-z]') { $i = $j; break }
+                }
                 continue
             }
 
@@ -55,7 +60,10 @@ function Format-Lolcat {
                 [void]$sb.Append("`e[38;2;${red};${green};${blue}m${char}")
             }
             else {
-                $color256 = ($red * 36 + $green * 6 + $blue) % 256
+                $r6 = [Math]::Floor($red / 255 * 5)
+                $g6 = [Math]::Floor($green / 255 * 5)
+                $b6 = [Math]::Floor($blue / 255 * 5)
+                $color256 = 16 + 36 * $r6 + 6 * $g6 + $b6
                 [void]$sb.Append("`e[38;5;${color256}m${char}")
             }
         }

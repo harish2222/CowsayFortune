@@ -13,6 +13,7 @@ function Show-CFAnimation {
         Show-CFAnimation -CowOutput $cow -Message "Hello"
     #>
     [CmdletBinding()]
+    [OutputType([string])]
     param(
         [Parameter(Mandatory)]
         [string]$CowOutput,

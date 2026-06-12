@@ -15,10 +15,12 @@ function Set-CFConfig {
     .EXAMPLE
         Set-CFConfig -Config @{ lolcat = @{ enabled = $true }; cow = @{ file = 'tux' } }
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
+    [OutputType([void])]
     param(
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
+        [ValidateScript({ $_ -is [hashtable] -or $_ -is [PSCustomObject] })]
         $Config
     )
 
@@ -29,18 +31,20 @@ function Set-CFConfig {
         New-Item -ItemType Directory -Path $dir -Force -ErrorAction Stop | Out-Null
     }
 
-    # Convert to JSON with sufficient depth
-    $json = $Config | ConvertTo-Json -Depth 10
+    if ($PSCmdlet.ShouldProcess($path, 'Save configuration')) {
+        # Convert to JSON with sufficient depth
+        $json = $Config | ConvertTo-Json -Depth 10
 
-    # Atomic write: write to temp file then move (prevents corruption on crash)
-    $tempPath = "$path.tmp"
-    try {
-        $json | Set-Content -Path $tempPath -Encoding UTF8 -Force -ErrorAction Stop
-        Move-Item -Path $tempPath -Destination $path -Force -ErrorAction Stop
-    }
-    catch {
-        if (Test-Path $tempPath) { Remove-Item $tempPath -Force -ErrorAction SilentlyContinue }
-        throw
+        # Atomic write: write to temp file then move (prevents corruption on crash)
+        $tempPath = "$path.tmp"
+        try {
+            $json | Set-Content -Path $tempPath -Encoding UTF8 -Force -ErrorAction Stop
+            Move-Item -Path $tempPath -Destination $path -Force -ErrorAction Stop
+        }
+        catch {
+            if (Test-Path $tempPath) { Remove-Item $tempPath -Force -ErrorAction SilentlyContinue }
+            throw
+        }
     }
 
     # Invalidate cache

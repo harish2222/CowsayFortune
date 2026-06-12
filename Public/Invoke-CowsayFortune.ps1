@@ -21,6 +21,7 @@ function Invoke-CowsayFortune {
         Shows tux thinking a fortune.
     #>
     [CmdletBinding()]
+    [OutputType([string])]
     param(
         [switch]$Think,
 
@@ -44,7 +45,7 @@ function Invoke-CowsayFortune {
 
     $cowOutput = Invoke-Cowsay @cowParams
 
-    if ($config.lolcat.enabled) {
+    if ($config.lolcat -and $config.lolcat.enabled) {
         $cowOutput = Format-Lolcat -Text $cowOutput `
             -Frequency $config.lolcat.frequency `
             -Truecolor:$config.lolcat.truecolor

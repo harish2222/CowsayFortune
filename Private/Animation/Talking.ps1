@@ -23,7 +23,7 @@ function Invoke-TalkingAnimation {
     # Find the eye line (contains the mouth pattern in default cow)
     $eyeLineIndex = -1
     for ($i = 0; $i -lt $cowLines.Count; $i++) {
-        if ($cowLines[$i] -match '\\.*\(@@\)') {
+        if ($cowLines[$i] -match '\\.*\([^)]{2}\)') {
             $eyeLineIndex = $i
             break
         }
@@ -41,7 +41,7 @@ function Invoke-TalkingAnimation {
             $line = $cowLines[$i]
             if ($i -eq $eyeLineIndex) {
                 # Replace the eye pattern with the current mouth frame
-                $line = $line -replace '\(@@\)', "($mouth$mouth)"
+                $line = $line -replace '\(([^)]{2})\)', "($mouth$mouth)"
             }
             [void]$sb.Append($line)
         }

@@ -13,6 +13,7 @@ function Get-CFConfig {
         Returns just the lolcat enabled setting.
     #>
     [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param()
 
     # Return cached config if still valid

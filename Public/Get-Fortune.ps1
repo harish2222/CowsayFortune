@@ -15,12 +15,18 @@ function Get-Fortune {
         Returns a random fortune from the specified database.
     #>
     [CmdletBinding()]
+    [OutputType([string])]
     param(
         [ValidateNotNullOrEmpty()]
         [string]$Database = 'fortunes'
     )
 
     $fortunePath = Join-Path (Split-Path $PSScriptRoot -Parent) "Data/Fortunes/$Database.txt"
+    $resolvedPath = [System.IO.Path]::GetFullPath($fortunePath)
+    $baseDir = [System.IO.Path]::GetFullPath((Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Fortunes'))
+    if (-not $resolvedPath.StartsWith($baseDir)) {
+        throw "Invalid database name: $Database"
+    }
 
     if (-not (Test-Path $fortunePath)) {
         throw "Fortune database not found: $Database (looked at $fortunePath)"

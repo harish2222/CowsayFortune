@@ -1,0 +1,28 @@
+# PowerShell
+*.ps1xml
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Module artifacts
+*.nupkg
+*.snupkg
+modules/
+packages/
+
+# Test artifacts
+testResults/
+coverage/
+*.codecov
+
+# Config (user-specific, not distributed)
+config.json

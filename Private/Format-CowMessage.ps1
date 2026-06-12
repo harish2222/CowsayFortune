@@ -13,9 +13,7 @@ function Format-CowMessage {
         [string]$Text,
 
         [ValidateRange(20, 200)]
-        [int]$MaxWidth = 60,
-
-        [switch]$Think
+        [int]$MaxWidth = 60
     )
 
     # Normalize line endings
@@ -66,14 +64,13 @@ function Format-CowMessage {
     }
 
     # Build balloon
-    $padding = ' ' * ($maxLength + 2)
     $result = [System.Collections.Generic.List[string]]::new()
     $result.Add(" $('_' * ($maxLength + 2))")
 
-    $openChar  = if ($Think) { '(' } else { '<' }
-    $closeChar = if ($Think) { ')' } else { '>' }
-    $midOpen   = if ($Think) { '(' } else { '|' }
-    $midClose  = if ($Think) { ')' } else { '|' }
+    $openChar  = '<'
+    $closeChar = '>'
+    $midOpen   = '|'
+    $midClose  = '|'
 
     if ($lines.Count -eq 1) {
         $pad = ' ' * ($maxLength - $lines[0].Length)

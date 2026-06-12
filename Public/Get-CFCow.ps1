@@ -15,6 +15,7 @@ function Get-CFCow {
         Returns the parsed template for the tux cow.
     #>
     [CmdletBinding()]
+    [OutputType([string[]])]
     param(
         [ValidateNotNullOrEmpty()]
         [string]$Name

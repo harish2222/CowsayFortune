@@ -16,11 +16,8 @@ function Invoke-TypewriterAnimation {
 
     $lines = $CowOutput -split "`n"
     foreach ($line in $lines) {
-        $chars = $line.ToCharArray()
-        $sb = [System.Text.StringBuilder]::new($chars.Length)
-        foreach ($char in $chars) {
+        foreach ($char in $line.ToCharArray()) {
             Write-Host -NoNewline $char
-            [void]$sb.Append($char)
             Start-Sleep -Milliseconds $Speed
         }
         Write-Host ''

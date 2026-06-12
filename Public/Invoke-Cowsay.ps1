@@ -23,6 +23,7 @@ function Invoke-Cowsay {
         Invoke-Cowsay -Text "Tux says hi" -CowFile 'tux'
     #>
     [CmdletBinding()]
+    [OutputType([string])]
     param(
         [Parameter(ValueFromPipeline)]
         [AllowEmptyString()]
@@ -32,8 +33,10 @@ function Invoke-Cowsay {
         [string]$CowFile = 'default',
 
         [ValidateNotNullOrEmpty()]
+        [ValidateLength(2,2)]
         [string]$Eyes = 'oo',
 
+        [ValidateLength(2,2)]
         [string]$Tongue = '  ',
 
         [string]$Thoughts = '\'
@@ -44,7 +47,9 @@ function Invoke-Cowsay {
     # Resolve random cow if configured
     if ($config.cow.random) {
         $cowsPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Cows'
-        $CowFile = (Get-ChildItem -Path $cowsPath -Filter '*.cow' | Get-Random).BaseName
+        $cowFiles = Get-ChildItem -Path $cowsPath -Filter '*.cow' -ErrorAction SilentlyContinue
+        if (-not $cowFiles) { throw "No cow files found in $cowsPath" }
+        $CowFile = ($cowFiles | Get-Random).BaseName
     }
 
     # Resolve cow mode presets (eyes/tongue overrides)
@@ -60,8 +65,8 @@ function Invoke-Cowsay {
             'y' = @{ eyes = '..'; tongue = '  ' }
         }
         if ($modes.ContainsKey($config.cow.mode)) {
-            $Eyes   = $modes[$config.cow.mode].eyes
-            $Tongue = $modes[$config.cow.mode].tongue
+            if (-not $PSBoundParameters.ContainsKey('Eyes'))   { $Eyes   = $modes[$config.cow.mode].eyes }
+            if (-not $PSBoundParameters.ContainsKey('Tongue')) { $Tongue = $modes[$config.cow.mode].tongue }
         }
     }
     else {

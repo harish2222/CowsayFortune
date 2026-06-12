@@ -1,11 +1,11 @@
 # CowsayFortune
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version">
-  <img src="https://img.shields.io/badge/powershell-5.1%2B-blue.svg" alt="PowerShell">
-  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
-  <img src="https://img.shields.io/badge/tests-66%20passing-brightgreen.svg" alt="Tests">
-  <img src="https://img.shields.io/badge/cows-190-orange.svg" alt="Cows">
+  <a href="https://github.com/harish2222/CowsayFortune/releases"><img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version"></a>
+  <a href="https://github.com/harish2222/CowsayFortune"><img src="https://img.shields.io/badge/powershell-5.1%2B-blue.svg" alt="PowerShell"></a>
+  <a href="https://github.com/harish2222/CowsayFortune/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
+  <a href="https://github.com/harish2222/CowsayFortune/actions"><img src="https://img.shields.io/badge/tests-66%20passing-brightgreen.svg" alt="Tests"></a>
+  <a href="https://github.com/harish2222/CowsayFortune"><img src="https://img.shields.io/badge/cows-190-orange.svg" alt="Cows"></a>
 </p>
 
 <p align="center">
@@ -20,19 +20,19 @@
 **One-liner install (PowerShell):**
 
 ```powershell
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/HKDEVS/CowsayFortune/main/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/harish2222/CowsayFortune/main/install.ps1'))
 ```
 
 **One-liner install (Bash/Zsh):**
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/HKDEVS/CowsayFortune/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/harish2222/CowsayFortune/main/install.sh)
 ```
 
 **Manual install:**
 
 ```powershell
-git clone https://github.com/HKDEVS/CowsayFortune.git
+git clone https://github.com/harish2222/CowsayFortune.git
 Import-Module ./CowsayFortune/CowsayFortune.psd1
 ```
 
@@ -195,14 +195,11 @@ Config file locations:
 Add to your shell config:
 
 ```bash
-# Bash (~/.bashrc)
-source /path/to/CowsayFortune/Scripts/cowsayfortune.sh
+# Bash (~/.bashrc) - add after importing CowsayFortune
+fortune | cowsay -f $( cowsay -l | shuf -n1 )
 
-# Zsh (~/.zshrc)
-source /path/to/CowsayFortune/Scripts/cowsayfortune.zsh
-
-# Fish (~/.config/fish/config.fish)
-source /path/to/CowsayFortune/Scripts/cowsayfortune.fish
+# Or use the PowerShell module directly from bash
+pwsh -Command "Import-Module CowsayFortune; Invoke-CowsayFortune"
 ```
 
 ### tmux Integration
@@ -210,7 +207,7 @@ source /path/to/CowsayFortune/Scripts/cowsayfortune.fish
 Add to `~/.tmux.conf`:
 
 ```
-set -g status-right "#(bash /path/to/Scripts/tmux-cowsayfortune.sh)"
+set -g status-right "#(pwsh -Command 'Import-Module CowsayFortune; Get-Fortune' 2>/dev/null)"
 set -g status-interval 300
 ```
 
@@ -253,13 +250,11 @@ CowsayFortune/
 ├── CowsayFortune.psm1          # Entry point with caching
 ├── Public/                      # 7 exported functions
 ├── Private/                     # Internal functions + cache
-│   ├── Animation/               # Static, Talking, Typewriter
-│   └── Security/                # (reserved)
+│   └── Animation/               # Static, Talking, Typewriter
 ├── Data/
 │   ├── Cows/                    # 190 .cow files
 │   ├── Fortunes/                # Fortune database
 │   └── Templates/               # Default config
-├── Scripts/                     # Shell wrappers
 ├── Tests/                       # 66 Pester tests
 ├── install.ps1                  # Fun PowerShell installer
 ├── install.sh                   # Fun bash installer
