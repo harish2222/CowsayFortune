@@ -1,18 +1,16 @@
+<h1 align="center">
+  <code style="color: #FF6B6B; font-size: 48px;">F O R G U M</code>
+</h1>
+
 <p align="center">
-  <img src="assets/logo.png" alt="Forgum" width="400">
+  <b style="color: #FF9A3C;">fortune</b> + <b style="color: #FFD93D;">cow</b> + <b style="color: #6BCB77;">rainbow</b> = <b style="color: #4D96FF;">joy</b>
 </p>
 
-<h1 align="center">Forgum</h1>
-
 <p align="center">
-  <b>fortune + cow + rainbow = joy</b>
-</p>
-
-<p align="center">
-  <a href="https://github.com/harish2222/Forgum/releases"><img src="https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge" alt="Version"></a>
-  <a href="https://github.com/harish2222/Forgum"><img src="https://img.shields.io/badge/powershell-5.1+-blueviolet?style=for-the-badge&logo=powershell&logoColor=white" alt="PowerShell"></a>
-  <a href="https://github.com/harish2222/Forgum/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" alt="License"></a>
-  <a href="https://github.com/harish2222/Forgum/actions"><img src="https://img.shields.io/badge/tests-67%20passing-brightgreen?style=for-the-badge" alt="Tests"></a>
+  <a href="https://github.com/harish2222/CowsayFortune/releases"><img src="https://img.shields.io/badge/version-1.0.1-blue?style=for-the-badge" alt="Version"></a>
+  <a href="https://github.com/harish2222/CowsayFortune"><img src="https://img.shields.io/badge/powershell-5.1+-blueviolet?style=for-the-badge&logo=powershell&logoColor=white" alt="PowerShell"></a>
+  <a href="https://github.com/harish2222/CowsayFortune/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" alt="License"></a>
+  <a href="https://github.com/harish2222/CowsayFortune/actions"><img src="https://img.shields.io/badge/tests-67%20passing-brightgreen?style=for-the-badge" alt="Tests"></a>
   <a href="#-cows"><img src="https://img.shields.io/badge/cows-107-orange?style=for-the-badge" alt="Cows"></a>
   <a href="#-rainbow"><img src="https://img.shields.io/badge/rainbow-lolcat-pink?style=for-the-badge" alt="Lolcat"></a>
 </p>
@@ -65,18 +63,24 @@
 
 **With rainbow lolcat**
 
-```
-  ╭─────────────────────────────────╮
-  │ Code is like humor. When you    │
-  │ have to explain it, it's bad.   │
-  ╰─────────────────────────────────╯
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\
-                ||----w |
-```
-
-*(imagine this in rainbow colors)*
+<p align="center">
+  <img src="https://img.shields.io/badge/╭─────────────────────────────────╮-gray?style=flat-square" alt="">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Code_is_like_humor._When_you-FF6B6B?style=flat-square" alt="">
+  <img src="https://img.shields.io/badge/have_to_explain_it,_it's_bad.-FFD93D?style=flat-square" alt="">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/╰─────────────────────────────────╯-gray?style=flat-square" alt="">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/🌈_Truecolor_24-bit_rainbow-FF6B6B?style=for-the-badge" alt="">
+  <img src="https://img.shields.io/badge/🌈_256-color_support-FF9A3C?style=for-the-badge" alt="">
+  <img src="https://img.shields.io/badge/🌈_Configurable_frequency-FFD93D?style=for-the-badge" alt="">
+  <img src="https://img.shields.io/badge/🌈_Invert_colors-6BCB77?style=for-the-badge" alt="">
+  <img src="https://img.shields.io/badge/🌈_Per-line_coloring-4D96FF?style=for-the-badge" alt="">
+  <img src="https://img.shields.io/badge/🌈_Smooth_gradient-9B59B6?style=for-the-badge" alt="">
+</p>
 
 </td>
 </tr>
@@ -89,19 +93,19 @@
 ### One-liner (PowerShell)
 
 ```powershell
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/harish2222/Forgum/main/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/harish2222/CowsayFortune/main/install.ps1'))
 ```
 
 ### One-liner (Bash/Zsh/Fish)
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/harish2222/Forgum/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/harish2222/CowsayFortune/main/install.sh)
 ```
 
 ### Manual
 
 ```powershell
-git clone https://github.com/harish2222/Forgum.git
+git clone https://github.com/harish2222/CowsayFortune.git
 Import-Module ./Forgum/Forgum.psd1
 ```
 
