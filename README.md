@@ -5,7 +5,7 @@
   <a href="https://github.com/harish2222/CowsayFortune"><img src="https://img.shields.io/badge/powershell-5.1%2B-blue.svg" alt="PowerShell"></a>
   <a href="https://github.com/harish2222/CowsayFortune/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
   <a href="https://github.com/harish2222/CowsayFortune/actions"><img src="https://img.shields.io/badge/tests-66%20passing-brightgreen.svg" alt="Tests"></a>
-  <a href="https://github.com/harish2222/CowsayFortune"><img src="https://img.shields.io/badge/cows-190-orange.svg" alt="Cows"></a>
+  <a href="https://github.com/harish2222/CowsayFortune"><img src="https://img.shields.io/badge/cows-107-orange.svg" alt="Cows"></a>
 </p>
 
 <p align="center">
@@ -40,7 +40,7 @@ Import-Module ./CowsayFortune/CowsayFortune.psd1
 
 ## Features
 
-- **190 cow files** - From the original piuccio/cowsay collection
+- **107 animal cow files** - Curated animal-only collection from piuccio/cowsay
 - **Fortune database** - Thousands of classic quotes
 - **Lolcat rainbow** - Truecolor (24-bit) and 256-color support
 - **3 animation modes** - Static, talking, typewriter
@@ -63,7 +63,7 @@ Invoke-Cowsay -Text "Hello, World!"
 # Get a random fortune
 Get-Fortune
 
-# List all 190 available cows
+# List all 107 available cows
 Get-CFCow
 
 # Use a specific cow
@@ -252,7 +252,7 @@ CowsayFortune/
 ├── Private/                     # Internal functions + cache
 │   └── Animation/               # Static, Talking, Typewriter
 ├── Data/
-│   ├── Cows/                    # 190 .cow files
+│   ├── Cows/                    # 107 animal .cow files
 │   ├── Fortunes/                # Fortune database
 │   └── Templates/               # Default config
 ├── Tests/                       # 66 Pester tests

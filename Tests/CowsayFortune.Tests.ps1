@@ -437,7 +437,7 @@ Describe "Edge Cases" {
         Set-CFConfig -Config $config
     }
 
-    It "all 190 cows can be loaded and rendered" {
+    It "all 107 cows can be loaded and rendered" {
         $cows = @(Get-CFCow)
         $failed = @()
         foreach ($cow in $cows) {

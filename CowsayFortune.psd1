@@ -5,7 +5,7 @@
     Author            = 'HKDEVS'
     CompanyName       = 'HKDEVS'
     Copyright         = '(c) 2026 HKDEVS. All rights reserved.'
-    Description       = 'Cross-platform cowsay + fortune + lolcat PowerShell module with 190 cows, rainbow colors, animations, and multi-shell integration.'
+    Description       = 'Cross-platform cowsay + fortune + lolcat PowerShell module with 107 animal cows, rainbow colors, animations, and multi-shell integration.'
     PowerShellVersion = '5.1'
     FunctionsToExport = @(
         'Invoke-Cowsay'
@@ -25,7 +25,7 @@
             LicenseUri   = 'https://github.com/harish2222/CowsayFortune/blob/main/LICENSE'
             ProjectUri   = 'https://github.com/harish2222/CowsayFortune'
             IconUri      = 'https://raw.githubusercontent.com/harish2222/CowsayFortune/main/icon.png'
-            ReleaseNotes = 'Initial release with 190 cows, lolcat rainbow, 3 animation modes, multi-shell integration.'
+            ReleaseNotes = 'Initial release with 107 animal cows, lolcat rainbow, 3 animation modes, multi-shell integration.'
         }
     }
 }
