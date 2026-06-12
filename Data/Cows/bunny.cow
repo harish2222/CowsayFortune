@@ -1,10 +1,12 @@
 ##
-## A cute little wabbit
+## Bunny - A cute little wabbit (well-defined)
 ##
 $the_cow = <<EOC;
-  $thoughts
-   $thoughts   \\
-        \\ /\\
-        ( )
-      .( o ).
+   $thoughts
+    $thoughts   \\
+         \\ /\\
+         ( )
+       .( o ).
+      / /   \\ \\
+     (_/     \\_)
 EOC

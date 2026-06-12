@@ -252,8 +252,8 @@ Describe "Cow System" {
         It "renders speech bubble borders" {
             $output = Invoke-Cowsay -Text "Test"
             $raw = $output -replace '\x1b\[[0-9;]*m', ''
-            $raw | Should Match '_______'
-            $raw | Should Match '-----'
+            $raw | Should Match '#####'
+            $raw | Should Match '\|\|'
         }
 
         It "supports thinking mode" {

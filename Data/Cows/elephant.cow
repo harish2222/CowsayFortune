@@ -1,15 +1,15 @@
 ##
-## An elephant out and about
+## Elephant (well-defined)
 ##
 $the_cow = <<EOC;
- $thoughts     /\\  ___  /\\
-  $thoughts   // \\/   \\/ \\\\
-     ((    $eye $eye    ))
-      \\\\ /     \\ //
-       \\/  | |  \\/ 
-        |  | |  |  
-        |  | |  |  
-        |   o   |  
-        | |   | |  
-        |m|   |m|  
+  $thoughts     /\\  ___  /\\
+   $thoughts   // \\/   \\/ \\\\
+      ((    $eye $eye    ))
+       \\ /     \\ //
+        \\  | |  \\/
+         | | | | |
+         | | | | |
+         |  o o  |
+         | |   | |
+         |m|   |m|
 EOC

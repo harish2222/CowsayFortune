@@ -4,7 +4,7 @@ function Format-CowMessage {
         Formats text into a speech balloon with word wrapping.
     .DESCRIPTION
         Wraps text at MaxWidth characters and renders it inside a
-        classic ASCII speech balloon with top/bottom borders.
+        speech balloon with clean ASCII borders.
     #>
     [CmdletBinding()]
     param(
@@ -16,10 +16,8 @@ function Format-CowMessage {
         [int]$MaxWidth = 60
     )
 
-    # Normalize line endings
     $Text = $Text -replace "`r`n", "`n"
 
-    # Word-wrap using System.Text.StringBuilder for performance
     $lines = [System.Collections.Generic.List[string]]::new()
     $paragraphs = $Text -split '\n'
 
@@ -34,7 +32,6 @@ function Format-CowMessage {
 
         foreach ($word in $words) {
             if ($word.Length -eq 0) { continue }
-
             $currentLen = $sb.Length
             if ($currentLen -eq 0) {
                 [void]$sb.Append($word)
@@ -57,41 +54,30 @@ function Format-CowMessage {
         $lines.Add('')
     }
 
-    # Find max line length
     $maxLength = 0
     foreach ($line in $lines) {
         if ($line.Length -gt $maxLength) { $maxLength = $line.Length }
     }
 
-    # Build balloon
+    # Clean ASCII balloon with double-line top/bottom
     $result = [System.Collections.Generic.List[string]]::new()
-    $result.Add(" $('_' * ($maxLength + 2))")
+    $topBorder = '#' * ($maxLength + 4)
+    $sideBorder = '||'
 
-    $openChar  = '<'
-    $closeChar = '>'
-    $midOpen   = '|'
-    $midClose  = '|'
+    $result.Add("  $topBorder")
 
     if ($lines.Count -eq 1) {
         $pad = ' ' * ($maxLength - $lines[0].Length)
-        $result.Add("$openChar $($lines[0])$pad $closeChar")
+        $result.Add("  $sideBorder $($lines[0])$pad $sideBorder")
     }
     else {
         for ($i = 0; $i -lt $lines.Count; $i++) {
             $pad = ' ' * ($maxLength - $lines[$i].Length)
-            if ($i -eq 0) {
-                $result.Add("/ $($lines[$i])$pad \")
-            }
-            elseif ($i -eq $lines.Count - 1) {
-                $result.Add("\ $($lines[$i])$pad /")
-            }
-            else {
-                $result.Add("$midOpen $($lines[$i])$pad $midClose")
-            }
+            $result.Add("  $sideBorder $($lines[$i])$pad $sideBorder")
         }
     }
 
-    $result.Add(" $('-' * ($maxLength + 2))")
+    $result.Add("  $topBorder")
 
     return ($result -join "`n")
 }
