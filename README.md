@@ -220,6 +220,103 @@ Import-Module CowsayFortune
 Invoke-CowsayFortune  # Show fortune on shell start
 ```
 
+## Customization
+
+### Quick Config Functions
+
+Add these to your `$PROFILE` for quick access:
+
+```powershell
+# Quick config access
+function cowconfig {
+  param([string]$Path, [object]$Value)
+  $config = Get-CFConfig
+  if ($Path) {
+    $parts = $Path -split '\.'
+    $current = $config
+    foreach ($part in $parts[0..($parts.Length-2)]) { $current = $current.$part }
+    if ($Value) { $current.$parts[-1] = $Value; Set-CFConfig -Config $config }
+    else { $current.$parts[-1] }
+  } else { $config | ConvertTo-Json -Depth 4 }
+}
+
+# Quick cow preview
+function cowpreview {
+  param([string]$Cow = 'default', [string]$Text = 'Hello!')
+  Invoke-Cowsay -Text $Text -CowFile $Cow
+}
+
+# Random cow gallery
+function cowgallery {
+  param([int]$Count = 5)
+  Get-CFCow | Get-Random -Count $Count | ForEach-Object {
+    Invoke-Cowsay -Text (Get-Fortune) -CowFile $_.Name
+  }
+}
+
+# Toggle lolcat
+function lolcat-toggle {
+  $config = Get-CFConfig
+  $config.lolcat.enabled = -not $config.lolcat.enabled
+  Set-CFConfig -Config $config
+  Write-Host "Lolcat: $(if ($config.lolcat.enabled) {'ON'} else {'OFF'})"
+}
+
+# Set animation mode
+function cow-animate {
+  param([ValidateSet('static','talking','typewriter')]$Mode)
+  $config = Get-CFConfig
+  $config.animation.mode = $Mode
+  Set-CFConfig -Config $config
+  Write-Host "Animation: $Mode"
+}
+
+# Cow eyes preset
+function cow-eyes {
+  param(
+    [ValidateSet('borg','dead','greedy','paranoia','stoned','tired','wasted','youthful')]$Preset,
+    [string]$Custom
+  )
+  $eyes = switch ($Preset) {
+    'borg' {'=='}, 'dead' {'xx'}, 'greedy' {'$$'}, 'paranoia' {'@@'},
+    'stoned' {'**'}, 'tired' {'--'}, 'wasted' {'OO'}, 'youthful' {'..'}
+    default { $Custom }
+  }
+  $config = Get-CFConfig
+  $config.cow.eyes = $eyes
+  Set-CFConfig -Config $config
+  Write-Host "Cow eyes: $eyes"
+}
+```
+
+### Custom Cow Files
+
+Create your own `.cow` file in `Data/Cows/`:
+
+```perl
+$the_cow = <<EOC;
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||
+EOC
+```
+
+Use `$eyes`, `$tongue`, `$thoughts` for customizable parts.
+
+### Custom Fortune Database
+
+Add your own fortunes to `~/Documents/PowerShell/fortunes.txt`:
+
+```
+Your first fortune here
+%
+Your second fortune here
+%
+Your third fortune here
+```
+
 ## Testing
 
 ```powershell

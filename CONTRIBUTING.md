@@ -12,6 +12,7 @@ Thank you for your interest in contributing! This document provides guidelines a
 - [Testing](#testing)
 - [Pull Request Process](#pull-request-process)
 - [Adding Cows](#adding-cows)
+- [Customization Methods](#customization-methods)
 - [Reporting Bugs](#reporting-bugs)
 
 ## Code of Conduct
@@ -82,7 +83,7 @@ CowsayFortune/
 │       ├── Talking.ps1
 │       └── Typewriter.ps1
 ├── Data/
-│   ├── Cows/                    # 190 .cow files
+│   ├── Cows/                    # 107 .cow files
 │   ├── Fortunes/                # Fortune database
 │   └── Templates/               # Default config
 ├── Tests/                       # Pester tests
@@ -242,6 +243,173 @@ To add a new cow:
 3. Use `$eyes`, `$tongue`, `$thoughts` for customizable parts
 4. Test with: `Invoke-Cowsay -Text "Test" -CowFile 'your-cow'`
 5. Add to test suite
+
+## Customization Methods
+
+### Adding Custom Cow Files
+
+Create your own `.cow` file in `Data/Cows/`:
+
+```perl
+$the_cow = <<EOC;
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||
+EOC
+```
+
+**Template Variables:**
+- `$eyes` - Two-character eye string (default: `oo`)
+- `$tongue` - Two-character tongue string (default: `  `)
+- `$thoughts` - Thought bubble character (default: `\`)
+
+### Creating Custom Animation Modes
+
+Add a new animation in `Private/Animation/`:
+
+```powershell
+# Private/Animation/MyCustom.ps1
+function Invoke-MyCustomAnimation {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$CowOutput,
+        [string]$Message,
+        [hashtable]$Config
+    )
+
+    # Your animation logic here
+    # Write output using Write-Host or Write-Information
+}
+```
+
+Register in `Show-CFAnimation.ps1`:
+
+```powershell
+switch ($Config.animation.mode) {
+    'static'    { Invoke-StaticAnimation @params }
+    'talking'   { Invoke-TalkingAnimation @params }
+    'typewriter'{ Invoke-TypewriterAnimation @params }
+    'mycustom'  { Invoke-MyCustomAnimation @params }
+}
+```
+
+### Extending the Config Schema
+
+1. Add default values in `Data/Templates/default-config.json`:
+   ```json
+   {
+     "mySection": {
+       "myOption": "defaultValue"
+     }
+   }
+   ```
+
+2. Access in your functions:
+   ```powershell
+   $config = Get-CFConfig
+   $myValue = $config.mySection.myOption
+   ```
+
+3. Update with:
+   ```powershell
+   Set-CFConfig -Config $config
+   ```
+
+### Adding Custom Fortune Databases
+
+1. Create a new fortune file in `Data/Fortunes/`:
+   ```
+   Fortune 1
+   %
+   Fortune 2
+   %
+   Fortune 3
+   ```
+
+2. Access it:
+   ```powershell
+   Get-Fortune -Database 'mydatabase'
+   ```
+
+### Creating Shell Wrappers
+
+**Bash wrapper:**
+```bash
+#!/bin/bash
+# Save as /usr/local/bin/cowsayfortune
+pwsh -Command "Import-Module CowsayFortune; Invoke-CowsayFortune"
+```
+
+**Fish wrapper:**
+```fish
+# Save as ~/.config/fish/functions/cowsayfortune.fish
+function cowsayfortune
+    pwsh -Command "Import-Module CowsayFortune; Invoke-CowsayFortune"
+end
+```
+
+**Zsh wrapper:**
+```bash
+# Save as ~/.zshrc function
+cowsayfortune() {
+    pwsh -Command "Import-Module CowsayFortune; Invoke-CowsayFortune"
+}
+```
+
+### Adding Tab Completion
+
+Add to your profile:
+```powershell
+# Cow file tab completion
+Register-ArgumentCompleter -Native -CommandName Invoke-Cowsay -ScriptBlock {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+
+    $cows = Get-CFCow | Where-Object { $_ -like "$wordToComplete*" }
+    $cows | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new(
+            $_, $_, 'ParameterValue', $_
+        )
+    }
+}
+```
+
+### Custom Output Formats
+
+Create custom output formatters:
+
+```powershell
+function Format-CowJson {
+    param([string]$CowOutput, [string]$Message)
+
+    @{
+        message = $Message
+        cow = $CowOutput
+        timestamp = Get-Date -Format 'o'
+    } | ConvertTo-Json
+}
+```
+
+### Integration with Other Tools
+
+**VS Code task:**
+```json
+{
+    "label": "Show Fortune",
+    "type": "shell",
+    "command": "pwsh -Command \"Import-Module CowsayFortune; Invoke-CowsayFortune\""
+}
+```
+
+**Windows Terminal profile:**
+```json
+{
+    "commandline": "pwsh -NoExit -Command \"Import-Module CowsayFortune; Show-FortuneCow\"",
+    "name": "Cowsay Fortune"
+}
+```
 
 ## Reporting Bugs
 

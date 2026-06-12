@@ -5,6 +5,33 @@ All notable changes to CowsayFortune will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-06-12
+
+### Added
+
+- **Profile Customization Functions**
+  - `cowconfig` - Quick config access with dot notation
+  - `cowpreview` - Preview cows with custom text
+  - `cowgallery` - Browse random cows
+  - `lolcat-toggle` - Toggle rainbow colors
+  - `cow-animate` - Switch animation modes
+  - `cow-eyes` - Set cow eyes with presets
+
+- **Documentation**
+  - Comprehensive customization guide in README
+  - Advanced contributor customization methods
+  - Custom cow file creation guide
+  - Animation mode extension guide
+  - Shell wrapper examples
+  - Tab completion setup
+  - VS Code integration examples
+
+### Changed
+
+- Updated README with ghost-writing style
+- Enhanced CONTRIBUTING.md with customization methods
+- Improved profile integration with tab completion
+
 ## [1.0.0] - 2026-06-12
 
 ### Added

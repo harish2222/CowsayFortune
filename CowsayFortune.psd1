@@ -1,6 +1,6 @@
 @{
     RootModule        = 'CowsayFortune.psm1'
-    ModuleVersion     = '1.0.0'
+    ModuleVersion     = '1.1.0'
     GUID              = 'f7e6b3a1-2d84-4c9f-a5e0-1b3d7c8f9e2a'
     Author            = 'HKDEVS'
     CompanyName       = 'HKDEVS'
@@ -25,7 +25,7 @@
             LicenseUri   = 'https://github.com/harish2222/CowsayFortune/blob/main/LICENSE'
             ProjectUri   = 'https://github.com/harish2222/CowsayFortune'
             IconUri      = 'https://raw.githubusercontent.com/harish2222/CowsayFortune/main/icon.png'
-            ReleaseNotes = 'Initial release with 107 animal cows, lolcat rainbow, 3 animation modes, multi-shell integration.'
+            ReleaseNotes = 'v1.1.0: Added profile customization functions, comprehensive customization guide, advanced contributor methods.'
         }
     }
 }
