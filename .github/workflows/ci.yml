@@ -72,7 +72,8 @@ jobs:
             Write-Host "Expected at least 50 cow files" -ForegroundColor Red
             exit 1
           }
-          $fortuneCount = ((Get-Content ./Data/Fortunes/fortunes.txt -Raw) -split '^%$' | Where-Object { $_.Trim() }).Count
+          $fortuneRaw = Get-Content ./Data/Fortunes/fortunes.txt -Raw
+          $fortuneCount = ($fortuneRaw -split '%').Count
           Write-Host "Fortune entries: $fortuneCount"
           if ($fortuneCount -lt 1000) {
             Write-Host "Expected at least 1000 fortune entries" -ForegroundColor Red
