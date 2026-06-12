@@ -46,3 +46,5 @@ fastfetch config/
 *.temp
 ~$*
 
+# Test report (generated, not source)
+TEST_REPORT.md

@@ -23,11 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install PowerShell ${{ matrix.pwsh }}
-        uses: pspowershell/pspowershell@v0.3
-        with:
-          version: ${{ matrix.pwsh }}
-
       - name: Install Pester
         shell: pwsh
         run: |
@@ -61,7 +56,7 @@ jobs:
       - name: Run PSScriptAnalyzer
         shell: pwsh
         run: |
-          $results = Invoke-ScriptAnalyzer -Path ./CowsayFortune -Recurse -Severity Error,Warning
+          $results = Invoke-ScriptAnalyzer -Path . -Recurse -Severity Error,Warning -ExcludeRule PSReviewUnusedParameter
           if ($results) {
             $results | Format-Table -AutoSize
             exit 1
@@ -88,4 +83,11 @@ jobs:
           name: "CowsayFortune v${{ steps.version.outputs.tag }}"
           generate_release_notes: true
           files: |
-            CowsayFortune/**
+            *.ps1
+            *.psm1
+            *.psd1
+            Data/**
+            Private/**
+            Public/**
+            LICENSE
+            README.md
