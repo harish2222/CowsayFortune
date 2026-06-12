@@ -42,7 +42,7 @@ function Read-CowFile {
     }
 
     # Unescape Perl escape sequences (order matters: \\ before \@ and \$)
-    $content = $content -replace '\\\\', "`x5C"
+    $content = $content -replace '\\\\', '\'
     $content = $content -replace '\\@',  '@'
     $content = $content -replace '\\\$', '$'
 

@@ -1,6 +1,6 @@
 #Requires -Modules Pester
 
-$modulePath = Join-Path $PSScriptRoot '..' 'CowsayFortune'
+$modulePath = (Split-Path $PSScriptRoot -Parent)
 
 Describe "Module Loading" {
     BeforeAll {
@@ -173,12 +173,12 @@ Describe "Fortune System" {
     }
 
     It "can read the fortunes database file" {
-        $fortunePath = Join-Path (Split-Path $modulePath -Parent) 'CowsayFortune/Data/Fortunes/fortunes.txt'
+        $fortunePath = Join-Path $modulePath 'Data/Fortunes/fortunes.txt'
         Test-Path $fortunePath | Should Be $true
     }
 
     It "fortune file contains percent delimiters" {
-        $fortunePath = Join-Path (Split-Path $modulePath -Parent) 'CowsayFortune/Data/Fortunes/fortunes.txt'
+        $fortunePath = Join-Path $modulePath 'Data/Fortunes/fortunes.txt'
         $content = Get-Content $fortunePath -Raw
         $content | Should Match '%'
     }
