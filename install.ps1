@@ -1,13 +1,13 @@
 <#
 .SYNOPSIS
-    CowsayFortune Installer - Fun installation like oh-my-zsh!
+    Forgum Installer - Fun installation like oh-my-zsh!
 .DESCRIPTION
-    Installs CowsayFortune with a fun, interactive experience.
+    Installs Forgum with a fun, interactive experience.
     Checks for dependencies and installs them automatically.
 .EXAMPLE
     .\install.ps1
     # One-liner install:
-    pwsh -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/harish2222/CowsayFortune/main/install.ps1'))"
+    pwsh -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/harish2222/Forgum/main/install.ps1'))"
 #>
 
 [CmdletBinding()]
@@ -31,7 +31,7 @@ function Show-Banner {
     Write-Host ""
 
     $phrases = @(
-        "Moo! Let's install CowsayFortune!",
+        "Moo! Let's install Forgum!",
         "A cow approaches you with a fortune...",
         "The prophecy says: install me!",
         "I come in peace! (and with rainbows)",
@@ -85,12 +85,12 @@ if (Get-Module -ListAvailable -Name Pester) {
 }
 
 Write-Host ""
-Write-Host "  Installing CowsayFortune..." -ForegroundColor White
+Write-Host "  Installing Forgum..." -ForegroundColor White
 Write-Host ""
 
 # Determine install directory
-$installDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) "PowerShell\Modules\CowsayFortune"
-$configDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) "PowerShell\cowsayfortune"
+$installDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) "PowerShell\Modules\Forgum"
+$configDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) "PowerShell\Forgum"
 
 # Create directories
 if (-not (Test-Path $installDir)) {
@@ -103,18 +103,18 @@ $sourceDir = Split-Path $MyInvocation.MyCommand.Path -Parent
 if (Test-CommandExists git) {
     if (Test-Path (Join-Path $sourceDir '.git')) {
         # Running from cloned repo
-        Copy-Item -Path "$sourceDir\CowsayFortune\*" -Destination $installDir -Recurse -Force
+        Copy-Item -Path "$sourceDir\Forgum\*" -Destination $installDir -Recurse -Force
     } else {
         # Download from GitHub
         Write-Host ""
         Write-Host "  Downloading from GitHub..." -ForegroundColor Cyan
-        $tempDir = Join-Path $env:TEMP "CowsayFortune_$(Get-Random)"
-        git clone --depth 1 https://github.com/harish2222/CowsayFortune.git $tempDir 2>$null
-        Copy-Item -Path "$tempDir\CowsayFortune\*" -Destination $installDir -Recurse -Force
+        $tempDir = Join-Path $env:TEMP "Forgum_$(Get-Random)"
+        git clone --depth 1 https://github.com/harish2222/Forgum.git $tempDir 2>$null
+        Copy-Item -Path "$tempDir\Forgum\*" -Destination $installDir -Recurse -Force
         Remove-Item $tempDir -Recurse -Force -ErrorAction SilentlyContinue
     }
 } else {
-    Copy-Item -Path "$sourceDir\CowsayFortune\*" -Destination $installDir -Recurse -Force
+    Copy-Item -Path "$sourceDir\Forgum\*" -Destination $installDir -Recurse -Force
 }
 Show-Progress 50 100
 
@@ -132,12 +132,12 @@ if ($profilePath) {
         New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
     }
 
-    $importLine = "Import-Module CowsayFortune -ErrorAction SilentlyContinue"
+    $importLine = "Import-Module Forgum -ErrorAction SilentlyContinue"
     $existingProfile = if (Test-Path $profilePath) { Get-Content $profilePath -Raw } else { '' }
 
-    if ($existingProfile -notmatch 'CowsayFortune') {
+    if ($existingProfile -notmatch 'Forgum') {
         $separator = if ($existingProfile.Length -gt 0) { "`n`n" } else { '' }
-        Add-Content -Path $profilePath -Value "${separator}# CowsayFortune`n$importLine"
+        Add-Content -Path $profilePath -Value "${separator}# Forgum`n$importLine"
         Write-Host "  Added to PowerShell profile" -ForegroundColor Green
     }
 }
@@ -145,7 +145,7 @@ Show-Progress 90 100
 
 # Verify
 try {
-    Import-Module $installDir\CowsayFortune.psd1 -Force -ErrorAction Stop
+    Import-Module $installDir\Forgum.psd1 -Force -ErrorAction Stop
 } catch {
     Write-Host ""
     Write-Host "  Warning: Module loaded but verification had issues" -ForegroundColor Yellow
@@ -157,7 +157,7 @@ Write-Host ""
 Write-Host "  Installation complete!" -ForegroundColor Green
 Write-Host ""
 Write-Host "  Quick Start:" -ForegroundColor White
-Write-Host "    Invoke-CowsayFortune          # Show a cow with a fortune" -ForegroundColor Green
+Write-Host "    Invoke-Forgum          # Show a cow with a fortune" -ForegroundColor Green
 Write-Host "    Invoke-Cowsay -Text 'Hello'   # Show a cow with custom text" -ForegroundColor Green
 Write-Host "    Get-Fortune                  # Get a random fortune" -ForegroundColor Green
 Write-Host "    Get-CFCow                    # List all available cows" -ForegroundColor Green

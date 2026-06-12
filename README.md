@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/harish2222/CowsayFortune/releases"><img src="https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge" alt="Version"></a>
-  <a href="https://github.com/harish2222/CowsayFortune"><img src="https://img.shields.io/badge/powershell-5.1+-blueviolet?style=for-the-badge&logo=powershell&logoColor=white" alt="PowerShell"></a>
-  <a href="https://github.com/harish2222/CowsayFortune/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" alt="License"></a>
-  <a href="https://github.com/harish2222/CowsayFortune/actions"><img src="https://img.shields.io/badge/tests-67%20passing-brightgreen?style=for-the-badge" alt="Tests"></a>
+  <a href="https://github.com/harish2222/Forgum/releases"><img src="https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge" alt="Version"></a>
+  <a href="https://github.com/harish2222/Forgum"><img src="https://img.shields.io/badge/powershell-5.1+-blueviolet?style=for-the-badge&logo=powershell&logoColor=white" alt="PowerShell"></a>
+  <a href="https://github.com/harish2222/Forgum/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" alt="License"></a>
+  <a href="https://github.com/harish2222/Forgum/actions"><img src="https://img.shields.io/badge/tests-67%20passing-brightgreen?style=for-the-badge" alt="Tests"></a>
   <a href="#-cows"><img src="https://img.shields.io/badge/cows-107-orange?style=for-the-badge" alt="Cows"></a>
   <a href="#-rainbow"><img src="https://img.shields.io/badge/rainbow-lolcat-pink?style=for-the-badge" alt="Lolcat"></a>
 </p>
@@ -89,20 +89,20 @@
 ### One-liner (PowerShell)
 
 ```powershell
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/harish2222/CowsayFortune/main/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/harish2222/Forgum/main/install.ps1'))
 ```
 
 ### One-liner (Bash/Zsh/Fish)
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/harish2222/CowsayFortune/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/harish2222/Forgum/main/install.sh)
 ```
 
 ### Manual
 
 ```powershell
-git clone https://github.com/harish2222/CowsayFortune.git
-Import-Module ./CowsayFortune/CowsayFortune.psd1
+git clone https://github.com/harish2222/Forgum.git
+Import-Module ./Forgum/Forgum.psd1
 ```
 
 ---
@@ -146,7 +146,7 @@ Native PowerShell — Windows, macOS, Linux. Multi-shell integration for Bash, Z
 
 ```powershell
 # Fortune + cow combo
-Invoke-CowsayFortune
+Invoke-Forgum
 
 # Your own message
 Invoke-Cowsay -Text "Hello, World!"
@@ -166,7 +166,7 @@ Get-CFCow
 ```powershell
 # Enable rainbow
 Set-CFConfig -Config @{ lolcat = @{ enabled = $true } }
-Invoke-CowsayFortune
+Invoke-Forgum
 
 # Truecolor vs 256-color
 Set-CFConfig -Config @{ lolcat = @{ enabled = $true; truecolor = $true } }  # 24-bit
@@ -203,10 +203,10 @@ Invoke-Cowsay -Text "Hello" [-CowFile <name>] [-Eyes <chars>] [-Tongue <chars>] 
 | `Tongue` | `'  '` | Two-character tongue string |
 | `Thoughts` | `'\'` | Thought bubble character |
 
-### `Invoke-CowsayFortune`
+### `Invoke-Forgum`
 
 ```powershell
-Invoke-CowsayFortune [-Think] [-CowFile <name>] [-Eyes <chars>] [-Tongue <chars>]
+Invoke-Forgum [-Think] [-CowFile <name>] [-Eyes <chars>] [-Tongue <chars>]
 ```
 
 ### `Get-Fortune`
@@ -241,9 +241,9 @@ Show-CFAnimation -CowOutput <string> [-Message <string>]
 
 | Platform | Path |
 |:---------|:-----|
-| Windows | `~/Documents/PowerShell/cowsayfortune/config.json` |
-| Linux/Mac | `~/.config/cowsayfortune/config.json` |
-| Override | `$env:COWSAYFORTUNE_CONFIG` |
+| Windows | `~/Documents/PowerShell/Forgum/config.json` |
+| Linux/Mac | `~/.config/Forgum/config.json` |
+| Override | `$env:Forgum_CONFIG` |
 
 ### Default Config
 
@@ -290,14 +290,14 @@ Show-CFAnimation -CowOutput <string> [-Message <string>]
 fortune | cowsay -f $( cowsay -l | shuf -n1 )
 
 # Or use PowerShell module from bash
-pwsh -Command "Import-Module CowsayFortune; Invoke-CowsayFortune"
+pwsh -Command "Import-Module Forgum; Invoke-Forgum"
 ```
 
 ### tmux Status Bar
 
 ```bash
 # Add to ~/.tmux.conf
-set -g status-right "#(pwsh -Command 'Import-Module CowsayFortune; Get-Fortune' 2>/dev/null)"
+set -g status-right "#(pwsh -Command 'Import-Module Forgum; Get-Fortune' 2>/dev/null)"
 set -g status-interval 300
 ```
 
@@ -305,8 +305,8 @@ set -g status-interval 300
 
 ```powershell
 # Add to $PROFILE
-Import-Module CowsayFortune
-Invoke-CowsayFortune  # Show fortune on shell start
+Import-Module Forgum
+Invoke-Forgum  # Show fortune on shell start
 ```
 
 ---
@@ -424,8 +424,8 @@ Your third fortune here
 ```
 
 Or manually:
-1. Module: `~/Documents/PowerShell/Modules/CowsayFortune/`
-2. Config: `~/Documents/PowerShell/cowsayfortune/`
+1. Module: `~/Documents/PowerShell/Modules/Forgum/`
+2. Config: `~/Documents/PowerShell/Forgum/`
 3. Profile entry in `$PROFILE`
 
 ---

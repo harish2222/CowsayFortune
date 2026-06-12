@@ -1,4 +1,4 @@
-function Invoke-CowsayFortune {
+function Invoke-Forgum {
     <#
     .SYNOPSIS
         Combines cowsay + fortune + optional lolcat in one command.
@@ -14,10 +14,10 @@ function Invoke-CowsayFortune {
     .PARAMETER Tongue
         Override the tongue characters from config.
     .EXAMPLE
-        Invoke-CowsayFortune
+        Invoke-Forgum
         Shows a cow with a random fortune.
     .EXAMPLE
-        Invoke-CowsayFortune -Think -CowFile 'tux'
+        Invoke-Forgum -Think -CowFile 'tux'
         Shows tux thinking a fortune.
     #>
     [CmdletBinding()]

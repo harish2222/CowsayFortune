@@ -10,14 +10,14 @@ $publicPath  = Join-Path $PSScriptRoot 'Public'
 Get-ChildItem -Path $privatePath -Filter '*.ps1' -Recurse -ErrorAction SilentlyContinue |
     ForEach-Object {
         try { . $_.FullName }
-        catch { Write-Warning "CowsayFortune: Failed to load $($_.FullName): $_" }
+        catch { Write-Warning "Forgum: Failed to load $($_.FullName): $_" }
     }
 
 # Dot-source public functions
 Get-ChildItem -Path $publicPath -Filter '*.ps1' -Recurse -ErrorAction SilentlyContinue |
     ForEach-Object {
         try { . $_.FullName }
-        catch { Write-Warning "CowsayFortune: Failed to load $($_.FullName): $_" }
+        catch { Write-Warning "Forgum: Failed to load $($_.FullName): $_" }
     }
 
 # Module-scoped cache for performance

@@ -1,7 +1,7 @@
 function Get-CFConfig {
     <#
     .SYNOPSIS
-        Returns the current CowsayFortune configuration.
+        Returns the current Forgum configuration.
     .DESCRIPTION
         Loads config from disk (with caching) or returns defaults.
         Config is cached for 30 seconds to avoid repeated disk reads.
@@ -30,7 +30,7 @@ function Get-CFConfig {
             $config = Get-Content $path -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
         }
         catch {
-            Write-Warning "CowsayFortune: Corrupt config file, using defaults. Error: $($_.Exception.Message)"
+            Write-Warning "Forgum: Corrupt config file, using defaults. Error: $($_.Exception.Message)"
             $config = $null
         }
     }

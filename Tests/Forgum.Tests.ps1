@@ -10,41 +10,41 @@ Describe "Module Loading" {
     }
 
     It "exports exactly 7 functions" {
-        (Get-Command -Module CowsayFortune).Count | Should -Be 7
+        (Get-Command -Module Forgum).Count | Should -Be 7
     }
 
     It "exports Invoke-Cowsay" {
-        Get-Command Invoke-Cowsay -Module CowsayFortune | Should -Not -BeNullOrEmpty
+        Get-Command Invoke-Cowsay -Module Forgum | Should -Not -BeNullOrEmpty
     }
 
-    It "exports Invoke-CowsayFortune" {
-        Get-Command Invoke-CowsayFortune -Module CowsayFortune | Should -Not -BeNullOrEmpty
+    It "exports Invoke-Forgum" {
+        Get-Command Invoke-Forgum -Module Forgum | Should -Not -BeNullOrEmpty
     }
 
     It "exports Get-Fortune" {
-        Get-Command Get-Fortune -Module CowsayFortune | Should -Not -BeNullOrEmpty
+        Get-Command Get-Fortune -Module Forgum | Should -Not -BeNullOrEmpty
     }
 
     It "exports Get-CFCow" {
-        Get-Command Get-CFCow -Module CowsayFortune | Should -Not -BeNullOrEmpty
+        Get-Command Get-CFCow -Module Forgum | Should -Not -BeNullOrEmpty
     }
 
     It "exports Get-CFConfig" {
-        Get-Command Get-CFConfig -Module CowsayFortune | Should -Not -BeNullOrEmpty
+        Get-Command Get-CFConfig -Module Forgum | Should -Not -BeNullOrEmpty
     }
 
     It "exports Set-CFConfig" {
-        Get-Command Set-CFConfig -Module CowsayFortune | Should -Not -BeNullOrEmpty
+        Get-Command Set-CFConfig -Module Forgum | Should -Not -BeNullOrEmpty
     }
 
     It "exports Show-CFAnimation" {
-        Get-Command Show-CFAnimation -Module CowsayFortune | Should -Not -BeNullOrEmpty
+        Get-Command Show-CFAnimation -Module Forgum | Should -Not -BeNullOrEmpty
     }
 
     It "has CmdletBinding on public functions" {
-        $funcs = @('Invoke-Cowsay', 'Get-Fortune', 'Get-CFCow', 'Get-CFConfig', 'Set-CFConfig', 'Show-CFAnimation', 'Invoke-CowsayFortune')
+        $funcs = @('Invoke-Cowsay', 'Get-Fortune', 'Get-CFCow', 'Get-CFConfig', 'Set-CFConfig', 'Show-CFAnimation', 'Invoke-Forgum')
         foreach ($func in $funcs) {
-            $cmd = Get-Command $func -Module CowsayFortune
+            $cmd = Get-Command $func -Module Forgum
             $cmd.Parameters.ContainsKey('Verbose') | Should -Be $true
         }
     }
@@ -125,20 +125,20 @@ Describe "Config System" {
 
         It "creates config directory if missing" {
             if ($IsLinux -or $IsMacOS) {
-                $testDir = Join-Path $HOME '.config/cowsayfortune_test'
+                $testDir = Join-Path $HOME '.config/Forgum_test'
             } else {
-                $testDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'PowerShell/cowsayfortune_test'
+                $testDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'PowerShell/Forgum_test'
             }
             if (Test-Path $testDir) { Remove-Item $testDir -Recurse -Force }
 
-            $env:COWSAYFORTUNE_CONFIG = Join-Path $testDir 'config.json'
+            $env:Forgum_CONFIG = Join-Path $testDir 'config.json'
             try {
                 $config = Get-CFConfig
                 Set-CFConfig -Config $config
-                Test-Path $env:COWSAYFORTUNE_CONFIG | Should -Be $true
+                Test-Path $env:Forgum_CONFIG | Should -Be $true
             }
             finally {
-                $env:COWSAYFORTUNE_CONFIG = $null
+                $env:Forgum_CONFIG = $null
                 if (Test-Path $testDir) { Remove-Item $testDir -Recurse -Force }
             }
         }
@@ -291,33 +291,33 @@ Describe "Cow System" {
     }
 }
 
-Describe "Combined CowsayFortune" {
+Describe "Combined Forgum" {
     BeforeAll {
         Import-Module (Split-Path $PSScriptRoot -Parent) -Force
     }
 
     It "outputs cowsay with fortune" {
-        Invoke-CowsayFortune | Should -Not -BeNullOrEmpty
+        Invoke-Forgum | Should -Not -BeNullOrEmpty
     }
 
     It "contains a cow" {
-        $output = Invoke-CowsayFortune
+        $output = Invoke-Forgum
         $raw = $output -replace '\x1b\[[0-9;]*m', ''
         $raw | Should -Match '\^__\^'
     }
 
     It "contains a fortune message" {
-        $output = Invoke-CowsayFortune
+        $output = Invoke-Forgum
         $raw = $output -replace '\x1b\[[0-9;]*m', ''
         $raw | Should -Match '[a-zA-Z]'
     }
 
     It "supports think parameter" {
-        Invoke-CowsayFortune -Think | Should -Not -BeNullOrEmpty
+        Invoke-Forgum -Think | Should -Not -BeNullOrEmpty
     }
 
     It "supports custom cow file" {
-        Invoke-CowsayFortune -CowFile 'tux' | Should -Not -BeNullOrEmpty
+        Invoke-Forgum -CowFile 'tux' | Should -Not -BeNullOrEmpty
     }
 }
 
@@ -339,7 +339,7 @@ Describe "Lolcat Colorization" {
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
 
-        $output = Invoke-CowsayFortune -Think -CowFile 'default' -Eyes '@@'
+        $output = Invoke-Forgum -Think -CowFile 'default' -Eyes '@@'
         $output | Should -Not -BeNullOrEmpty
         # Check that output contains cow face components (strip ANSI first)
         $esc = [char]27
@@ -362,7 +362,7 @@ Describe "Lolcat Colorization" {
         Set-CFConfig -Config $config
 
         Import-Module (Split-Path $PSScriptRoot -Parent) -Force
-        $output = Invoke-CowsayFortune
+        $output = Invoke-Forgum
         $output | Should -Not -BeNullOrEmpty
         $esc = [char]27
         $stripped = $output -replace "${esc}\[[0-9;]*[a-zA-Z]", ''
@@ -380,7 +380,7 @@ Describe "Lolcat Colorization" {
         Set-CFConfig -Config $config
 
         Import-Module (Split-Path $PSScriptRoot -Parent) -Force
-        $output = Invoke-CowsayFortune
+        $output = Invoke-Forgum
         $esc = [char]27
         $hasAnsi = $output -match "${esc}\[[0-9;]*m"
         $hasAnsi | Should -Be $false

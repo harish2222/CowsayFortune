@@ -1,5 +1,5 @@
 @{
-    RootModule        = 'CowsayFortune.psm1'
+    RootModule        = 'Forgum.psm1'
     ModuleVersion     = '1.1.0'
     GUID              = 'f7e6b3a1-2d84-4c9f-a5e0-1b3d7c8f9e2a'
     Author            = 'HKDEVS'
@@ -9,7 +9,7 @@
     PowerShellVersion = '5.1'
     FunctionsToExport = @(
         'Invoke-Cowsay'
-        'Invoke-CowsayFortune'
+        'Invoke-Forgum'
         'Get-Fortune'
         'Get-CFCow'
         'Get-CFConfig'
@@ -22,9 +22,9 @@
     PrivateData       = @{
         PSData = @{
             Tags         = @('cowsay', 'fortune', 'lolcat', 'ascii', 'fun', 'cross-platform', 'terminal')
-            LicenseUri   = 'https://github.com/harish2222/CowsayFortune/blob/main/LICENSE'
-            ProjectUri   = 'https://github.com/harish2222/CowsayFortune'
-            IconUri      = 'https://raw.githubusercontent.com/harish2222/CowsayFortune/main/icon.png'
+            LicenseUri   = 'https://github.com/harish2222/Forgum/blob/main/LICENSE'
+            ProjectUri   = 'https://github.com/harish2222/Forgum'
+            IconUri      = 'https://raw.githubusercontent.com/harish2222/Forgum/main/icon.png'
             ReleaseNotes = 'v1.1.0: Added profile customization functions, comprehensive customization guide, advanced contributor methods.'
         }
     }

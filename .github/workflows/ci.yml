@@ -8,7 +8,7 @@ on:
     branches: [main]
 
 env:
-  MODULE_NAME: CowsayFortune
+  MODULE_NAME: Forgum
 
 jobs:
   lint:
@@ -54,7 +54,7 @@ jobs:
           Write-Host "Module: $($manifest.Name) v$($manifest.Version)"
           Write-Host "Author: $($manifest.Author)"
           Write-Host "Exports: $($manifest.ExportedFunctions.Keys -join ', ')"
-          $expected = @('Invoke-Cowsay', 'Invoke-CowsayFortune', 'Get-Fortune', 'Get-CFCow', 'Get-CFConfig', 'Set-CFConfig', 'Show-CFAnimation')
+          $expected = @('Invoke-Cowsay', 'Invoke-Forgum', 'Get-Fortune', 'Get-CFCow', 'Get-CFConfig', 'Set-CFConfig', 'Show-CFAnimation')
           $actual = $manifest.ExportedFunctions.Keys
           $missing = $expected | Where-Object { $_ -notin $actual }
           if ($missing) {
@@ -104,7 +104,7 @@ jobs:
         shell: pwsh
         run: |
           $config = New-PesterConfiguration
-          $config.Run.Path = './Tests/CowsayFortune.Tests.ps1'
+          $config.Run.Path = './Tests/Forgum.Tests.ps1'
           $config.Run.PassThru = $true
           $config.Output.Verbosity = 'Detailed'
           $results = Invoke-Pester -Configuration $config
@@ -142,7 +142,7 @@ jobs:
         shell: pwsh
         run: |
           $version = '${{ steps.version.outputs.tag }}'
-          $stagingDir = Join-Path $env:RUNNER_TEMP "CowsayFortune-v$version"
+          $stagingDir = Join-Path $env:RUNNER_TEMP "Forgum-v$version"
           New-Item -ItemType Directory -Path $stagingDir -Force | Out-Null
 
           # Copy module files
@@ -158,7 +158,7 @@ jobs:
           Copy-Item -Path "./uninstall.ps1" -Destination $stagingDir
 
           # Create zip
-          $zipPath = Join-Path $env:RUNNER_TEMP "CowsayFortune-v$version.zip"
+          $zipPath = Join-Path $env:RUNNER_TEMP "Forgum-v$version.zip"
           Compress-Archive -Path "$stagingDir/*" -DestinationPath $zipPath -Force
 
           # Verify zip contents
@@ -168,13 +168,13 @@ jobs:
           Write-Host "Package created: $zipPath ($entries files)"
 
           # Copy to artifact location
-          Copy-Item $zipPath ./CowsayFortune-v$version.zip
+          Copy-Item $zipPath ./Forgum-v$version.zip
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CowsayFortune-v${{ steps.version.outputs.tag }}
-          path: CowsayFortune-v*.zip
+          name: Forgum-v${{ steps.version.outputs.tag }}
+          path: Forgum-v*.zip
 
   release:
     needs: [build]
@@ -193,12 +193,12 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: CowsayFortune-v${{ steps.version.outputs.tag }}
+          name: Forgum-v${{ steps.version.outputs.tag }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "CowsayFortune v${{ steps.version.outputs.tag }}"
+          name: "Forgum v${{ steps.version.outputs.tag }}"
           generate_release_notes: true
           files: |
-            CowsayFortune-v*.zip
+            Forgum-v*.zip

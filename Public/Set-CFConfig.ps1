@@ -1,7 +1,7 @@
 function Set-CFConfig {
     <#
     .SYNOPSIS
-        Saves the CowsayFortune configuration to disk.
+        Saves the Forgum configuration to disk.
     .DESCRIPTION
         Accepts a hashtable or PSCustomObject and saves it as JSON.
         Creates the config directory if it doesn't exist.

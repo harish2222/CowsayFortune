@@ -1,4 +1,4 @@
-# Contributing to CowsayFortune
+# Contributing to Forgum
 
 Thank you for your interest in contributing! This document provides guidelines and instructions for contributing.
 
@@ -27,8 +27,8 @@ Thank you for your interest in contributing! This document provides guidelines a
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```powershell
-   git clone https://github.com/YOUR_USERNAME/CowsayFortune.git
-   cd CowsayFortune
+   git clone https://github.com/YOUR_USERNAME/Forgum.git
+   cd Forgum
    ```
 3. Create a feature branch:
    ```powershell
@@ -51,22 +51,22 @@ Thank you for your interest in contributing! This document provides guidelines a
 
 ```powershell
 # Import the module in development mode
-Import-Module ./CowsayFortune/CowsayFortune.psd1 -Force
+Import-Module ./Forgum/Forgum.psd1 -Force
 
 # Run tests
 Import-Module Pester
-Invoke-Pester -Path ./Tests/CowsayFortune.Tests.ps1
+Invoke-Pester -Path ./Tests/Forgum.Tests.ps1
 ```
 
 ### Project Structure
 
 ```
-CowsayFortune/
-├── CowsayFortune.psd1          # Module manifest
-├── CowsayFortune.psm1          # Module entry point
+Forgum/
+├── Forgum.psd1          # Module manifest
+├── Forgum.psm1          # Module entry point
 ├── Public/                      # Exported functions
 │   ├── Invoke-Cowsay.ps1
-│   ├── Invoke-CowsayFortune.ps1
+│   ├── Invoke-Forgum.ps1
 │   ├── Get-Fortune.ps1
 │   ├── Get-CFCow.ps1
 │   ├── Get-CFConfig.ps1
@@ -167,13 +167,13 @@ function Get-Fortune {
 
 ```powershell
 # Run all tests
-Invoke-Pester -Path ./Tests/CowsayFortune.Tests.ps1
+Invoke-Pester -Path ./Tests/Forgum.Tests.ps1
 
 # Run with detailed output
-Invoke-Pester -Path ./Tests/CowsayFortune.Tests.ps1 -Verbose
+Invoke-Pester -Path ./Tests/Forgum.Tests.ps1 -Verbose
 
 # Run specific test
-Invoke-Pester -Path ./Tests/CowsayFortune.Tests.ps1 -TestName "renders cow with message"
+Invoke-Pester -Path ./Tests/Forgum.Tests.ps1 -TestName "renders cow with message"
 ```
 
 ### Writing Tests
@@ -339,23 +339,23 @@ switch ($Config.animation.mode) {
 **Bash wrapper:**
 ```bash
 #!/bin/bash
-# Save as /usr/local/bin/cowsayfortune
-pwsh -Command "Import-Module CowsayFortune; Invoke-CowsayFortune"
+# Save as /usr/local/bin/Forgum
+pwsh -Command "Import-Module Forgum; Invoke-Forgum"
 ```
 
 **Fish wrapper:**
 ```fish
-# Save as ~/.config/fish/functions/cowsayfortune.fish
-function cowsayfortune
-    pwsh -Command "Import-Module CowsayFortune; Invoke-CowsayFortune"
+# Save as ~/.config/fish/functions/Forgum.fish
+function Forgum
+    pwsh -Command "Import-Module Forgum; Invoke-Forgum"
 end
 ```
 
 **Zsh wrapper:**
 ```bash
 # Save as ~/.zshrc function
-cowsayfortune() {
-    pwsh -Command "Import-Module CowsayFortune; Invoke-CowsayFortune"
+Forgum() {
+    pwsh -Command "Import-Module Forgum; Invoke-Forgum"
 }
 ```
 
@@ -399,14 +399,14 @@ function Format-CowJson {
 {
     "label": "Show Fortune",
     "type": "shell",
-    "command": "pwsh -Command \"Import-Module CowsayFortune; Invoke-CowsayFortune\""
+    "command": "pwsh -Command \"Import-Module Forgum; Invoke-Forgum\""
 }
 ```
 
 **Windows Terminal profile:**
 ```json
 {
-    "commandline": "pwsh -NoExit -Command \"Import-Module CowsayFortune; Show-FortuneCow\"",
+    "commandline": "pwsh -NoExit -Command \"Import-Module Forgum; Show-FortuneCow\"",
     "name": "Cowsay Fortune"
 }
 ```

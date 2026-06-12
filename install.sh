@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# CowsayFortune Installer — fun, animated, cross-platform
-# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/harish2222/CowsayFortune/main/install.sh)
+# Forgum Installer — fun, animated, cross-platform
+# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/harish2222/Forgum/main/install.sh)
 
 set -e
 
@@ -244,19 +244,19 @@ install_powershell() {
 }
 
 install_module() {
-    echo -e "\n${YELLOW}  Installing CowsayFortune module...${NC}"
+    echo -e "\n${YELLOW}  Installing Forgum module...${NC}"
 
     local module_dir
     if check_command pwsh; then
-        module_dir=$(pwsh -NoProfile -Command '[Environment]::GetFolderPath("MyDocuments") + "/PowerShell/Modules/CowsayFortune"' 2>/dev/null)
+        module_dir=$(pwsh -NoProfile -Command '[Environment]::GetFolderPath("MyDocuments") + "/PowerShell/Modules/Forgum"' 2>/dev/null)
     fi
 
     if [ -z "$module_dir" ]; then
-        module_dir="$HOME/.local/share/powershell/Modules/CowsayFortune"
+        module_dir="$HOME/.local/share/powershell/Modules/Forgum"
     fi
 
-    local repo_url="https://github.com/harish2222/CowsayFortune/archive/refs/heads/main.zip"
-    local tmp_zip="/tmp/cowsayfortune_$$.zip"
+    local repo_url="https://github.com/harish2222/Forgum/archive/refs/heads/main.zip"
+    local tmp_zip="/tmp/Forgum_$$.zip"
 
     echo -e "  Downloading from GitHub..."
     if check_command curl; then
@@ -269,7 +269,7 @@ install_module() {
     fi
 
     echo -e "  Extracting..."
-    local tmp_dir="/tmp/cowsayfortune_extract_$$"
+    local tmp_dir="/tmp/Forgum_extract_$$"
     mkdir -p "$tmp_dir"
 
     if check_command unzip; then
@@ -278,7 +278,7 @@ install_module() {
         tar -xf "$tmp_zip" -C "$tmp_dir" 2>/dev/null
     fi
 
-    local extracted="$tmp_dir/CowsayFortune-main"
+    local extracted="$tmp_dir/Forgum-main"
 
     if [ ! -d "$extracted" ]; then
         echo -e "  ${RED}✗ Extraction failed.${NC}"
@@ -303,7 +303,7 @@ setup_profile() {
     [ -f "$HOME/.zshrc" ] && profiles+=("$HOME/.zshrc")
     [ -f "$HOME/.config/fish/config.fish" ] && profiles+=("$HOME/.config/fish/config.fish")
 
-    local marker="# CowsayFortune"
+    local marker="# Forgum"
 
     for profile in "${profiles[@]}"; do
         if grep -q "$marker" "$profile" 2>/dev/null; then
@@ -316,18 +316,18 @@ setup_profile() {
         if [ "$profile_name" = "config.fish" ]; then
             cat >> "$profile" << 'FISH'
 
-# CowsayFortune
+# Forgum
 function fish_greeting
-    pwsh -NoProfile -Command "Import-Module CowsayFortune -ErrorAction SilentlyContinue; Invoke-CowsayFortune" 2>/dev/null
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum" 2>/dev/null
 end
 FISH
         else
             cat >> "$profile" << 'SHELL'
 
-# CowsayFortune
+# Forgum
 if command -v pwsh &>/dev/null; then
     if [ -t 1 ]; then
-        pwsh -NoProfile -Command "Import-Module CowsayFortune -ErrorAction SilentlyContinue; Invoke-CowsayFortune" 2>/dev/null
+        pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum" 2>/dev/null
     fi
 fi
 SHELL
@@ -354,7 +354,7 @@ run_tests() {
 
     local test_dir
     if check_command pwsh; then
-        test_dir=$(pwsh -NoProfile -Command '[Environment]::GetFolderPath("MyDocuments") + "/PowerShell/Modules/CowsayFortune"' 2>/dev/null)
+        test_dir=$(pwsh -NoProfile -Command '[Environment]::GetFolderPath("MyDocuments") + "/PowerShell/Modules/Forgum"' 2>/dev/null)
     fi
 
     if [ -z "$test_dir" ] || [ ! -d "$test_dir/Tests" ]; then
@@ -365,7 +365,7 @@ run_tests() {
     local result
     result=$(pwsh -NoProfile -Command "
         Import-Module Pester
-        \$r = Invoke-Pester -Path '$test_dir/Tests/CowsayFortune.Tests.ps1' -PassThru
+        \$r = Invoke-Pester -Path '$test_dir/Tests/Forgum.Tests.ps1' -PassThru
         Write-Output \"\$(\$r.PassedCount)/\$(\$r.TotalCount) passed\"
         if (\$r.FailedCount -gt 0) { exit 1 }
     " 2>&1)
@@ -391,7 +391,7 @@ main() {
     clear
     show_banner
 
-    echo -e "${BOLD}  Welcome to the CowsayFortune installer!${NC}"
+    echo -e "${BOLD}  Welcome to the Forgum installer!${NC}"
     echo -e "  This will install cowsay + fortune + lolcat for PowerShell."
     echo ""
 
@@ -410,7 +410,7 @@ main() {
     install_pester
 
     # Step 3: Install Module
-    echo -e "\n${BOLD}━━━ Step 3/5: CowsayFortune Module ━━━${NC}"
+    echo -e "\n${BOLD}━━━ Step 3/5: Forgum Module ━━━${NC}"
     if ! install_module; then
         echo -e "\n${RED}Failed to install module.${NC}"
         exit 1
@@ -430,13 +430,13 @@ main() {
     echo -e "${GREEN}${BOLD}  Installation complete!${NC}"
     echo ""
     echo -e "  ${CYAN}Quick start:${NC}"
-    echo -e "    pwsh -Command \"Import-Module CowsayFortune; Invoke-CowsayFortune\""
+    echo -e "    pwsh -Command \"Import-Module Forgum; Invoke-Forgum\""
     echo ""
     echo -e "  ${CYAN}Config:${NC}"
     echo -e "    Get-CFConfig | ConvertTo-Json"
     echo ""
     echo -e "  ${CYAN}Uninstall:${NC}"
-    echo -e "    rm -rf ~/Documents/PowerShell/Modules/CowsayFortune"
+    echo -e "    rm -rf ~/Documents/PowerShell/Modules/Forgum"
     echo ""
 
     local final_phrase="${PHRASES[$RANDOM % ${#PHRASES[@]}]}"

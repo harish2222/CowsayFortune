@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to CowsayFortune will be documented in this file.
+All notable changes to Forgum will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Core Features**
   - `Invoke-Cowsay` - Display ASCII cow with custom message
-  - `Invoke-CowsayFortune` - Combine cowsay + fortune + optional lolcat
+  - `Invoke-Forgum` - Combine cowsay + fortune + optional lolcat
   - `Get-Fortune` - Get random fortune from database
   - `Get-CFCow` - List available cows or read specific cow
   - `Get-CFConfig` / `Set-CFConfig` - Configuration management
@@ -67,9 +67,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Talking (mouth movement simulation)
 
 - **Multi-Shell Integration**
-  - Bash wrapper (`cowsayfortune.sh`)
-  - Zsh wrapper with completions (`cowsayfortune.zsh`)
-  - Fish wrapper (`cowsayfortune.fish`)
+  - Bash wrapper (`Forgum.sh`)
+  - Zsh wrapper with completions (`Forgum.zsh`)
+  - Fish wrapper (`Forgum.fish`)
   - PowerShell native support
 
 - **tmux/rmux Integration**
@@ -79,7 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Configuration**
   - JSON-based config file
   - Platform-appropriate locations
-  - Environment variable override (`COWSAYFORTUNE_CONFIG`)
+  - Environment variable override (`Forgum_CONFIG`)
   - Atomic file writes (prevents corruption)
   - Config caching with TTL
 

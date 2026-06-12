@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Uninstalls CowsayFortune module.
+    Uninstalls Forgum module.
 .DESCRIPTION
     Removes the module, config, and shell integration.
 .EXAMPLE
@@ -12,18 +12,18 @@
 param()
 
 Write-Host ""
-Write-Host "  CowsayFortune Uninstaller" -ForegroundColor Cyan
+Write-Host "  Forgum Uninstaller" -ForegroundColor Cyan
 Write-Host ""
 
 # Remove module
-$installDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) "PowerShell\Modules\CowsayFortune"
+$installDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) "PowerShell\Modules\Forgum"
 if (Test-Path $installDir) {
     Remove-Item $installDir -Recurse -Force
     Write-Host "  Removed module: $installDir" -ForegroundColor Green
 }
 
 # Remove config
-$configDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) "PowerShell\cowsayfortune"
+$configDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) "PowerShell\Forgum"
 if (Test-Path $configDir) {
     Remove-Item $configDir -Recurse -Force
     Write-Host "  Removed config: $configDir" -ForegroundColor Green
@@ -33,8 +33,8 @@ if (Test-Path $configDir) {
 $profilePath = $PROFILE.CurrentUserAllHosts
 if (Test-Path $profilePath) {
     $content = Get-Content $profilePath -Raw
-    if ($content -match 'CowsayFortune') {
-        $newContent = $content -replace '(?s)\n*# CowsayFortune\nImport-Module CowsayFortune[^\n]*\n*', "`n"
+    if ($content -match 'Forgum') {
+        $newContent = $content -replace '(?s)\n*# Forgum\nImport-Module Forgum[^\n]*\n*', "`n"
         Set-Content -Path $profilePath -Value $newContent.TrimEnd()
         Write-Host "  Removed from PowerShell profile" -ForegroundColor Green
     }
@@ -44,8 +44,8 @@ if (Test-Path $profilePath) {
 foreach ($file in @("$HOME/.bashrc", "$HOME/.zshrc", "$HOME/.config/fish/config.fish")) {
     if (Test-Path $file) {
         $content = Get-Content $file -Raw
-        if ($content -match 'CowsayFortune') {
-            $newContent = $content -replace '(?s)\n*# CowsayFortune\n.*?CowsayFortune.*?\n*', "`n"
+        if ($content -match 'Forgum') {
+            $newContent = $content -replace '(?s)\n*# Forgum\n.*?Forgum.*?\n*', "`n"
             Set-Content -Path $file -Value $newContent.TrimEnd()
             Write-Host "  Removed from $file" -ForegroundColor Green
         }
@@ -53,5 +53,5 @@ foreach ($file in @("$HOME/.bashrc", "$HOME/.zshrc", "$HOME/.config/fish/config.
 }
 
 Write-Host ""
-Write-Host "  CowsayFortune uninstalled successfully!" -ForegroundColor Green
+Write-Host "  Forgum uninstalled successfully!" -ForegroundColor Green
 Write-Host ""
