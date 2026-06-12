@@ -37,8 +37,19 @@ function Get-CFConfig {
 
     if (-not $config) {
         $defaultPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json'
+        if (-not (Test-Path $defaultPath)) {
+            $defaultPath = Join-Path $PSScriptRoot 'Data/Templates/default-config.json'
+        }
         $config = Get-Content $defaultPath -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
     }
+
+    # Ensure all required sections exist with defaults
+    if (-not $config.animation) { $config | Add-Member -NotePropertyName animation -NotePropertyValue ([PSCustomObject]@{ mode = 'static'; speed = 20; duration = 12; spread = 3.0 }) -Force }
+    if (-not $config.cow) { $config | Add-Member -NotePropertyName cow -NotePropertyValue ([PSCustomObject]@{ file = 'default'; random = $false; mode = $null; eyes = 'oo'; tongue = '  ' }) -Force }
+    if (-not $config.fortune) { $config | Add-Member -NotePropertyName fortune -NotePropertyValue ([PSCustomObject]@{ database = 'fortunes'; offensive = $false }) -Force }
+    if (-not $config.lolcat) { $config | Add-Member -NotePropertyName lolcat -NotePropertyValue ([PSCustomObject]@{ enabled = $false; truecolor = $true; frequency = 0.1; invert = $false }) -Force }
+    if (-not $config.output) { $config | Add-Member -NotePropertyName output -NotePropertyValue ([PSCustomObject]@{ wordWrap = $true; maxWidth = 60 }) -Force }
+    if (-not $config.shell) { $config | Add-Member -NotePropertyName shell -NotePropertyValue ([PSCustomObject]@{ integration = 'auto'; tmux = ([PSCustomObject]@{ enabled = $false; pane = 'status-right' }) }) -Force }
 
     # Cache the result
     $script:ConfigCache = $config

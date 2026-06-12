@@ -72,8 +72,8 @@ function Invoke-Cowsay {
     }
     else {
         # Only use config eyes/tongue if not explicitly provided via parameter
-        if (-not $PSBoundParameters.ContainsKey('Eyes'))   { $Eyes   = $config.cow.eyes }
-        if (-not $PSBoundParameters.ContainsKey('Tongue')) { $Tongue = $config.cow.tongue }
+        if (-not $PSBoundParameters.ContainsKey('Eyes'))   { $Eyes   = if ($config.cow.eyes)   { $config.cow.eyes }   else { 'oo' } }
+        if (-not $PSBoundParameters.ContainsKey('Tongue')) { $Tongue = if ($config.cow.tongue) { $config.cow.tongue } else { '  ' } }
     }
 
     # Build the cow template with variable substitutions
