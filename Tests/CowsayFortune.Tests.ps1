@@ -330,19 +330,51 @@ Describe "Lolcat Colorization" {
         Import-Module $modulePath -Force
     }
 
-    It "produces colored output when enabled" {
+    It "produces colored output when enabled with all options" {
         $original = Get-CFConfig
         $config = Get-CFConfig
         $config.lolcat.enabled = $true
+        $config.lolcat.truecolor = $true
+        $config.lolcat.frequency = 0.15
+        $config.lolcat.invert = $false
+        $config.cow.file = 'default'
+        $config.cow.eyes = '@@'
+        $config.cow.tongue = '  '
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+
+        Import-Module $modulePath -Force
+        $output = Invoke-CowsayFortune -Think -CowFile 'default' -Eyes '@@'
+        $output | Should Not BeNullOrEmpty
+        # Check that output contains cow face components (strip ANSI first)
+        $esc = [char]27
+        $stripped = $output -replace "${esc}\[[0-9;]*[a-zA-Z]", ''
+        $stripped | Should Match '@@'
+        $stripped | Should Match '\^__\^'
+        # Check that ANSI codes are present (lolcat enabled)
+        $hasAnsi = $output -match "${esc}\[38;2;"
+        $hasAnsi | Should Be $true
+
+        Set-CFConfig -Config $original
+    }
+
+    It "produces 256-color output when truecolor disabled" {
+        $original = Get-CFConfig
+        $config = Get-CFConfig
+        $config.lolcat.enabled = $true
+        $config.lolcat.truecolor = $false
+        $config.lolcat.frequency = 0.1
         Set-CFConfig -Config $config
 
         Import-Module $modulePath -Force
         $output = Invoke-CowsayFortune
         $output | Should Not BeNullOrEmpty
-        # Check that output contains cow face components (strip ANSI first)
         $esc = [char]27
         $stripped = $output -replace "${esc}\[[0-9;]*[a-zA-Z]", ''
         $stripped | Should Match '\^__\^'
+        # Check for 256-color ANSI codes
+        $hasAnsi256 = $output -match "${esc}\[38;5;"
+        $hasAnsi256 | Should Be $true
 
         Set-CFConfig -Config $original
     }
