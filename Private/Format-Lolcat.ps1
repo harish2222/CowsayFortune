@@ -24,6 +24,9 @@ function Format-Lolcat {
         [int]$Offset = 0
     )
 
+    # ESC character for ANSI codes (PowerShell 5.1 compatible)
+    $esc = [char]27
+
     # Detect truecolor support
     $useTruecolor = $Truecolor -or ($env:COLORTERM -in @('truecolor', '24bit'))
 
@@ -57,18 +60,18 @@ function Format-Lolcat {
             $blue  = [int]([Math]::Sin($freq + 4.1887902047863905) * 127 + 128)  # 4PI/3
 
             if ($useTruecolor) {
-                [void]$sb.Append("`e[38;2;${red};${green};${blue}m${char}")
+                [void]$sb.Append("${esc}[38;2;${red};${green};${blue}m${char}")
             }
             else {
                 $r6 = [Math]::Floor($red / 255 * 5)
                 $g6 = [Math]::Floor($green / 255 * 5)
                 $b6 = [Math]::Floor($blue / 255 * 5)
                 $color256 = 16 + 36 * $r6 + 6 * $g6 + $b6
-                [void]$sb.Append("`e[38;5;${color256}m${char}")
+                [void]$sb.Append("${esc}[38;5;${color256}m${char}")
             }
         }
 
-        [void]$sb.Append("`e[0m")
+        [void]$sb.Append("${esc}[0m")
         $output.Add($sb.ToString())
         $os++
     }

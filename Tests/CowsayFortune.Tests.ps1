@@ -339,8 +339,10 @@ Describe "Lolcat Colorization" {
         Import-Module $modulePath -Force
         $output = Invoke-CowsayFortune
         $output | Should Not BeNullOrEmpty
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
-        $raw | Should Match '\^__\^'
+        # Check that output contains cow face components (strip ANSI first)
+        $esc = [char]27
+        $stripped = $output -replace "${esc}\[[0-9;]*[a-zA-Z]", ''
+        $stripped | Should Match '\^__\^'
 
         Set-CFConfig -Config $original
     }
@@ -352,7 +354,8 @@ Describe "Lolcat Colorization" {
 
         Import-Module $modulePath -Force
         $output = Invoke-CowsayFortune
-        $hasAnsi = $output -match '\x1b\[[0-9;]*m'
+        $esc = [char]27
+        $hasAnsi = $output -match "${esc}\[[0-9;]*m"
         $hasAnsi | Should Be $false
 
         Set-CFConfig -Config $config
