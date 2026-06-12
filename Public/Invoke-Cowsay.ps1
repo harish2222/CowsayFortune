@@ -1,0 +1,107 @@
+function Invoke-Cowsay {
+    <#
+    .SYNOPSIS
+        Displays a cow saying a message.
+    .DESCRIPTION
+        Renders an ASCII cow with a speech balloon containing the message.
+        Supports custom cow files, eyes, tongue, and thinking mode.
+    .PARAMETER Text
+        The message for the cow to say.
+    .PARAMETER CowFile
+        Name of the cow file to use (default: 'default').
+    .PARAMETER Eyes
+        Two-character eye string (default: 'oo').
+    .PARAMETER Tongue
+        Two-character tongue string (default: '  ').
+    .PARAMETER Thoughts
+        Character for the thought bubble connector (default: '\').
+    .EXAMPLE
+        Invoke-Cowsay -Text "Hello World"
+    .EXAMPLE
+        Invoke-Cowsay -Text "Thinking..." -Thoughts 'o'
+    .EXAMPLE
+        Invoke-Cowsay -Text "Tux says hi" -CowFile 'tux'
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(ValueFromPipeline)]
+        [AllowEmptyString()]
+        [string]$Text = '',
+
+        [ValidateNotNullOrEmpty()]
+        [string]$CowFile = 'default',
+
+        [ValidateNotNullOrEmpty()]
+        [string]$Eyes = 'oo',
+
+        [string]$Tongue = '  ',
+
+        [string]$Thoughts = '\'
+    )
+
+    $config = Get-CFConfig
+
+    # Resolve random cow if configured
+    if ($config.cow.random) {
+        $cowsPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Cows'
+        $CowFile = (Get-ChildItem -Path $cowsPath -Filter '*.cow' | Get-Random).BaseName
+    }
+
+    # Resolve cow mode presets (eyes/tongue overrides)
+    if ($config.cow.mode) {
+        $modes = @{
+            'b' = @{ eyes = '=='; tongue = '  ' }
+            'd' = @{ eyes = 'xx'; tongue = 'U ' }
+            'g' = @{ eyes = '$$'; tongue = '  ' }
+            'p' = @{ eyes = '@@'; tongue = '  ' }
+            's' = @{ eyes = '**'; tongue = 'U ' }
+            't' = @{ eyes = '--'; tongue = '  ' }
+            'w' = @{ eyes = 'OO'; tongue = '  ' }
+            'y' = @{ eyes = '..'; tongue = '  ' }
+        }
+        if ($modes.ContainsKey($config.cow.mode)) {
+            $Eyes   = $modes[$config.cow.mode].eyes
+            $Tongue = $modes[$config.cow.mode].tongue
+        }
+    }
+    else {
+        # Only use config eyes/tongue if not explicitly provided via parameter
+        if (-not $PSBoundParameters.ContainsKey('Eyes'))   { $Eyes   = $config.cow.eyes }
+        if (-not $PSBoundParameters.ContainsKey('Tongue')) { $Tongue = $config.cow.tongue }
+    }
+
+    # Build the cow template with variable substitutions
+    $cowTemplate = Read-CowFile -CowName $CowFile
+    $message = Format-CowMessage -Text $Text -MaxWidth $config.output.maxWidth
+
+    # Apply substitutions using StringBuilder for performance
+    $sb = [System.Text.StringBuilder]::new($cowTemplate)
+    [void]$sb.Replace('$thoughts', $Thoughts)
+    [void]$sb.Replace('$eyes', $Eyes)
+    [void]$sb.Replace('${eyes}', $Eyes)
+    [void]$sb.Replace('$tongue', $Tongue)
+    [void]$sb.Replace('${tongue}', $Tongue)
+
+    # Replace single-char eye placeholders ($eye) on the first matching line only
+    $result = $sb.ToString()
+    if ($Eyes.Length -ge 2) {
+        $lines = $result -split "`n"
+        $eyeReplaced = $false
+        $newLines = [System.Collections.Generic.List[string]]::new($lines.Count)
+
+        foreach ($line in $lines) {
+            if (-not $eyeReplaced -and $line -match '\$eye') {
+                $replaced = $line -replace '\$eye', $Eyes[0]
+                $replaced = $replaced -replace '\$eye', $Eyes[1]
+                $newLines.Add($replaced)
+                $eyeReplaced = $true
+            }
+            else {
+                $newLines.Add($line)
+            }
+        }
+        $result = $newLines -join "`n"
+    }
+
+    return "$message`n$result"
+}
