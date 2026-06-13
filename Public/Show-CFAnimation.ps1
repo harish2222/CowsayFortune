@@ -4,7 +4,8 @@ function Show-CFAnimation {
         Displays cow output with the configured animation mode.
     .DESCRIPTION
         Dispatches to the appropriate animation function based on config.
-        Modes: static (instant), talking (mouth movement), typewriter (char-by-char).
+        Modes: static, talking, typewriter, slide-in, bounce, dissolve,
+        fade-in, blink, wiggle, wave, disco.
     .PARAMETER CowOutput
         The rendered cow string to animate.
     .PARAMETER Message
@@ -30,6 +31,30 @@ function Show-CFAnimation {
         }
         'typewriter' {
             return Invoke-TypewriterAnimation -CowOutput $CowOutput -Message $Message -Speed $config.animation.speed
+        }
+        'slide-in' {
+            return Invoke-SlideInAnimation -CowOutput $CowOutput -Message $Message -Speed $config.animation.speed
+        }
+        'bounce' {
+            return Invoke-BounceAnimation -CowOutput $CowOutput -Message $Message -Duration $config.animation.duration
+        }
+        'dissolve' {
+            return Invoke-DissolveAnimation -CowOutput $CowOutput -Message $Message -Duration $config.animation.duration
+        }
+        'fade-in' {
+            return Invoke-FadeInAnimation -CowOutput $CowOutput -Message $Message -Duration $config.animation.duration
+        }
+        'blink' {
+            return Invoke-BlinkAnimation -CowOutput $CowOutput -Message $Message -Duration $config.animation.duration -BlinkRate $config.animation.blinkRate
+        }
+        'wiggle' {
+            return Invoke-WiggleAnimation -CowOutput $CowOutput -Message $Message -Duration $config.animation.duration -Amplitude $config.animation.amplitude
+        }
+        'wave' {
+            return Invoke-WaveAnimation -CowOutput $CowOutput -Message $Message -Speed $config.animation.speed
+        }
+        'disco' {
+            return Invoke-DiscoAnimation -CowOutput $CowOutput -Message $Message -Speed $config.animation.speed -Duration $config.animation.duration
         }
         default {
             return Invoke-StaticAnimation -CowOutput $CowOutput -Message $Message

@@ -98,6 +98,14 @@ Describe "Config System" {
             (Get-CFConfig).animation.duration | Should -Be 12
         }
 
+        It "has animation blinkRate of 0.2" {
+            (Get-CFConfig).animation.blinkRate | Should -Be 0.2
+        }
+
+        It "has animation amplitude of 2" {
+            (Get-CFConfig).animation.amplitude | Should -Be 2
+        }
+
         It "has fortune database set to 'fortunes'" {
             (Get-CFConfig).fortune.database | Should -Be 'fortunes'
         }
@@ -423,6 +431,99 @@ Describe "Animation System" {
         $output = Show-CFAnimation -CowOutput $cowOutput
         $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match "Test"
+    }
+
+    It "slide-in animation returns output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'slide-in'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "SlideTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "SlideTest"
+        $output | Should -Not -BeNullOrEmpty
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "bounce animation returns output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'bounce'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "BounceTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "BounceTest"
+        $output | Should -Not -BeNullOrEmpty
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "dissolve animation returns output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'dissolve'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "DissolveTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "DissolveTest"
+        $output | Should -Not -BeNullOrEmpty
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "fade-in animation returns output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'fade-in'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "FadeTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "FadeTest"
+        $output | Should -Not -BeNullOrEmpty
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "blink animation returns output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'blink'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "BlinkTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "BlinkTest"
+        $output | Should -Not -BeNullOrEmpty
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "wiggle animation returns output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'wiggle'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "WiggleTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "WiggleTest"
+        $output | Should -Not -BeNullOrEmpty
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "wave animation returns output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'wave'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "WaveTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "WaveTest"
+        $output | Should -Not -BeNullOrEmpty
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "disco animation returns output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'disco'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "DiscoTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "DiscoTest"
+        $output | Should -Not -BeNullOrEmpty
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "all animation modes are valid config values" {
+        $validModes = @('static', 'talking', 'typewriter', 'slide-in', 'bounce', 'dissolve', 'fade-in', 'blink', 'wiggle', 'wave', 'disco')
+        $validModes.Count | Should -Be 11
     }
 }
 

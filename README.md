@@ -101,10 +101,18 @@ Curated collection of beautifully drawn animal ASCII art. From tux to dragon, ca
 ### 🌈 Lolcat Rainbow
 Truecolor (24-bit) and 256-color support with configurable frequency and invert options.
 
-### ✨ 3 Animation Modes
-- **Static** — instant display
-- **Talking** — mouth movement simulation
-- **Typewriter** — character-by-character reveal
+### ✨ 11 Animation Modes
+- **static** — instant display
+- **talking** — mouth movement simulation
+- **typewriter** — character-by-character reveal
+- **slide-in** — cow slides in from the left
+- **bounce** — cow drops in with bounce physics
+- **dissolve** — cow materializes character by character
+- **fade-in** — cow fades in line by line
+- **blink** — cow eyes blink periodically
+- **wiggle** — cow wiggles left and right
+- **wave** — fortune text appears word by word with rainbow
+- **disco** — cow cycles through rainbow colors
 
 </td>
 <td width="50%">
@@ -231,7 +239,7 @@ Show-CFAnimation -CowOutput <string> [-Message <string>]
 
 ```json
 {
-  "animation": { "mode": "static", "speed": 20, "duration": 12, "spread": 3.0 },
+  "animation": { "mode": "static", "speed": 20, "duration": 12, "spread": 3.0, "blinkRate": 0.2, "amplitude": 2 },
   "cow": { "file": "default", "random": false, "mode": null, "eyes": "oo", "tongue": "  " },
   "fortune": { "database": "fortunes", "offensive": false },
   "lolcat": { "enabled": false, "truecolor": true, "frequency": 0.1 },
@@ -260,6 +268,14 @@ Show-CFAnimation -CowOutput <string> [-Message <string>]
 | `static` | Instant display (default) |
 | `talking` | Simulates mouth movement |
 | `typewriter` | Types character by character |
+| `slide-in` | Cow slides in from the left, column by column |
+| `bounce` | Cow drops in with realistic bounce physics |
+| `dissolve` | Cow materializes character by character randomly |
+| `fade-in` | Cow fades in line by line with brightness |
+| `blink` | Cow eyes blink periodically |
+| `wiggle` | Cow wiggles left and right playfully |
+| `wave` | Fortune text appears word by word with rainbow |
+| `disco` | Cow cycles through rainbow colors (party mode) |
 
 ---
 
