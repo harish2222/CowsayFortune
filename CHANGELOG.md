@@ -8,14 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.5] - 2026-06-13
 
 ### Added
-- Inno Setup installer (Forgum-v1.0.5-Setup.exe) for winget compatibility
+- Inno Setup installer (Forgum-v1.0.5-Setup.exe) for silent install
 - CI workflow: build-installer job compiles Inno Setup on Windows
 - Release artifacts: both ZIP and Setup.exe attached to GitHub releases
 - One-liner install: `& "$env:TEMP\Forgum-v1.0.5-Setup.exe" /VERYSILENT /SUPPRESSMSGBOXES`
-- Winget manifests updated to InstallerType: inno (was: zip, which failed validation)
 
 ### Changed
-- Winget manifests version bumped to 1.0.5 with Inno Setup EXE installer
 - Module version bumped to 1.0.5
 
 ## [1.0.4] - 2026-06-13
@@ -27,9 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package manager manifest validation tests
 - Documentation existence tests
 - Security harness tests (no Invoke-Expression, safe config paths, safe cow files)
-- Proof of legitimacy documentation for package manager reviewers
-- Winget submission (PR #387476)
-- Scoop submission (PR #18034)
+- Proof of legitimacy documentation
 
 ### Fixed
 - Show-FortuneCow function not defined in setup.ps1 generated profiles

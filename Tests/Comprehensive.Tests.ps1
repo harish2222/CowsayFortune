@@ -7,8 +7,8 @@ Describe "Comprehensive Feature Matrix Tests" {
     BeforeAll {
         $modulePath = Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1'
         Import-Module $modulePath -Force
-        $script:OriginalConfig = Get-CFConfig
-        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
+        $script:OriginalConfig = Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json
+        Set-CFConfig -Config $script:OriginalConfig
     }
 
     AfterAll {

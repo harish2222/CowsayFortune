@@ -17,10 +17,10 @@
 ## Quick Submit (Own Bucket)
 
 ```powershell
-# 1. Create hkdevs/scoop-forgum repo
+# 1. Create hkdevs/forgum repo
 # 2. Copy forgum.json to bucket/
 # 3. Test
-scoop bucket add hkdevs https://github.com/hkdevs/scoop-forgum
+scoop bucket add hkdevs https://github.com/hkdevs/forgum
 scoop install hkdevs/forgum
 ```
 

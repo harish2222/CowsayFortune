@@ -1548,7 +1548,7 @@ The `setup.ps1` script provides a guided wizard:
 
 ### Non-Interactive (Package Managers)
 
-For winget/scoop automated installs:
+For automated installs:
 
 ```powershell
 # Skips all prompts, uses defaults:

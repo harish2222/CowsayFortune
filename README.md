@@ -52,19 +52,6 @@
 
 ## Install
 
-### Windows Package Manager (winget)
-
-```powershell
-winget install HKDEVS.Forgum
-```
-
-### Scoop (Windows)
-
-```powershell
-scoop bucket add hkdevs https://github.com/hkdevs/scoop-forgum
-scoop install hkdevs/forgum
-```
-
 ### One-liner (PowerShell)
 
 ```powershell

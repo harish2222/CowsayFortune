@@ -2,22 +2,21 @@
 
 ## Overview
 
-Package: `forgum` v1.0.3
+Package: `forgum` v1.0.5
 Targets:
-1. Own bucket: `hkdevs/scoop-forgum`
-2. Community bucket: `ScoopInstaller/Extras`
+1. Own bucket: `hkdevs/forgum`
 
 ---
 
-## Part 1: Own Bucket (hkdevs/scoop-forgum)
+## Part 1: Own Bucket (hkdevs/forgum)
 
 ### Step 1: Create Repo
 
-1. Create repo `hkdevs/scoop-forgum` on GitHub
+1. Create repo `hkdevs/forgum` on GitHub
 2. Clone:
 ```powershell
-git clone https://github.com/hkdevs/scoop-forgum
-cd scoop-forgum
+git clone https://github.com/hkdevs/forgum
+cd forgum
 ```
 
 ### Step 2: Add Manifest
@@ -27,7 +26,7 @@ Create `bucket/forgum.json` with contents from `package-managers/scoop/forgum.js
 ### Step 3: Test
 
 ```powershell
-scoop bucket add hkdevs https://github.com/hkdevs/scoop-forgum
+scoop bucket add hkdevs https://github.com/hkdevs/forgum
 scoop install hkdevs/forgum
 ```
 
