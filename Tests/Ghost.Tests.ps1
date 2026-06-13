@@ -3,10 +3,14 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'originalConfig')]
 param()
 
+# Prevent auto-start from modifying config during tests
+$env:FORGUM_NOAUTOSTART = '1'
+
 Describe "Ghost Tests - Hostile QA" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
         $originalConfig = Get-CFConfig
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     AfterEach {
@@ -33,13 +37,13 @@ Describe "Ghost Tests - Hostile QA" {
 
     It "Ghost 04: Single character message renders correctly" {
         $output = Invoke-Cowsay -Text 'X'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match 'X'
     }
 
     It "Ghost 05: Newlines in message are preserved" {
         $output = Invoke-Cowsay -Text "Line1`nLine2`nLine3"
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match 'Line1'
         $raw | Should -Match 'Line2'
         $raw | Should -Match 'Line3'
@@ -48,7 +52,7 @@ Describe "Ghost Tests - Hostile QA" {
     # --- SPECIAL CHARACTERS & INJECTION ---
     It "Ghost 06: Shell injection attempt in text is harmless" {
         $output = Invoke-Cowsay -Text '$(Get-Process)'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '\$\(Get-Process\)'
         # Verify no processes were actually enumerated
     }
@@ -71,26 +75,26 @@ Describe "Ghost Tests - Hostile QA" {
 
     It "Ghost 10: Curly braces and special JSON chars in text" {
         $output = Invoke-Cowsay -Text '{"key": "value", "num": 42}'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '"key"'
     }
 
     # --- PARAMETER BOUNDARY ---
     It "Ghost 11: Eyes with exact 2 chars works" {
         $output = Invoke-Cowsay -Text 'Test' -Eyes '@@'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '@@'
     }
 
     It "Ghost 12: Tongue with exact 2 chars works" {
         $output = Invoke-Cowsay -Text 'Test' -Tongue '##'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '##'
     }
 
     It "Ghost 13: Thoughts character single char works" {
         $output = Invoke-Cowsay -Text 'Test' -Thoughts 'o'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match 'o'
     }
 
@@ -223,13 +227,13 @@ Describe "Ghost Tests - Hostile QA" {
     # --- OUTPUT INTEGRITY ---
     It "Ghost 27: Cow face ^__^ is always present in default cow output" {
         $output = Invoke-Cowsay -Text 'Anything'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '\^__\^'
     }
 
     It "Ghost 28: Speech balloon borders are properly closed" {
         $output = Invoke-Cowsay -Text 'Test'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $lines = $raw -split "`n"
         # Find lines that are all # (with optional leading spaces)
         $hashLines = $lines | Where-Object { $_.Trim() -match '^#+$' }
@@ -240,7 +244,7 @@ Describe "Ghost Tests - Hostile QA" {
 
     It "Ghost 29: Think bubble uses o not backslash" {
         $output = Invoke-Cowsay -Text 'Think' -Thoughts 'o'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         # Should have 'o' connector, not '\'
         $raw | Should -Match 'o\s+\^__\^'
         $raw | Should -Not -Match '\\\s+\^__\^'
@@ -249,7 +253,7 @@ Describe "Ghost Tests - Hostile QA" {
     It "Ghost 30: Invoke-Forgum returns complete cow with fortune" {
         $output = Invoke-Forgum
         $output | Should -Not -BeNullOrEmpty
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         # Should have balloon, cow face, and fortune text
         $raw | Should -Match '\^__\^'
         $raw | Should -Match '#'

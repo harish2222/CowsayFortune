@@ -1,5 +1,8 @@
 #Requires -Modules Pester
 
+# Prevent auto-start from modifying config during tests
+$env:FORGUM_NOAUTOSTART = '1'
+
 Describe "Module Loading" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force -ErrorVariable errors
@@ -53,6 +56,7 @@ Describe "Module Loading" {
 Describe "Config System" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     Context "Default config" {
@@ -147,6 +151,7 @@ Describe "Config System" {
 Describe "Fortune System" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     It "returns a fortune" {
@@ -188,6 +193,7 @@ Describe "Fortune System" {
 Describe "Cow System" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     Context "Cow listing" {
@@ -240,26 +246,26 @@ Describe "Cow System" {
 
         It "renders default face" {
             $output = Invoke-Cowsay -Text "Test" -CowFile 'default'
-            $raw = $output -replace '\x1b\[[0-9;]*m', ''
+            $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
             $raw | Should -Match '\^__\^'
         }
 
         It "renders speech bubble borders" {
             $output = Invoke-Cowsay -Text "Test"
-            $raw = $output -replace '\x1b\[[0-9;]*m', ''
+            $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
             $raw | Should -Match '#####'
             $raw | Should -Match '\|\|'
         }
 
         It "supports thinking mode" {
             $output = Invoke-Cowsay -Text "Thinking..." -Thoughts 'o'
-            $raw = $output -replace '\x1b\[[0-9;]*m', ''
+            $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
             $raw | Should -Match "Thinking"
         }
 
         It "supports custom eyes" {
             $output = Invoke-Cowsay -Text "Test" -Eyes '@@'
-            $raw = $output -replace '\x1b\[[0-9;]*m', ''
+            $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
             $raw | Should -Match '@@'
         }
 
@@ -271,7 +277,7 @@ Describe "Cow System" {
         It "word wraps long messages" {
             $long = "This is a very long message that should be wrapped at the configured max width to prevent the cow from being too wide"
             $output = Invoke-Cowsay -Text $long
-            $raw = $output -replace '\x1b\[[0-9;]*m', ''
+            $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
             $lines = $raw -split "`n"
             $maxLen = ($lines | ForEach-Object { $_.Length } | Measure-Object -Maximum).Maximum
             $maxLen | Should -BeLessThan 100
@@ -283,7 +289,7 @@ Describe "Cow System" {
 
         It "handles multiline message" {
             $output = Invoke-Cowsay -Text "Line 1`nLine 2"
-            $raw = $output -replace '\x1b\[[0-9;]*m', ''
+            $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
             $raw | Should -Match "Line 1"
             $raw | Should -Match "Line 2"
         }
@@ -293,6 +299,7 @@ Describe "Cow System" {
 Describe "Combined Forgum" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     It "outputs cowsay with fortune" {
@@ -301,13 +308,13 @@ Describe "Combined Forgum" {
 
     It "contains a cow" {
         $output = Invoke-Forgum
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '\^__\^'
     }
 
     It "contains a fortune message" {
         $output = Invoke-Forgum
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '[a-zA-Z]'
     }
 
@@ -323,6 +330,7 @@ Describe "Combined Forgum" {
 Describe "Lolcat Colorization" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     It "produces colored output when enabled with all options" {
@@ -391,6 +399,7 @@ Describe "Lolcat Colorization" {
 Describe "Animation System" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     It "Show-CFAnimation runs without error" {
@@ -401,7 +410,7 @@ Describe "Animation System" {
     It "static animation returns output" {
         $cowOutput = Invoke-Cowsay -Text "Test"
         $output = Show-CFAnimation -CowOutput $cowOutput
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match "Test"
     }
 }
@@ -409,11 +418,12 @@ Describe "Animation System" {
 Describe "Security" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     It "does not execute code from cow files" {
         $output = Invoke-Cowsay -Text "Test"
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Not -Match 'Invoke-Expression'
         $raw | Should -Not -Match 'Get-Process'
     }
@@ -433,6 +443,7 @@ Describe "Security" {
 Describe "Edge Cases" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     It "handles unicode in message" {

@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint
     steps:
-      - uses: actions/checkout@v6
+      -         uses: actions/checkout@v4
 
       - name: Install PSScriptAnalyzer
         shell: pwsh
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate Module
     steps:
-      - uses: actions/checkout@v6
+      -         uses: actions/checkout@v4
 
       - name: Validate module manifest
         shell: pwsh
@@ -91,7 +91,7 @@ jobs:
     name: Test (${{ matrix.os }})
 
     steps:
-      - uses: actions/checkout@v6
+      -         uses: actions/checkout@v4
 
       - name: Install Pester 5
         shell: pwsh
@@ -103,6 +103,8 @@ jobs:
 
       - name: Run Pester Tests
         shell: pwsh
+        env:
+          FORGUM_NOAUTOSTART: '1'
         run: |
           $config = New-PesterConfiguration
           $config.Run.Path = './Tests'
@@ -133,7 +135,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      -         uses: actions/checkout@v4
 
       - name: Get version from tag
         id: version
@@ -172,7 +174,7 @@ jobs:
           Copy-Item $zipPath ./Forgum-v$version.zip
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: Forgum-v${{ steps.version.outputs.tag }}
           path: Forgum-v*.zip
@@ -185,7 +187,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      -         uses: actions/checkout@v4
 
       - name: Get version from tag
         id: version
@@ -233,7 +235,7 @@ jobs:
           }
 
       - name: Upload installer artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: Forgum-v${{ steps.version.outputs.tag }}-Setup
           path: dist/Forgum-v*-Setup.exe
@@ -246,19 +248,19 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      -         uses: actions/checkout@v4
 
       - name: Get version from tag
         id: version
         run: echo "tag=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Download build artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
           name: Forgum-v${{ steps.version.outputs.tag }}
 
       - name: Download installer artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
           name: Forgum-v${{ steps.version.outputs.tag }}-Setup
           path: dist/

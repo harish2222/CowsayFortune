@@ -1,10 +1,14 @@
 #Requires -Modules Pester
 
+# Prevent auto-start from modifying config during tests
+$env:FORGUM_NOAUTOSTART = '1'
+
 Describe "Comprehensive Feature Matrix Tests" {
     BeforeAll {
         $modulePath = Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1'
         Import-Module $modulePath -Force
         $script:OriginalConfig = Get-CFConfig
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
     }
 
     AfterAll {
@@ -19,14 +23,14 @@ Describe "Comprehensive Feature Matrix Tests" {
     It "Test 01: Invoke-Cowsay default returns string containing cow face" {
         $output = Invoke-Cowsay -Text "Hello"
         $output | Should -BeOfType System.String
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '\^__\^'
     }
 
     # --- TEST 2: Invoke-Cowsay with all params (Text, CowFile, Eyes, Tongue, Thoughts) ---
     It "Test 02: Invoke-Cowsay with all custom params applies all substitutions" {
         $output = Invoke-Cowsay -Text "CustomAll" -CowFile 'tux' -Eyes '@@' -Tongue '##' -Thoughts 'o'
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match 'CustomAll'
         $raw | Should -Match '@_@'
     }
@@ -137,7 +141,7 @@ Describe "Comprehensive Feature Matrix Tests" {
 
         $longText = "This is a very long message that must be wrapped at forty characters width to stay within limits"
         $output = Invoke-Cowsay -Text $longText
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $lines = $raw -split "`n"
         $maxLen = ($lines | ForEach-Object { $_.Length } | Measure-Object -Maximum).Maximum
         $maxLen | Should -BeLessThan 60
@@ -147,14 +151,14 @@ Describe "Comprehensive Feature Matrix Tests" {
     It "Test 15: Invoke-Cowsay with empty string still returns output" {
         $output = Invoke-Cowsay -Text ""
         $output | Should -Not -BeNullOrEmpty
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '\^__\^'
     }
 
     # --- TEST 16: Invoke-Cowsay handles multiline message ---
     It "Test 16: Invoke-Cowsay multiline message preserves both lines" {
         $output = Invoke-Cowsay -Text "Alpha`nBeta"
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match 'Alpha'
         $raw | Should -Match 'Beta'
     }
@@ -163,7 +167,7 @@ Describe "Comprehensive Feature Matrix Tests" {
     It "Test 17: Invoke-Forgum returns non-empty string with cow face" {
         $output = Invoke-Forgum
         $output | Should -BeOfType System.String
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '\^__\^'
     }
 
@@ -171,7 +175,7 @@ Describe "Comprehensive Feature Matrix Tests" {
     It "Test 18: Invoke-Forgum -Think produces thinking bubble output" {
         $output = Invoke-Forgum -Think
         $output | Should -Not -BeNullOrEmpty
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match '\^__\^'
     }
 
@@ -237,7 +241,7 @@ Describe "Comprehensive Feature Matrix Tests" {
     It "Test 24: Show-CFAnimation static mode returns cow output unchanged" {
         $cowOutput = Invoke-Cowsay -Text "AnimTest"
         $result = Show-CFAnimation -CowOutput $cowOutput
-        $raw = $result -replace '\x1b\[[0-9;]*m', ''
+        $raw = $result -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match 'AnimTest'
     }
 
@@ -271,7 +275,7 @@ Describe "Comprehensive Feature Matrix Tests" {
     # --- TEST 27: Special characters in message are preserved ---
     It "Test 27: Special characters in cow message are preserved in output" {
         $output = Invoke-Cowsay -Text "Hello <world> & 'friends' (test) !"
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match 'Hello <world>'
     }
 
@@ -280,7 +284,7 @@ Describe "Comprehensive Feature Matrix Tests" {
         $longWord = "A" * 500
         $output = Invoke-Cowsay -Text $longWord
         $output | Should -Not -BeNullOrEmpty
-        $raw = $output -replace '\x1b\[[0-9;]*m', ''
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match 'AAAA'
     }
 

@@ -26,13 +26,13 @@ function Show-CFAnimation {
 
     switch ($mode) {
         'talking' {
-            Invoke-TalkingAnimation -CowOutput $CowOutput -Message $Message -Duration $config.animation.duration
+            return Invoke-TalkingAnimation -CowOutput $CowOutput -Message $Message -Duration $config.animation.duration
         }
         'typewriter' {
-            Invoke-TypewriterAnimation -CowOutput $CowOutput -Message $Message -Speed $config.animation.speed
+            return Invoke-TypewriterAnimation -CowOutput $CowOutput -Message $Message -Speed $config.animation.speed
         }
         default {
-            Invoke-StaticAnimation -CowOutput $CowOutput -Message $Message
+            return Invoke-StaticAnimation -CowOutput $CowOutput -Message $Message
         }
     }
 }

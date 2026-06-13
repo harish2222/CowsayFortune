@@ -38,7 +38,9 @@ function Set-CFConfig {
         # Atomic write: write to temp file then move (prevents corruption on crash)
         $tempPath = "$path.tmp"
         try {
+            if (Test-Path $tempPath) { Remove-Item $tempPath -Force -ErrorAction SilentlyContinue }
             $json | Set-Content -Path $tempPath -Encoding UTF8 -Force -ErrorAction Stop
+            if (Test-Path $path) { Remove-Item $path -Force -ErrorAction SilentlyContinue }
             Move-Item -Path $tempPath -Destination $path -Force -ErrorAction Stop
         }
         catch {

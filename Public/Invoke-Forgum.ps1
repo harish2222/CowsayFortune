@@ -54,15 +54,31 @@ function Invoke-Forgum {
     # Determine effective lolcat: explicit switch OR config setting
     $useLolcat = $Lolcat -or $config.lolcat.enabled
 
-    if ($useLolcat) {
-        $cowParams.Lolcat = $true
-    }
+    # Determine effective animation mode
+    $useAnimation = $config.animation.mode -and $config.animation.mode -ne 'static'
 
+    # Render cow WITHOUT lolcat so animation can modify it
     $cowOutput = Invoke-Cowsay @cowParams
 
-    # Apply animation display if configured (non-lolcat only)
-    if (-not $useLolcat) {
-        $null = Show-CFAnimation -CowOutput $cowOutput -Message $fortune
+    # Apply animation if configured (works with or without lolcat)
+    if ($useAnimation) {
+        $cowOutput = Show-CFAnimation -CowOutput $cowOutput -Message $fortune
+    }
+
+    # Apply lolcat colorization after animation
+    if ($useLolcat) {
+        $lolcatParams = @{
+            Text      = $cowOutput
+            Frequency = $config.lolcat.frequency
+            Spread    = if ($config.lolcat.spread) { $config.lolcat.spread } else { 3.0 }
+            Seed      = if ($config.lolcat.seed) { $config.lolcat.seed } else { 0 }
+            Truecolor = $config.lolcat.truecolor
+            Invert    = $config.lolcat.invert
+            Animate   = $config.lolcat.animate
+            Duration  = if ($config.lolcat.duration) { $config.lolcat.duration } else { 12 }
+            Speed     = if ($config.lolcat.speed) { $config.lolcat.speed } else { 20.0 }
+        }
+        $cowOutput = Format-Lolcat @lolcatParams
     }
 
     return $cowOutput
