@@ -36,7 +36,7 @@ All scripts display the FORGUM figlet banner on startup:
 ## Package Manager Integration
 
 ### Winget
-- InstallerType: `zip` (extracts PowerShell module)
+- InstallerType: `zip` (PowerShell module in zip)
 - Downloads: `Forgum-v1.0.3.zip` from GitHub Release
 - Extracts module to `~/Documents/PowerShell/Modules/Forgum/`
 - Runs `setup.ps1 -NonInteractive -Force` silently
