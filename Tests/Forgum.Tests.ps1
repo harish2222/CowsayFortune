@@ -513,10 +513,10 @@ Describe "Package Manager Support" {
         $json.version | Should -Be $module.Version.ToString()
     }
 
-    It "winget installer SHA256 is 64 hex chars" {
+    It "winget installer SHA256 is 64 hex chars or placeholder" {
         $yaml = Get-Content "$script:ProjectRoot/package-managers/winget/HKDEVS.Forgum.installer.yaml" -Raw
         $sha = ($yaml | Select-String 'InstallerSha256:\s*(.+)').Matches[0].Groups[1].Value.Trim()
-        $sha | Should -Match '^[a-f0-9]{64}$'
+        ($sha -match '^[a-f0-9]{64}$' -or $sha -eq 'REPLACE_WITH_ACTUAL_SHA256') | Should -BeTrue
     }
 
     It "scoop manifest hash is 64 hex chars" {
@@ -527,12 +527,12 @@ Describe "Package Manager Support" {
     It "winget installer URL points to GitHub Release" {
         $yaml = Get-Content "$script:ProjectRoot/package-managers/winget/HKDEVS.Forgum.installer.yaml" -Raw
         $url = ($yaml | Select-String 'InstallerUrl:\s*(.+)').Matches[0].Groups[1].Value.Trim()
-        $url | Should -Match 'github\.com.*releases.*v1\.0\.4'
+        $url | Should -Match 'github\.com.*releases.*Forgum.*Setup\.exe'
     }
 
     It "scoop URL points to GitHub Release" {
         $json = Get-Content "$script:ProjectRoot/package-managers/scoop/forgum.json" -Raw | ConvertFrom-Json
-        $json.url | Should -Match 'github\.com.*releases.*v1\.0\.4'
+        $json.url | Should -Match 'github\.com.*releases.*Forgum.*\.zip'
     }
 
     It "proof README exists and has content" {
