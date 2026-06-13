@@ -197,7 +197,7 @@ if (-not `$global:HKDEVS_STARTUP_DONE) {
 function cowconfig { Get-CFConfig | ConvertTo-Json -Depth 4 }
 function cowpreview { param([string]$Cow='default',[string]$Text='Hello!') Invoke-Cowsay -Text $Text -CowFile $Cow }
 function cowgallery { param([int]$Count=5) Get-CFCow | Get-Random -Count $Count | ForEach-Object { Invoke-Cowsay -Text (Get-Fortune) -CowFile $_ } }
-function lolcat-toggle { `$c = Get-CFConfig; `$c.lolcat.enabled = -not `$c.lolcat.enabled; Set-CFConfig -Config `$c; Write-Host "Lolcat: $(if (`$c.lolcat.enabled){'ON'}else{'OFF'})" }
+function lolcat-toggle { `$c = Get-CFConfig; `$c.lolcat.enabled = -not `$c.lolcat.enabled; Set-CFConfig -Config `$c; if (`$c.lolcat.enabled) { Write-Host "Lolcat: ON" -ForegroundColor Green } else { Write-Host "Lolcat: OFF" -ForegroundColor Yellow } }
 function cow-animate { param([ValidateSet('static','talking','typewriter')]`$Mode) `$c = Get-CFConfig; `$c.animation.mode = `$Mode; Set-CFConfig -Config `$c; Write-Host "Animation: `$Mode" }
 "@
             $newContent += $aliasBlock
