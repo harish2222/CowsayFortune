@@ -13,9 +13,15 @@ function Invoke-Forgum {
         Override the eye characters from config.
     .PARAMETER Tongue
         Override the tongue characters from config.
+    .PARAMETER Lolcat
+        Enable rainbow lolcat colorization for this invocation.
+        Overrides the lolcat configuration setting.
     .EXAMPLE
         Invoke-Forgum
         Shows a cow with a random fortune.
+    .EXAMPLE
+        Invoke-Forgum -Lolcat
+        Shows a rainbow-colored cow with a random fortune.
     .EXAMPLE
         Invoke-Forgum -Think -CowFile 'tux'
         Shows tux thinking a fortune.
@@ -30,7 +36,9 @@ function Invoke-Forgum {
 
         [string]$Eyes,
 
-        [string]$Tongue
+        [string]$Tongue,
+
+        [switch]$Lolcat
     )
 
     $config = Get-CFConfig
@@ -43,13 +51,21 @@ function Invoke-Forgum {
     if ($Tongue)  { $cowParams.Tongue  = $Tongue }
     if ($Think)   { $cowParams.Thoughts = 'o' }
 
-    $cowOutput = Invoke-Cowsay @cowParams
+    # Determine effective lolcat: explicit switch OR config setting
+    $useLolcat = $Lolcat -or $config.lolcat.enabled
 
-    if ($config.lolcat -and $config.lolcat.enabled) {
-        $cowOutput = Format-Lolcat -Text $cowOutput `
-            -Frequency $config.lolcat.frequency `
-            -Truecolor:$config.lolcat.truecolor
+    if ($useLolcat) {
+        $cowParams.Lolcat = $true
     }
 
-    Show-CFAnimation -CowOutput $cowOutput -Message $fortune
+    $cowOutput = Invoke-Cowsay @cowParams
+
+    # Display output
+    if ($useLolcat) {
+        Show-Lolcat -Text $cowOutput
+    } else {
+        $null = Show-CFAnimation -CowOutput $cowOutput -Message $fortune
+    }
+
+    return $cowOutput
 }

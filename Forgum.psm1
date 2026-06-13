@@ -1,5 +1,35 @@
 #Requires -Version 5.1
 
+# Enable Virtual Terminal Processing for truecolor ANSI support on Windows
+if ($IsWindows -or $env:OS -eq 'Windows_NT') {
+    try {
+        Add-Type @"
+            using System;
+            using System.Runtime.InteropServices;
+            public class VTTerminal {
+                [DllImport("kernel32.dll", SetLastError=true)]
+                public static extern IntPtr GetStdHandle(int nStdHandle);
+                [DllImport("kernel32.dll", SetLastError=true)]
+                public static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint lpMode);
+                [DllImport("kernel32.dll", SetLastError=true)]
+                public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
+                public const int STD_OUTPUT_HANDLE = -11;
+                public const int STD_ERROR_HANDLE  = -12;
+                public const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
+            }
+"@ -ErrorAction SilentlyContinue
+
+        $hOut = [VTTerminal]::GetStdHandle([VTTerminal]::STD_OUTPUT_HANDLE)
+        $mode = 0
+        if ([VTTerminal]::GetConsoleMode($hOut, [ref]$mode)) {
+            $newMode = $mode -bor [VTTerminal]::ENABLE_VIRTUAL_TERMINAL_PROCESSING
+            [void][VTTerminal]::SetConsoleMode($hOut, $newMode)
+        }
+    } catch {
+        # Non-fatal: VT might not be available on older Windows or non-console hosts
+    }
+}
+
 # Module initialization - dot-source private then public functions
 $ErrorActionPreference = 'Stop'
 
