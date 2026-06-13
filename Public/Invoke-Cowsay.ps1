@@ -113,9 +113,18 @@ function Invoke-Cowsay {
 
         # Apply lolcat if explicitly requested via -Lolcat switch
         if ($Lolcat) {
-            $output = Format-Lolcat -Text $output `
-                -Frequency $config.lolcat.frequency `
-                -Truecolor:$config.lolcat.truecolor
+            $lolcatParams = @{
+                Text      = $output
+                Frequency = $config.lolcat.frequency
+                Spread    = if ($config.lolcat.spread) { $config.lolcat.spread } else { 3.0 }
+                Seed      = if ($config.lolcat.seed) { $config.lolcat.seed } else { 0 }
+                Truecolor = $config.lolcat.truecolor
+                Invert    = $config.lolcat.invert
+                Animate   = $config.lolcat.animate
+                Duration  = if ($config.lolcat.duration) { $config.lolcat.duration } else { 12 }
+                Speed     = if ($config.lolcat.speed) { $config.lolcat.speed } else { 20.0 }
+            }
+            $output = Format-Lolcat @lolcatParams
         }
 
         return $output

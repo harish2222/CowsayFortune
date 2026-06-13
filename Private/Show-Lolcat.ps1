@@ -5,14 +5,20 @@ function Show-Lolcat {
     .DESCRIPTION
         Renders ANSI color codes by writing directly to the console.
         Enables virtual terminal processing on Windows for proper 24-bit color support.
-        Falls back to PowerShell Write-Host with 256-color palette on legacy terminals.
+        Supports animated mode with frame-by-frame rendering.
     .PARAMETER Text
         The text to display (with ANSI escape codes already embedded).
+    .PARAMETER Animate
+        Enable animation mode for psychedelic effects.
+    .NOTES
+        Based on busyloop/lolcat (BSD-3-Clause) - https://github.com/busyloop/lolcat
     #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
-        [string]$Text
+        [string]$Text,
+
+        [switch]$Animate
     )
 
     # Attempt to enable virtual terminal processing on Windows
@@ -44,7 +50,19 @@ function Show-Lolcat {
         }
     }
 
-    # Write directly to console to bypass PowerShell pipeline formatting
-    # that may strip or ignore ANSI escape codes
-    [Console]::WriteLine($Text)
+    if ($Animate) {
+        # Animation mode: write frames with carriage returns
+        # Hide cursor during animation
+        [Console]::Write("${esc}[?25l")
+        try {
+            [Console]::Write($Text)
+            [Console]::Write("${esc}[0m")
+        } finally {
+            # Show cursor after animation
+            [Console]::Write("${esc}[?25h${esc}[0m")
+        }
+    } else {
+        # Plain mode: write directly to console
+        [Console]::WriteLine($Text)
+    }
 }
