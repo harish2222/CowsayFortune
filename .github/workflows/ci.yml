@@ -177,8 +177,68 @@ jobs:
           name: Forgum-v${{ steps.version.outputs.tag }}
           path: Forgum-v*.zip
 
+  build-installer:
+    needs: [test]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    name: Build Installer (Inno Setup)
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Get version from tag
+        id: version
+        run: echo "tag=${GITHUB_REF#refs/tags/v}" >> $env:GITHUB_OUTPUT
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (Test-Path $iscc) {
+            Write-Host "Inno Setup found at: $iscc"
+          } else {
+            Write-Host "Inno Setup not found, checking alternatives..."
+            Get-ChildItem "C:\Program Files*\Inno Setup*" -ErrorAction SilentlyContinue | ForEach-Object { Write-Host $_.FullName }
+          }
+
+      - name: Compile installer
+        shell: pwsh
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          $script = "installer\Forgum.iss"
+
+          # Update version in script
+          $version = '${{ steps.version.outputs.tag }}'
+          $content = Get-Content $script -Raw
+          $content = $content -replace '#define MyAppVersion ".*"', "#define MyAppVersion `"$version`""
+          Set-Content $script $content
+
+          # Compile
+          & "$iscc" "$script"
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Inno Setup compilation failed with exit code $LASTEXITCODE" -ForegroundColor Red
+            exit 1
+          }
+
+          $installer = "dist\Forgum-v$version-Setup.exe"
+          if (Test-Path $installer) {
+            $size = (Get-Item $installer).Length / 1MB
+            Write-Host "Installer created: $installer ($([math]::Round($size, 1)) MB)"
+          } else {
+            Write-Host "Installer not found at expected path" -ForegroundColor Red
+            exit 1
+          }
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: Forgum-v${{ steps.version.outputs.tag }}-Setup
+          path: dist/Forgum-v*-Setup.exe
+
   release:
-    needs: [build]
+    needs: [build, build-installer]
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     name: Release
@@ -196,6 +256,12 @@ jobs:
         with:
           name: Forgum-v${{ steps.version.outputs.tag }}
 
+      - name: Download installer artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: Forgum-v${{ steps.version.outputs.tag }}-Setup
+          path: dist/
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
@@ -203,3 +269,4 @@ jobs:
           generate_release_notes: true
           files: |
             Forgum-v*.zip
+            dist/Forgum-v*-Setup.exe
