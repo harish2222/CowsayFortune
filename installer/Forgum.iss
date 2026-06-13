@@ -31,7 +31,7 @@ Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=lowest
-PrivilegesRequiredOverridingOwnedDir
+PrivilegesRequiredOverridingOwnedDir=admin
 UninstallDisplayName={#MyAppName} {#MyAppVersion}
 UninstallDisplayIcon={app}\Forgum.psm1
 VersionInfoVersion={#MyAppVersion}.0
