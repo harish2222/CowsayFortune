@@ -52,6 +52,19 @@
 
 ## Install
 
+### Windows Package Manager (winget)
+
+```powershell
+winget install HKDEVS.Forgum
+```
+
+### Scoop (Windows)
+
+```powershell
+scoop bucket add hkdevs https://github.com/hkdevs/scoop-forgum
+scoop install hkdevs/forgum
+```
+
 ### One-liner (PowerShell)
 
 ```powershell
@@ -70,6 +83,22 @@ bash <(curl -fsSL https://raw.githubusercontent.com/harish2222/Forgum/main/insta
 git clone https://github.com/harish2222/Forgum.git
 Import-Module ./Forgum/Forgum.psd1
 ```
+
+### Post-Install Setup
+
+After installing, run the interactive setup to configure shell integration:
+
+```powershell
+.\setup.ps1
+```
+
+This will configure:
+- Fortune cow on terminal startup
+- Rainbow lolcat colors
+- Default cow file
+- Animation mode
+- Shell aliases (cowconfig, cowpreview, cowgallery)
+- Tab completion
 
 ---
 

@@ -1,6 +1,6 @@
 @{
     RootModule        = 'Forgum.psm1'
-    ModuleVersion     = '1.0.2'
+    ModuleVersion     = '1.0.3'
     GUID              = 'f7e6b3a1-2d84-4c9f-a5e0-1b3d7c8f9e2a'
     Author            = 'HKDEVS'
     CompanyName       = 'HKDEVS'
@@ -25,7 +25,15 @@
             LicenseUri   = 'https://github.com/harish2222/Forgum/blob/main/LICENSE'
             ProjectUri   = 'https://github.com/harish2222/Forgum'
             IconUri      = 'https://raw.githubusercontent.com/harish2222/Forgum/main/icon.png'
-            ReleaseNotes = 'v1.0.2: Updated GitHub Actions to Node.js 24 (checkout@v6, upload-artifact@v6, download-artifact@v7, gh-release@v3). Updated Pester minimum to 5.7.0 and PSScriptAnalyzer minimum to 1.24.0. Fixed lint issues, security hardening, and code review fixes.'
+            ReleaseNotes = @'
+## v1.0.3
+- Fixed double output bug in Invoke-Forgum -Lolcat
+- Updated all GitHub Actions to Node.js 24 compatible versions
+- Added interactive setup script with shell configuration toggles
+- Added winget and Scoop package manager support
+- Updated Pester minimum to 5.7.0, PSScriptAnalyzer minimum to 1.24.0
+- Updated README with figlet banner and demo screenshots
+'@
         }
     }
 }
