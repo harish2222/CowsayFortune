@@ -5,6 +5,19 @@ All notable changes to Forgum will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2026-06-13
+
+### Added
+- Inno Setup installer (Forgum-v1.0.5-Setup.exe) for winget compatibility
+- CI workflow: build-installer job compiles Inno Setup on Windows
+- Release artifacts: both ZIP and Setup.exe attached to GitHub releases
+- One-liner install: `& "$env:TEMP\Forgum-v1.0.5-Setup.exe" /VERYSILENT /SUPPRESSMSGBOXES`
+- Winget manifests updated to InstallerType: inno (was: zip, which failed validation)
+
+### Changed
+- Winget manifests version bumped to 1.0.5 with Inno Setup EXE installer
+- Module version bumped to 1.0.5
+
 ## [1.0.4] - 2026-06-13
 
 ### Added

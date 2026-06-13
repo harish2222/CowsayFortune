@@ -1,6 +1,6 @@
 @{
     RootModule        = 'Forgum.psm1'
-    ModuleVersion     = '1.0.4'
+    ModuleVersion     = '1.0.5'
     GUID              = 'f7e6b3a1-2d84-4c9f-a5e0-1b3d7c8f9e2a'
     Author            = 'HKDEVS'
     CompanyName       = 'HKDEVS'
@@ -26,6 +26,12 @@
             ProjectUri   = 'https://github.com/harish2222/Forgum'
             IconUri      = 'https://raw.githubusercontent.com/harish2222/Forgum/main/icon.png'
             ReleaseNotes = @'
+## v1.0.5
+- Inno Setup installer for winget compatibility (EXE, no admin required)
+- One-liner install via /VERYSILENT flag
+- CI builds both ZIP and Setup.exe for releases
+- Winget manifests corrected (InstallerType: inno)
+
 ## v1.0.4
 - Complete sample configurations for all platforms (PowerShell, Bash, Zsh, Fish, Git-Bash)
 - Wiki documentation: Sample-Configs.md with 9 use cases across 5 shells
