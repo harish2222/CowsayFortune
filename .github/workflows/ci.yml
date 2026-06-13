@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install PSScriptAnalyzer
         shell: pwsh
         run: |
-          if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer | Where-Object Version -ge '1.20.0')) {
-            Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -MinimumVersion 1.20.0
+          if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer | Where-Object Version -ge '1.24.0')) {
+            Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -MinimumVersion 1.24.0
           }
 
       - name: Run PSScriptAnalyzer
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate Module
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Validate module manifest
         shell: pwsh
@@ -91,13 +91,13 @@ jobs:
     name: Test (${{ matrix.os }})
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install Pester 5
         shell: pwsh
         run: |
           if (-not (Get-Module -ListAvailable -Name Pester | Where-Object { $_.Version.Major -ge 5 })) {
-            Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser -MinimumVersion 5.0.0 -MaximumVersion 5.99.99
+            Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser -MinimumVersion 5.7.0 -MaximumVersion 5.99.99
           }
           Get-Module -ListAvailable -Name Pester | Where-Object Version.Major -ge 5 | Select-Object Name, Version | Format-Table -AutoSize
 
@@ -133,7 +133,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Get version from tag
         id: version
@@ -172,7 +172,7 @@ jobs:
           Copy-Item $zipPath ./Forgum-v$version.zip
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Forgum-v${{ steps.version.outputs.tag }}
           path: Forgum-v*.zip
@@ -185,19 +185,19 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Get version from tag
         id: version
         run: echo "tag=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Download build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: Forgum-v${{ steps.version.outputs.tag }}
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name: "Forgum v${{ steps.version.outputs.tag }}"
           generate_release_notes: true

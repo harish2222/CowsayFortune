@@ -25,7 +25,7 @@
             LicenseUri   = 'https://github.com/harish2222/Forgum/blob/main/LICENSE'
             ProjectUri   = 'https://github.com/harish2222/Forgum'
             IconUri      = 'https://raw.githubusercontent.com/harish2222/Forgum/main/icon.png'
-            ReleaseNotes = 'v1.1.0: Added profile customization functions, comprehensive customization guide, advanced contributor methods.'
+            ReleaseNotes = 'v1.0.2: Updated GitHub Actions to Node.js 24 (checkout@v6, upload-artifact@v6, download-artifact@v7, gh-release@v3). Updated Pester minimum to 5.7.0 and PSScriptAnalyzer minimum to 1.24.0. Fixed lint issues, security hardening, and code review fixes.'
         }
     }
 }
