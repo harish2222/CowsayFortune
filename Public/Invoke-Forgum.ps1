@@ -60,12 +60,8 @@ function Invoke-Forgum {
 
     $cowOutput = Invoke-Cowsay @cowParams
 
-    # Display output
-    if ($useLolcat) {
-        $animate = $config.lolcat.animate
-        # $null = suppresses Show-Lolcat's return value; [Console]::WriteLine handles display
-        $null = Show-Lolcat -Text $cowOutput -Animate:$animate
-    } else {
+    # Apply animation display if configured (non-lolcat only)
+    if (-not $useLolcat) {
         $null = Show-CFAnimation -CowOutput $cowOutput -Message $fortune
     }
 
