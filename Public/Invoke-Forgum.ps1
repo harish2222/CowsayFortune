@@ -63,7 +63,8 @@ function Invoke-Forgum {
     # Display output
     if ($useLolcat) {
         $animate = $config.lolcat.animate
-        Show-Lolcat -Text $cowOutput -Animate:$animate
+        # $null = suppresses Show-Lolcat's return value; [Console]::WriteLine handles display
+        $null = Show-Lolcat -Text $cowOutput -Animate:$animate
     } else {
         $null = Show-CFAnimation -CowOutput $cowOutput -Message $fortune
     }
