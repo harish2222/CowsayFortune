@@ -189,7 +189,8 @@ jobs:
 
       - name: Get version from tag
         id: version
-        run: echo "tag=${GITHUB_REF#refs/tags/v}" >> $env:GITHUB_OUTPUT
+        shell: bash
+        run: echo "tag=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Install Inno Setup
         shell: pwsh
