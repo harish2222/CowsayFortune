@@ -37,7 +37,8 @@ function Read-CowFile {
     $content = $content -replace "`r`n", "`n"
 
     # Extract $the_cow heredoc block
-    if ($content -match '(?s)\$the_cow\s*=\s*<<["'']?EOC["'']?;\s*(.*?)\s*EOC') {
+    # Use \n instead of \s* to preserve leading whitespace in cow template lines
+    if ($content -match '(?s)\$the_cow\s*=\s*<<["'']?EOC["'']?;\n(.*?)\n\s*EOC') {
         $content = $Matches[1]
     }
 
