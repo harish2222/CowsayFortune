@@ -185,6 +185,22 @@ if (-not $NoProfile) {
             $startupBlock = @"
 
 # Forgum Startup Fortune Cow
+function Show-FortuneCow {
+    if (Get-Command Invoke-Forgum -ErrorAction Ignore) {
+        `$cowText = Invoke-Forgum -Lolcat
+        if (`$cowText) { [Console]::WriteLine(`$cowText) }
+    } elseif (Get-Command Invoke-Cowsay -ErrorAction Ignore) {
+        `$fortune = if (Get-Command Get-Fortune -ErrorAction Ignore) { Get-Fortune -ErrorAction SilentlyContinue } else { '' }
+        `$randomCow = (Get-CFCow | Get-Random).Name
+        if (`$fortune) {
+            `$null = Invoke-Cowsay -Text `$fortune -CowFile `$randomCow -Lolcat
+        } else {
+            `$null = Invoke-Cowsay -Text "Moo!" -CowFile `$randomCow -Lolcat
+        }
+    }
+}
+Set-Alias cowfortune Show-FortuneCow
+
 if (-not `$global:FORGUM_STARTUP_DONE) {
     `$global:FORGUM_STARTUP_DONE = `$true
     Show-FortuneCow
