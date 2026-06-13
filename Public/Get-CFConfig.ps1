@@ -50,6 +50,7 @@ function Get-CFConfig {
         fortune = @{ database = 'fortunes'; offensive = $false }
         lolcat = @{ enabled = $false; truecolor = $true; frequency = 0.1; spread = 3.0; seed = 0; invert = $false; animate = $false; duration = 12; speed = 20.0 }
         output = @{ wordWrap = $true; maxWidth = 60 }
+        startup = @{ enabled = $true; command = 'Invoke-Forgum' }
         shell = @{ integration = 'auto'; tmux = @{ enabled = $false; pane = 'status-right' } }
     }
     foreach ($key in $required.Keys) {

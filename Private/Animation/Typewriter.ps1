@@ -5,6 +5,7 @@ function Invoke-TypewriterAnimation {
     #>
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Message')]
     param(
         [Parameter(Mandatory)]
         [string]$CowOutput,

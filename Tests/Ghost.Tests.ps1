@@ -1,5 +1,7 @@
 #Requires -Modules Pester
 # Ghost Tests - Aggressive hostile QA that tries to break everything
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', 'originalConfig')]
+param()
 
 Describe "Ghost Tests - Hostile QA" {
     BeforeAll {

@@ -54,13 +54,6 @@ function Format-Lolcat {
         [double]$Speed = 20.0
     )
 
-    # ESC character for ANSI codes (PowerShell 5.1 compatible)
-    $esc = [char]27
-
-    # ANSI escape regex from upstream lolcat
-    # Matches complete ANSI escape sequences and captures the trailing character
-    $ansiEscape = '(\e(?:[ -\/]+.|[\]PX^_][^\a\e]*|\[[0-?]*.|.))*)(.?)'
-
     # Detect truecolor support
     $useTruecolor = $Truecolor -or ($env:COLORTERM -in @('truecolor', '24bit'))
 
@@ -73,7 +66,7 @@ function Format-Lolcat {
     foreach ($line in $lines) {
         if ($Animate) {
             # Animation mode: render multiple frames with shifting offset
-            $output.Add((Format-LolcatAnimateLine -Line $line -Frequency $Frequency -Spread $Spread -Truecolor:$useTruecolor -Invert:$Invert -Duration $Duration -Speed $Speed -StartOffset ([ref]$os)))
+            $output.Add((Format-LolcatAnimateLine -Line $line -Frequency $Frequency -Spread $Spread -Truecolor:$useTruecolor -Invert:$Invert -Duration $Duration -StartOffset ([ref]$os)))
         } else {
             # Plain mode: single pass
             $output.Add((Format-LolcatLine -Line $line -Frequency $Frequency -Spread $Spread -Truecolor:$useTruecolor -Invert:$Invert -Offset $os))
@@ -174,11 +167,9 @@ function Format-LolcatAnimateLine {
         [bool]$Truecolor,
         [bool]$Invert,
         [int]$Duration,
-        [double]$Speed,
         [ref]$StartOffset
     )
 
-    $esc = [char]27
     $sb = [System.Text.StringBuilder]::new($Line.Length * $Duration * 20)
     $realOffset = $StartOffset.Value
 

@@ -24,20 +24,22 @@ function Show-Lolcat {
     # Attempt to enable virtual terminal processing on Windows
     if ($IsWindows -or $env:OS -eq 'Windows_NT') {
         try {
-            Add-Type @"
-                using System;
-                using System.Runtime.InteropServices;
-                public class VTTerminal {
-                    [DllImport("kernel32.dll", SetLastError=true)]
-                    public static extern IntPtr GetStdHandle(int nStdHandle);
-                    [DllImport("kernel32.dll", SetLastError=true)]
-                    public static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint lpMode);
-                    [DllImport("kernel32.dll", SetLastError=true)]
-                    public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
-                    public const int STD_OUTPUT_HANDLE = -11;
-                    public const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
-                }
-"@ -ErrorAction SilentlyContinue
+            if (-not ([System.Management.Automation.PSTypeName]'VTTerminal').Type) {
+                Add-Type @"
+                    using System;
+                    using System.Runtime.InteropServices;
+                    public class VTTerminal {
+                        [DllImport("kernel32.dll", SetLastError=true)]
+                        public static extern IntPtr GetStdHandle(int nStdHandle);
+                        [DllImport("kernel32.dll", SetLastError=true)]
+                        public static extern bool GetConsoleMode(IntPtr hConsoleHandle, out uint lpMode);
+                        [DllImport("kernel32.dll", SetLastError=true)]
+                        public static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
+                        public const int STD_OUTPUT_HANDLE = -11;
+                        public const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
+                    }
+"@ -ErrorAction Stop
+            }
 
             $hOut = [VTTerminal]::GetStdHandle([VTTerminal]::STD_OUTPUT_HANDLE)
             $mode = 0
@@ -52,6 +54,7 @@ function Show-Lolcat {
 
     if ($Animate) {
         # Animation mode: write frames with carriage returns
+        $esc = [char]27
         # Hide cursor during animation
         [Console]::Write("${esc}[?25l")
         try {
