@@ -13,33 +13,23 @@
 [CmdletBinding()]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '')]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
-param()
+param(
+    [switch]$Silent
+)
 
 #Requires -Version 5.1
 
 # ASCII Art Banner
 function Show-Banner {
     Write-Host ""
-    Write-Host "    ,________                   __" -ForegroundColor Cyan
-    Write-Host "    \____   \  ____   ____  |  | _  ____   ____   ____   ____   ____   _______" -ForegroundColor Cyan
-    Write-Host "     /|      \_/ __ \ /  _ \ |  |/ \/ __ \ /    \ / __ \ / __ \ /  _ \ /  ___/" -ForegroundColor Cyan
-    Write-Host "    / |   |  \  ___/(  <_> )|   |  \  ___/|   |  \  ___/|  ___/(  <_> )\___ \" -ForegroundColor Cyan
-    Write-Host "    \__|___|  /\___  >____/ |__|\__\___  >___|  /\___  >____  >______//____  >" -ForegroundColor Cyan
-    Write-Host "           \/     \/                   \/     \/     \/     \/           \/ " -ForegroundColor Cyan
+    Write-Host "  _____ _____ ___ _____ ___ ___  _  ___" -ForegroundColor Cyan
+    Write-Host " /  ___|  ___/ _ \_   _|_ _/ _ \| |/ /" -ForegroundColor Cyan
+    Write-Host " \ \`--. | |_ / /_\ \| |  | | | | ' / " -ForegroundColor Cyan
+    Write-Host "  \`--. \|  _||  _  || |  | | | | . \ " -ForegroundColor Cyan
+    Write-Host " /\__/ /| |  | | | || | _| |_| | |\ \" -ForegroundColor Cyan
+    Write-Host " \____/ \_|  \_| |_/\_/ |___/ \_| |_/ " -ForegroundColor Cyan
     Write-Host ""
     Write-Host "  The fun way to get your daily fortune!" -ForegroundColor Magenta
-    Write-Host ""
-
-    $phrases = @(
-        "Moo! Let's install Forgum!",
-        "A cow approaches you with a fortune...",
-        "The prophecy says: install me!",
-        "I come in peace! (and with rainbows)",
-        "Don't have a cow, man! Install me!",
-        "Fortune favors the bold... and the installed!",
-        "Cow says: Install me or face the consequences!"
-    )
-    Write-Host "  $($phrases | Get-Random)" -ForegroundColor Cyan
     Write-Host ""
 }
 
@@ -141,6 +131,21 @@ if ($profilePath) {
         Write-Host "  Added to PowerShell profile" -ForegroundColor Green
     }
 }
+
+# Run setup in silent mode
+if ($Silent) {
+    Write-Host "  Running setup (silent mode)..." -ForegroundColor White
+    $setupScript = Join-Path $PSScriptRoot "setup.ps1"
+    if (Test-Path $setupScript) {
+        & $setupScript -NonInteractive -Force
+    } else {
+        Write-Host "  setup.ps1 not found, skipping interactive setup" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host ""
+    Write-Host "  Run .\setup.ps1 to configure shell integration!" -ForegroundColor Yellow
+}
+
 Show-Progress 90 100
 
 # Verify
