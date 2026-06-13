@@ -4,18 +4,18 @@
 
 Package: `forgum` v1.0.5
 Targets:
-1. Own bucket: `hkdevs/forgum`
+1. Own bucket: `hkdevloops/forgum`
 
 ---
 
-## Part 1: Own Bucket (hkdevs/forgum)
+## Part 1: Own Bucket (hkdevloops/forgum)
 
 ### Step 1: Create Repo
 
-1. Create repo `hkdevs/forgum` on GitHub
+1. Create repo `hkdevloops/forgum` on GitHub
 2. Clone:
 ```powershell
-git clone https://github.com/hkdevs/forgum
+git clone https://github.com/hkdevloops/forgum
 cd forgum
 ```
 
@@ -26,8 +26,8 @@ Create `bucket/forgum.json` with contents from `package-managers/scoop/forgum.js
 ### Step 3: Test
 
 ```powershell
-scoop bucket add hkdevs https://github.com/hkdevs/forgum
-scoop install hkdevs/forgum
+scoop bucket add hkdevloops https://github.com/hkdevloops/forgum
+scoop install hkdevloops/forgum
 ```
 
 ### Step 4: Verify

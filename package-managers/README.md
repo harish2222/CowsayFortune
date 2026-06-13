@@ -83,9 +83,9 @@ package-managers/
 - [ ] Monitor for `Azure-Pipeline-Passed` → `Validation-Completed`
 
 ### Scoop (Own Bucket)
-- [ ] Create `hkdevs/forgum` repo
+- [ ] Create `hkdevloops/forgum` repo
 - [ ] Copy `forgum.json` to `bucket/`
-- [ ] Test: `scoop install hkdevs/forgum`
+- [ ] Test: `scoop install hkdevloops/forgum`
 - [ ] Push
 
 ### Scoop (Extras)

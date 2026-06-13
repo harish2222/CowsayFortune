@@ -11,17 +11,17 @@
 
 - **Name**: `forgum`
 - **Version**: 1.0.3
-- **Bucket**: `hkdevs` (own) → eventually `Extras` (community)
+- **Bucket**: `hkdevloops` (own) → eventually `Extras` (community)
 - **Depends**: `pwsh`
 
 ## Quick Submit (Own Bucket)
 
 ```powershell
-# 1. Create hkdevs/forgum repo
+# 1. Create hkdevloops/forgum repo
 # 2. Copy forgum.json to bucket/
 # 3. Test
-scoop bucket add hkdevs https://github.com/hkdevs/forgum
-scoop install hkdevs/forgum
+scoop bucket add hkdevloops https://github.com/hkdevloops/forgum
+scoop install hkdevloops/forgum
 ```
 
 ## Quick Submit (Extras)
