@@ -59,15 +59,14 @@ $script:ConfigCacheTime = [datetime]::MinValue
 # Cache TTL in seconds (avoids stale reads during long sessions)
 $script:ConfigCacheTTL = 30
 
-# Auto-start: random animated cow with fortune on every import
+# Auto-start: random cow with fortune on every import (static, no animation)
 if ($env:FORGUM_NOAUTOSTART -ne '1') {
     $sb = {
         if (Get-Command Invoke-Forgum -ErrorAction Ignore) {
             $config = Get-CFConfig
             $config.cow.random = $true
-            $config.animation.mode = 'talking'
+            $config.animation.mode = 'static'
             $config.lolcat.enabled = $true
-            $config.lolcat.animate = $true
             Set-CFConfig -Config $config
             $cowText = Invoke-Forgum -Lolcat
             if ($cowText) { [Console]::WriteLine($cowText) }

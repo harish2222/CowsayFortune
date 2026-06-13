@@ -48,10 +48,17 @@ function Invoke-TalkingAnimation {
             [void]$sb.Append($line)
         }
 
-        Clear-Host
-        Write-Host $sb.ToString()
+        try {
+            if ($frame -gt 0 -and [Console]::CursorTop -ge $cowLines.Count) {
+                [Console]::SetCursorPosition(0, [Console]::CursorTop - $cowLines.Count)
+            }
+            Write-Host $sb.ToString() -NoNewline
+        } catch {
+            Write-Host $sb.ToString()
+        }
         Start-Sleep -Milliseconds 200
     }
 
+    Write-Host ""
     return $sb.ToString()
 }

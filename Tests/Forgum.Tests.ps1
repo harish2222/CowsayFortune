@@ -56,7 +56,12 @@ Describe "Module Loading" {
 Describe "Config System" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        $script:OriginalConfig = Get-CFConfig
         Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
+    }
+
+    AfterAll {
+        Set-CFConfig -Config $script:OriginalConfig
     }
 
     Context "Default config" {
@@ -330,7 +335,12 @@ Describe "Combined Forgum" {
 Describe "Lolcat Colorization" {
     BeforeAll {
         Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        $script:OriginalConfig = Get-CFConfig
         Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
+    }
+
+    AfterAll {
+        Set-CFConfig -Config $script:OriginalConfig
     }
 
     It "produces colored output when enabled with all options" {
@@ -382,6 +392,7 @@ Describe "Lolcat Colorization" {
     }
 
     It "does not colorize when disabled" {
+        $original = Get-CFConfig
         $config = Get-CFConfig
         $config.lolcat.enabled = $false
         Set-CFConfig -Config $config
@@ -392,7 +403,7 @@ Describe "Lolcat Colorization" {
         $hasAnsi = $output -match "${esc}\[[0-9;]*m"
         $hasAnsi | Should -Be $false
 
-        Set-CFConfig -Config $config
+        Set-CFConfig -Config $original
     }
 }
 
