@@ -116,7 +116,12 @@ try {
     exit 1
 }
 
-$config = Get-CFConfig
+try {
+    $config = Get-CFConfig
+} catch {
+    Write-Host "  ERROR: Failed to load config: $_" -ForegroundColor Red
+    exit 1
+}
 Write-Host "  Forgum module loaded successfully!" -ForegroundColor Green
 
 # ── Toggle 1: Fortune Cow on Startup ──
@@ -180,8 +185,8 @@ if (-not $NoProfile) {
             $startupBlock = @"
 
 # Forgum Startup Fortune Cow
-if (-not `$global:HKDEVS_STARTUP_DONE) {
-    `$global:HKDEVS_STARTUP_DONE = `$true
+if (-not `$global:FORGUM_STARTUP_DONE) {
+    `$global:FORGUM_STARTUP_DONE = `$true
     Show-FortuneCow
 }
 "@
@@ -211,13 +216,19 @@ function cow-animate { param([ValidateSet('static','talking','typewriter')]`$Mod
 # Forgum Tab Completion
 Register-ArgumentCompleter -CommandName Invoke-Cowsay -ParameterName CowFile -ScriptBlock {
     param(`$commandName, `$parameterName, `$wordToComplete, `$commandAst, `$fakeBoundParameters)
-    Get-CFCow | Where-Object { `$_.Name -like "*`$wordToComplete*" } | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new(`$_.Name, `$_.Name, 'ParameterValue', `$_.Name)
+    Get-CFCow | Where-Object { `$_ -like "*`$wordToComplete*" } | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new(`$_, `$_, 'ParameterValue', `$_)
     }
 }
 "@
             $newContent += $completionBlock
             Write-Host "  Added tab completion" -ForegroundColor Green
+        }
+        
+        # Backup profile before modifying
+        if (Test-Path $profilePath) {
+            $backupPath = "$profilePath.bak.$(Get-Date -Format 'yyyyMMddHHmmss')"
+            Copy-Item -Path $profilePath -Destination $backupPath -Force
         }
         
         Set-Content -Path $profilePath -Value $newContent -Force
