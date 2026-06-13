@@ -48,7 +48,7 @@ function Get-CFConfig {
         animation = @{ mode = 'static'; speed = 20; duration = 12; spread = 3.0 }
         cow = @{ file = 'default'; random = $false; mode = $null; eyes = 'oo'; tongue = '  ' }
         fortune = @{ database = 'fortunes'; offensive = $false }
-        lolcat = @{ enabled = $false; truecolor = $true; frequency = 0.1; invert = $false }
+        lolcat = @{ enabled = $false; truecolor = $true; frequency = 0.1; spread = 3.0; seed = 0; invert = $false; animate = $false; duration = 12; speed = 20.0 }
         output = @{ wordWrap = $true; maxWidth = 60 }
         shell = @{ integration = 'auto'; tmux = @{ enabled = $false; pane = 'status-right' } }
     }
