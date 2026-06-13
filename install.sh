@@ -186,7 +186,7 @@ progress_bar() {
     printf "\r  ${CYAN}["
     printf "%0.s█" $(seq 1 $filled 2>/dev/null) || true
     printf "%0.s░" $(seq 1 $empty 2>/dev/null) || true
-    printf "]${NC} %3d%%" "$page"
+    printf "]${NC} %3d%%" "$pct"
 }
 
 check_command() {

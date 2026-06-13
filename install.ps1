@@ -135,7 +135,8 @@ if ($profilePath) {
 # Run setup in silent mode
 if ($Silent) {
     Write-Host "  Running setup (silent mode)..." -ForegroundColor White
-    $setupScript = Join-Path $PSScriptRoot "setup.ps1"
+    $setupDir = if ($PSScriptRoot) { $PSScriptRoot } else { $sourceDir }
+    $setupScript = Join-Path $setupDir "setup.ps1"
     if (Test-Path $setupScript) {
         & $setupScript -NonInteractive -Force
     } else {
