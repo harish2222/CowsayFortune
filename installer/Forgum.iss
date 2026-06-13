@@ -1,15 +1,15 @@
 ; Forgum Inno Setup Script
-; Installs the PowerShell module to the user's PowerShell module path
+; Installs the PowerShell module directly to the user's PSModule path
 ; Compile with Inno Setup 6+ (https://jrsoftware.org/isinfo.php)
 ;
 ; One-liner install (silent):
-;   & "$env:TEMP\Forgum-v1.0.4-Setup.exe" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+;   & "$env:TEMP\Forgum-v1.0.5-Setup.exe" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
 ;
 ; Winget install:
 ;   winget install HKDEVS.Forgum
 
 #define MyAppName "Forgum"
-#define MyAppVersion "1.0.4"
+#define MyAppVersion "1.0.5"
 #define MyAppPublisher "HKDEVS"
 #define MyAppURL "https://github.com/harish2222/Forgum"
 #define MyAppLicense "MIT"
@@ -22,7 +22,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}/issues
 AppUpdatesURL={#MyAppURL}/releases
-DefaultDirName={localappdata}\{#MyAppName}
+DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 LicenseFile=..\LICENSE
 OutputDir=..\dist
@@ -32,7 +32,6 @@ SolidCompression=yes
 WizardStyle=modern
 PrivilegesRequired=lowest
 UninstallDisplayName={#MyAppName} {#MyAppVersion}
-UninstallDisplayIcon={app}\Forgum.psm1
 VersionInfoVersion={#MyAppVersion}.0
 VersionInfoDescription={#MyAppName} PowerShell Module Installer
 CloseApplications=no
@@ -42,7 +41,6 @@ RestartApplications=no
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-; Module files - extracted to temp install dir, then copied to PSModule path
 Source: "..\Forgum.psd1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Forgum.psm1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Private\*"; DestDir: "{app}\Private"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -59,16 +57,13 @@ Source: "..\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
-; Run setup.ps1 to configure user profile (skipped in silent/very silent mode)
 Filename: "pwsh.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\setup.ps1"" -InstallOnly"; StatusMsg: "Configuring PowerShell profile..."; Flags: runhidden waituntilterminated skipifsilent skipifdoesntexist
 
 [Code]
 function GetPSModulePath: String;
 var
-  PSModulePathEnv: String;
   UserModules: String;
 begin
-  PSModulePathEnv := GetEnv('PSModulePath');
   UserModules := ExpandConstant('{userdocs}\PowerShell\Modules');
   if DirExists(UserModules) then
     Result := UserModules
@@ -80,6 +75,7 @@ procedure CurStepChanged(CurStep: TSetupStep);
 var
   ModuleDir: String;
   SourceDir: String;
+  ResultCode: Integer;
 begin
   if CurStep = ssPostInstall then
   begin
@@ -91,20 +87,16 @@ begin
 
     FileCopy(SourceDir + '\Forgum.psd1', ModuleDir + '\Forgum.psd1', False);
     FileCopy(SourceDir + '\Forgum.psm1', ModuleDir + '\Forgum.psm1', False);
-
-    if DirExists(SourceDir + '\Private') then
-      CopyDir(SourceDir + '\Private', ModuleDir + '\Private', False);
-    if DirExists(SourceDir + '\Public') then
-      CopyDir(SourceDir + '\Public', ModuleDir + '\Public', False);
-    if DirExists(SourceDir + '\Data') then
-      CopyDir(SourceDir + '\Data', ModuleDir + '\Data', False);
-
     FileCopy(SourceDir + '\LICENSE', ModuleDir + '\LICENSE', False);
     FileCopy(SourceDir + '\README.md', ModuleDir + '\README.md', False);
     FileCopy(SourceDir + '\install.ps1', ModuleDir + '\install.ps1', False);
     FileCopy(SourceDir + '\install.sh', ModuleDir + '\install.sh', False);
     FileCopy(SourceDir + '\setup.ps1', ModuleDir + '\setup.ps1', False);
     FileCopy(SourceDir + '\uninstall.ps1', ModuleDir + '\uninstall.ps1', False);
+
+    Exec('robocopy.exe', '"' + SourceDir + '\Private" "' + ModuleDir + '\Private" /E /NFL /NDL /NJH /NJS /NC /NS', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+    Exec('robocopy.exe', '"' + SourceDir + '\Public" "' + ModuleDir + '\Public" /E /NFL /NDL /NJH /NJS /NC /NS', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+    Exec('robocopy.exe', '"' + SourceDir + '\Data" "' + ModuleDir + '\Data" /E /NFL /NDL /NJH /NJS /NC /NS', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   end;
 end;
 
