@@ -2,10 +2,10 @@ function Show-CFAnimation {
     <#
     .SYNOPSIS
         Displays cow output with the configured animation mode.
-    .DESCRIPTION
+        .DESCRIPTION
         Dispatches to the appropriate animation function based on config.
         Modes: static, talking, typewriter, slide-in, bounce, dissolve,
-        fade-in, blink, wiggle, wave, disco.
+        fade-in, blink, wiggle, wave, disco, dynamic.
     .PARAMETER CowOutput
         The rendered cow string to animate.
     .PARAMETER Message
@@ -55,6 +55,9 @@ function Show-CFAnimation {
         }
         'disco' {
             return Invoke-DiscoAnimation -CowOutput $CowOutput -Message $Message -Speed $config.animation.speed -Duration $config.animation.duration
+        }
+        'dynamic' {
+            return Invoke-DynamicAnimation -Duration $config.animation.duration -CycleInterval $config.animation.cycleInterval
         }
         default {
             return Invoke-StaticAnimation -CowOutput $CowOutput -Message $Message
