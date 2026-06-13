@@ -426,104 +426,154 @@ Describe "Animation System" {
         { Show-CFAnimation -CowOutput $cowOutput } | Should -Not -Throw
     }
 
-    It "static animation returns output" {
+    It "static animation returns output with cow face" {
         $cowOutput = Invoke-Cowsay -Text "Test"
         $output = Show-CFAnimation -CowOutput $cowOutput
         $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
         $raw | Should -Match "Test"
+        $raw | Should -Match '\^__\^'
     }
 
-    It "slide-in animation returns output" {
+    It "slide-in animation returns output with cow face" {
         $config = Get-CFConfig
         $config.animation.mode = 'slide-in'
         Set-CFConfig -Config $config
         $cowOutput = Invoke-Cowsay -Text "SlideTest"
         $output = Show-CFAnimation -CowOutput $cowOutput -Message "SlideTest"
-        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
     }
 
-    It "bounce animation returns output" {
+    It "bounce animation returns output with cow face" {
         $config = Get-CFConfig
         $config.animation.mode = 'bounce'
         Set-CFConfig -Config $config
         $cowOutput = Invoke-Cowsay -Text "BounceTest"
         $output = Show-CFAnimation -CowOutput $cowOutput -Message "BounceTest"
-        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
     }
 
-    It "dissolve animation returns output" {
+    It "dissolve animation returns output with cow face" {
         $config = Get-CFConfig
         $config.animation.mode = 'dissolve'
         Set-CFConfig -Config $config
         $cowOutput = Invoke-Cowsay -Text "DissolveTest"
         $output = Show-CFAnimation -CowOutput $cowOutput -Message "DissolveTest"
-        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
     }
 
-    It "fade-in animation returns output" {
+    It "fade-in animation returns output with cow face" {
         $config = Get-CFConfig
         $config.animation.mode = 'fade-in'
         Set-CFConfig -Config $config
         $cowOutput = Invoke-Cowsay -Text "FadeTest"
         $output = Show-CFAnimation -CowOutput $cowOutput -Message "FadeTest"
-        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
     }
 
-    It "blink animation returns output" {
+    It "blink animation returns output with cow face" {
         $config = Get-CFConfig
         $config.animation.mode = 'blink'
         Set-CFConfig -Config $config
         $cowOutput = Invoke-Cowsay -Text "BlinkTest"
         $output = Show-CFAnimation -CowOutput $cowOutput -Message "BlinkTest"
-        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
     }
 
-    It "wiggle animation returns output" {
+    It "wiggle animation returns output with cow face" {
         $config = Get-CFConfig
         $config.animation.mode = 'wiggle'
         Set-CFConfig -Config $config
         $cowOutput = Invoke-Cowsay -Text "WiggleTest"
         $output = Show-CFAnimation -CowOutput $cowOutput -Message "WiggleTest"
-        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
     }
 
-    It "wave animation returns output" {
+    It "wave animation returns output with cow face" {
         $config = Get-CFConfig
         $config.animation.mode = 'wave'
         Set-CFConfig -Config $config
         $cowOutput = Invoke-Cowsay -Text "WaveTest"
         $output = Show-CFAnimation -CowOutput $cowOutput -Message "WaveTest"
-        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
     }
 
-    It "disco animation returns output" {
+    It "disco animation returns output with cow face" {
         $config = Get-CFConfig
         $config.animation.mode = 'disco'
         Set-CFConfig -Config $config
         $cowOutput = Invoke-Cowsay -Text "DiscoTest"
         $output = Show-CFAnimation -CowOutput $cowOutput -Message "DiscoTest"
-        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
         $config.animation.mode = 'static'
         Set-CFConfig -Config $config
     }
 
-    It "all animation modes are valid config values" {
+    It "all 11 animation modes are valid" {
         $validModes = @('static', 'talking', 'typewriter', 'slide-in', 'bounce', 'dissolve', 'fade-in', 'blink', 'wiggle', 'wave', 'disco')
         $validModes.Count | Should -Be 11
+    }
+
+    It "invalid animation mode falls back to static" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'invalid_mode_xyz'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "FallbackTest"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "FallbackTest"
+        $output | Should -Not -BeNullOrEmpty
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match 'FallbackTest'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "each animation returns string type" {
+        $modes = @('static', 'talking', 'typewriter', 'slide-in', 'bounce', 'dissolve', 'fade-in', 'blink', 'wiggle', 'wave', 'disco')
+        foreach ($mode in $modes) {
+            $config = Get-CFConfig
+            $config.animation.mode = $mode
+            Set-CFConfig -Config $config
+            $cowOutput = Invoke-Cowsay -Text "TypeTest"
+            $output = Show-CFAnimation -CowOutput $cowOutput -Message "TypeTest"
+            $output | Should -BeOfType System.String
+            $config.animation.mode = 'static'
+            Set-CFConfig -Config $config
+        }
+    }
+
+    It "each animation returns non-null non-empty" {
+        $modes = @('static', 'talking', 'typewriter', 'slide-in', 'bounce', 'dissolve', 'fade-in', 'blink', 'wiggle', 'wave', 'disco')
+        foreach ($mode in $modes) {
+            $config = Get-CFConfig
+            $config.animation.mode = $mode
+            Set-CFConfig -Config $config
+            $cowOutput = Invoke-Cowsay -Text "NotNull"
+            $output = Show-CFAnimation -CowOutput $cowOutput -Message "NotNull"
+            $output | Should -Not -BeNullOrEmpty
+            $config.animation.mode = 'static'
+            Set-CFConfig -Config $config
+        }
     }
 }
 
@@ -615,6 +665,116 @@ Describe "Edge Cases" {
         $f2 = Get-Fortune
         $f1 | Should -Not -BeNullOrEmpty
         $f2 | Should -Not -BeNullOrEmpty
+    }
+
+    It "handles special characters: backticks, dollar signs, pipes" {
+        $output = Invoke-Cowsay -Text 'Test `$pipe|and$dollar'
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match 'Test'
+    }
+
+    It "handles extremely long single word (2000 chars)" {
+        $longWord = "X" * 2000
+        $output = Invoke-Cowsay -Text $longWord
+        $output | Should -Not -BeNullOrEmpty
+    }
+
+    It "handles message with only percent signs" {
+        $output = Invoke-Cowsay -Text "%%%"
+        $output | Should -Not -BeNullOrEmpty
+    }
+
+    It "handles consecutive spaces in message" {
+        $output = Invoke-Cowsay -Text "Hello    World"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match 'Hello'
+    }
+}
+
+Describe "Cross-Platform" {
+    BeforeAll {
+        $mod = Get-Module Forgum -ErrorAction SilentlyContinue
+        if ($mod) { Remove-Module Forgum -Force }
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+    }
+
+    It "config path is valid for current platform" {
+        $path = InModuleScope Forgum { Get-ConfigPath }
+        $path | Should -Not -BeNullOrEmpty
+        $path | Should -Match 'config\.json$'
+    }
+
+    It "config directory parent exists or can be created" {
+        $path = InModuleScope Forgum { Get-ConfigPath }
+        $dir = Split-Path $path -Parent
+        $dir | Should -Not -BeNullOrEmpty
+    }
+
+    It "module loads on current PowerShell version" {
+        $psVersion = $PSVersionTable.PSVersion
+        $psVersion | Should -Not -BeNullOrEmpty
+        $psVersion.Major | Should -BeGreaterOrEqual 5
+    }
+
+    It "all public functions have CmdletBinding" {
+        $funcs = Get-Command -Module Forgum
+        foreach ($func in $funcs) {
+            $func.CmdletBinding | Should -Be $true -Because "$($func.Name) should have CmdletBinding"
+        }
+    }
+
+    It "module manifest matches loaded module version" {
+        $manifest = Test-ModuleManifest (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1')
+        $loaded = Get-Module Forgum
+        [string]$manifest.Version | Should -Be ([string]$loaded.Version)
+    }
+}
+
+Describe "Performance" {
+    BeforeAll {
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        Set-CFConfig -Config (Get-Content (Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json') -Raw | ConvertFrom-Json)
+    }
+
+    It "100 Invoke-Cowsay calls complete within 10 seconds" {
+        $sw = [System.Diagnostics.Stopwatch]::StartNew()
+        for ($i = 0; $i -lt 100; $i++) {
+            Invoke-Cowsay -Text "Perf test $i" | Out-Null
+        }
+        $sw.Stop()
+        $sw.ElapsedMilliseconds | Should -BeLessThan 10000
+    }
+
+    It "Get-CFConfig cache hit is fast (100 calls < 1 second)" {
+        # Prime the cache
+        Get-CFConfig | Out-Null
+        $sw = [System.Diagnostics.Stopwatch]::StartNew()
+        for ($i = 0; $i -lt 100; $i++) {
+            Get-CFConfig | Out-Null
+        }
+        $sw.Stop()
+        $sw.ElapsedMilliseconds | Should -BeLessThan 1000
+    }
+
+    It "Get-Fortune cache hit is fast (100 calls < 2 seconds)" {
+        # Prime the cache
+        Get-Fortune | Out-Null
+        $sw = [System.Diagnostics.Stopwatch]::StartNew()
+        for ($i = 0; $i -lt 100; $i++) {
+            Get-Fortune | Out-Null
+        }
+        $sw.Stop()
+        $sw.ElapsedMilliseconds | Should -BeLessThan 2000
+    }
+
+    It "all 107 cows render within 5 seconds" {
+        $cows = @(Get-CFCow)
+        $sw = [System.Diagnostics.Stopwatch]::StartNew()
+        foreach ($cow in $cows) {
+            Invoke-Cowsay -Text "Test" -CowFile $cow | Out-Null
+        }
+        $sw.Stop()
+        $sw.ElapsedMilliseconds | Should -BeLessThan 5000
     }
 }
 

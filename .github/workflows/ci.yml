@@ -15,7 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint
     steps:
-      -         uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Cache PSScriptAnalyzer
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/powershell/Modules/PSScriptAnalyzer
+          key: pssa-1.24
 
       - name: Install PSScriptAnalyzer
         shell: pwsh
@@ -45,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate Module
     steps:
-      -         uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Validate module manifest
         shell: pwsh
@@ -81,17 +87,53 @@ jobs:
           }
           Write-Host "Data files verified." -ForegroundColor Green
 
+      - name: Verify animation files
+        shell: pwsh
+        run: |
+          $animFiles = Get-ChildItem ./Private/Animation/*.ps1 -ErrorAction SilentlyContinue
+          Write-Host "Animation files: $($animFiles.Count)"
+          if ($animFiles.Count -lt 11) {
+            Write-Host "Expected at least 11 animation files (3 original + 8 new)" -ForegroundColor Red
+            exit 1
+          }
+          $expected = @('Static', 'Talking', 'Typewriter', 'SlideIn', 'Bounce', 'Dissolve', 'FadeIn', 'Blink', 'Wiggle', 'Wave', 'Disco')
+          foreach ($name in $expected) {
+            $found = $animFiles | Where-Object { $_.BaseName -eq $name }
+            if (-not $found) {
+              Write-Host "Missing animation: $name" -ForegroundColor Red
+              exit 1
+            }
+          }
+          Write-Host "All 11 animation files present." -ForegroundColor Green
+
   test:
     needs: [lint, validate]
     strategy:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
+        pwsh: ['7.4']
+        include:
+          - os: windows-latest
+            pwsh: '5.1'
     runs-on: ${{ matrix.os }}
-    name: Test (${{ matrix.os }})
+    name: Test (${{ matrix.os }} pwsh ${{ matrix.pwsh }})
+    timeout-minutes: 15
 
     steps:
-      -         uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Install PowerShell ${{ matrix.pwsh }}
+        uses: actions/setup-powershell@v2
+        if: matrix.pwsh != '5.1'
+        with:
+          version: ${{ matrix.pwsh }}
+
+      - name: Cache Pester
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/powershell/Modules/Pester
+          key: pester-5.7
 
       - name: Install Pester 5
         shell: pwsh
@@ -110,10 +152,15 @@ jobs:
           $config.Run.Path = './Tests'
           $config.Run.PassThru = $true
           $config.Output.Verbosity = 'Detailed'
+          $config.Run.TestResult = $true
+          $config.Run.TestResultOutputFormat = 'NUnitXml'
+          $config.Run.TestResultPath =Join-Path $env:RUNNER_TEMP 'test-results.xml'
+          $config.Run.Timeout = 300
           $results = Invoke-Pester -Configuration $config
           Write-Host ""
           Write-Host "========================================" -ForegroundColor Cyan
           Write-Host "Tests: $($results.TotalCount) | Passed: $($results.PassedCount) | Failed: $($results.FailedCount) | Skipped: $($results.SkippedCount)" -ForegroundColor Cyan
+          Write-Host "Duration: $($results.Duration)" -ForegroundColor Cyan
           Write-Host "========================================" -ForegroundColor Cyan
           if ($results.FailedCount -gt 0) {
             $results.TestResult | Where-Object Result -eq 'Failed' | ForEach-Object {
@@ -127,6 +174,13 @@ jobs:
             exit 1
           }
 
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.os }}-pwsh${{ matrix.pwsh }}
+          path: ${{ runner.temp }}/test-results.xml
+
   build:
     needs: [test]
     if: startsWith(github.ref, 'refs/tags/v')
@@ -135,7 +189,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      -         uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Get version from tag
         id: version
@@ -170,6 +224,20 @@ jobs:
           $zip.Dispose()
           Write-Host "Package created: $zipPath ($entries files)"
 
+          # Verify key files exist in zip
+          $zip = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
+          $entryNames = $zip.Entries | ForEach-Object { $_.FullName }
+          $zip.Dispose()
+          $required = @('Forgum.psd1', 'Forgum.psm1', 'Private/', 'Public/', 'Data/')
+          foreach ($r in $required) {
+            $found = $entryNames | Where-Object { $_ -like "*$r*" }
+            if (-not $found) {
+              Write-Host "Missing in package: $r" -ForegroundColor Red
+              exit 1
+            }
+          }
+          Write-Host "Package contents verified."
+
           # Copy to artifact location
           Copy-Item $zipPath ./Forgum-v$version.zip
 
@@ -187,7 +255,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      -         uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Get version from tag
         id: version
@@ -248,7 +316,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      -         uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Get version from tag
         id: version

@@ -55,6 +55,7 @@ function Invoke-DiscoAnimation {
                 $f = $h - [Math]::Floor($h)
                 $q = 255 * (1 - $f)
                 $t = 255 * $f
+                $r = 0; $g = 0; $b = 0
 
                 switch ([int][Math]::Floor($h) % 6) {
                     0 { $r = 255; $g = [int]$t; $b = 0 }

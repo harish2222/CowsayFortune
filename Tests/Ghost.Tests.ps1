@@ -259,6 +259,235 @@ Describe "Ghost Tests - Hostile QA" {
         $raw | Should -Match '#'
         $raw | Should -Match '\|\|'
     }
+
+    # --- ANIMATION MODE HOSTILE QA ---
+    It "Ghost 31: static animation does not alter output" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "StaticHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "StaticHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match 'StaticHostile'
+        $raw | Should -Match '\^__\^'
+    }
+
+    It "Ghost 32: talking animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'talking'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "TalkHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "TalkHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 33: typewriter animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'typewriter'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "TypeHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "TypeHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match 'TypeHostile'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 34: slide-in animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'slide-in'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "SlideHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "SlideHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 35: bounce animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'bounce'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "BounceHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "BounceHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 36: dissolve animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'dissolve'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "DissolveHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "DissolveHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 37: fade-in animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'fade-in'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "FadeHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "FadeHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 38: blink animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'blink'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "BlinkHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "BlinkHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 39: wiggle animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'wiggle'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "WiggleHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "WiggleHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 40: wave animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'wave'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "WaveHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "WaveHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 41: disco animation returns complete cow" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'disco'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "DiscoHostile"
+        $output = Show-CFAnimation -CowOutput $cowOutput -Message "DiscoHostile"
+        $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+        $raw | Should -Match '\^__\^'
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 42: invalid animation mode does not crash" {
+        $config = Get-CFConfig
+        $config.animation.mode = 'totally_invalid_123'
+        Set-CFConfig -Config $config
+        $cowOutput = Invoke-Cowsay -Text "InvalidMode"
+        { Show-CFAnimation -CowOutput $cowOutput -Message "InvalidMode" } | Should -Not -Throw
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 43: rapid animation mode switching does not corrupt state" {
+        $modes = @('static', 'talking', 'typewriter', 'slide-in', 'bounce', 'dissolve', 'fade-in', 'blink', 'wiggle', 'wave', 'disco', 'static')
+        foreach ($mode in $modes) {
+            $config = Get-CFConfig
+            $config.animation.mode = $mode
+            Set-CFConfig -Config $config
+            $cowOutput = Invoke-Cowsay -Text "RapidSwitch"
+            $output = Show-CFAnimation -CowOutput $cowOutput -Message "RapidSwitch"
+            $output | Should -Not -BeNullOrEmpty
+        }
+        # Verify we can still get config
+        $finalConfig = Get-CFConfig
+        $finalConfig.animation.mode | Should -Be 'static'
+    }
+
+    It "Ghost 44: Invoke-Forgum with each animation mode returns valid output" {
+        $modes = @('static', 'talking', 'typewriter', 'slide-in', 'bounce', 'dissolve', 'fade-in', 'blink', 'wiggle', 'wave', 'disco')
+        foreach ($mode in $modes) {
+            $config = Get-CFConfig
+            $config.animation.mode = $mode
+            Set-CFConfig -Config $config
+            $output = Invoke-Forgum
+            $output | Should -Not -BeNullOrEmpty
+            $raw = $output -replace '\x1b\[[0-9;]*[a-zA-Z]', ''
+            $raw | Should -Match '\^__\^'
+        }
+        $config = Get-CFConfig
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 45: animation with empty message does not crash" {
+        $modes = @('static', 'talking', 'typewriter', 'slide-in', 'bounce', 'dissolve', 'fade-in', 'blink', 'wiggle', 'wave', 'disco')
+        foreach ($mode in $modes) {
+            $config = Get-CFConfig
+            $config.animation.mode = $mode
+            Set-CFConfig -Config $config
+            $cowOutput = Invoke-Cowsay -Text ""
+            { Show-CFAnimation -CowOutput $cowOutput -Message "" } | Should -Not -Throw
+        }
+        $config = Get-CFConfig
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 46: animation with very long message does not crash" {
+        $longText = "Word " * 200
+        $modes = @('static', 'talking', 'typewriter', 'slide-in', 'bounce', 'dissolve', 'fade-in', 'blink', 'wiggle', 'wave', 'disco')
+        foreach ($mode in $modes) {
+            $config = Get-CFConfig
+            $config.animation.mode = $mode
+            Set-CFConfig -Config $config
+            $cowOutput = Invoke-Cowsay -Text $longText
+            $output = Show-CFAnimation -CowOutput $cowOutput -Message $longText
+            $output | Should -Not -BeNullOrEmpty
+        }
+        $config = Get-CFConfig
+        $config.animation.mode = 'static'
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 47: config blinkRate/amplitude round-trip" {
+        $config = Get-CFConfig
+        $config.animation.blinkRate = 0.5
+        $config.animation.amplitude = 4
+        Set-CFConfig -Config $config
+        $reloaded = Get-CFConfig
+        $reloaded.animation.blinkRate | Should -Be 0.5
+        $reloaded.animation.amplitude | Should -Be 4
+        $config.animation.blinkRate = 0.2
+        $config.animation.amplitude = 2
+        Set-CFConfig -Config $config
+    }
+
+    It "Ghost 48: 50 rapid sequential Invoke-Forgum calls complete" {
+        $failed = 0
+        for ($i = 0; $i -lt 50; $i++) {
+            try {
+                $output = Invoke-Forgum
+                if (-not $output) { $failed++ }
+            } catch {
+                $failed++
+            }
+        }
+        $failed | Should -Be 0
+    }
 }
 
 Describe "Security Harness" {

@@ -60,7 +60,7 @@ function Format-CowMessage {
     }
 
     # Clean ASCII balloon with double-line top/bottom
-    $result = [System.Collections.Generic.List[string]]::new()
+    $result = [System.Collections.Generic.List[string]]::new($lines.Count + 2)
     $topBorder = '#' * ($maxLength + 4)
     $sideBorder = '||'
 
