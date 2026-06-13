@@ -40,7 +40,7 @@ function Show-Lolcat {
                 [void][VTTerminal]::SetConsoleMode($hOut, $newMode)
             }
         } catch {
-            # Non-fatal: VT might already be enabled or unavailable
+            Write-Verbose "Show-Lolcat: Virtual Terminal Processing not available: $_"
         }
     }
 

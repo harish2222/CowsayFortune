@@ -26,7 +26,7 @@ if ($IsWindows -or $env:OS -eq 'Windows_NT') {
             [void][VTTerminal]::SetConsoleMode($hOut, $newMode)
         }
     } catch {
-        # Non-fatal: VT might not be available on older Windows or non-console hosts
+        Write-Verbose "Forgum: Virtual Terminal Processing not available: $_"
     }
 }
 
