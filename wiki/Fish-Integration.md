@@ -105,6 +105,133 @@ end
 random_cow
 ```
 
+## Sample Configurations (Copy-Paste Ready)
+
+These are complete, ready-to-use snippets for common setups. Add them to your `~/.config/fish/config.fish`.
+
+### Pattern 1: Basic Forgum (Fortune Cow on Startup)
+
+```fish
+# ============================================
+# Forgum - Basic Fortune Cow
+# ============================================
+# Shows a cow with a random fortune every time you open a terminal.
+
+function forgum
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum"
+end
+
+# Show fortune on every terminal open
+forgum
+```
+
+**Expected output:**
+```
+  ╭─────────────────────────────────────────╮
+  │ The best way to predict the future is   │
+  │ to invent it.                           │
+  ╰─────────────────────────────────────────╯
+            \   ^__^
+             \  (oo)\_______
+                (__)\       )\/\
+                    ||----w |
+                    ||     ||
+```
+
+### Pattern 2: Random Thoughts + Fixed Animal (tux)
+
+```fish
+# ============================================
+# Forgum - Random Thoughts + Fixed Animal
+# ============================================
+# Always uses the tux cow with a random fortune.
+
+function forgum_tux
+    set fortune (pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Get-Fortune")
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Cowsay -Text '$fortune' -CowFile 'tux'"
+end
+
+# Call on startup
+forgum_tux
+```
+
+**Expected output:** Same as Pattern 1 but always with the tux penguin cow.
+
+### Pattern 3: Random Thoughts + Fixed Animal + Lolcat
+
+```fish
+# ============================================
+# Forgum - Random Thoughts + Fixed Animal + Rainbow
+# ============================================
+# Shows tux cow with fortune and rainbow colors.
+
+function forgum_tux_rainbow
+    set fortune (pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Get-Fortune")
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Cowsay -Text '$fortune' -CowFile 'tux' -Lolcat"
+end
+
+# Call on startup
+forgum_tux_rainbow
+```
+
+**Expected output:** Same as Pattern 2 but with rainbow-colored text.
+
+### Pattern 4: Random Thoughts + Random Animal
+
+```fish
+# ============================================
+# Forgum - Random Thoughts + Random Animal
+# ============================================
+# Picks a random cow each time with a random fortune.
+
+function forgum_random
+    set cows default tux dragon cat elephant doge bunny moose whale
+    set cow $cows[(random 1 (count $cows))]
+    set fortune (pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Get-Fortune")
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Cowsay -Text '$fortune' -CowFile '$cow'"
+end
+
+# Call on startup
+forgum_random
+```
+
+### Pattern 5: Config-Based Toggle (Cow + Lolcat from config.json)
+
+```fish
+# ============================================
+# Forgum - Config-Based Toggle
+# ============================================
+# Reads cow and lolcat settings from config.json.
+# Edit config.json to change cow/lolcat without touching the profile.
+
+function forgum_config
+    set config_file ""
+    if set -q FORGUM_CONFIG
+        set config_file "$FORGUM_CONFIG"
+    else if test -f "$HOME/.config/forgum/config.json"
+        set config_file "$HOME/.config/forgum/config.json"
+    else
+        pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum"
+        return
+    end
+
+    set cow (python3 -c "import json; c=json.load(open('$config_file')); print(c.get('cow',{}).get('file','default'))" 2>/dev/null; or echo "default")
+    set lolcat_enabled (python3 -c "import json; c=json.load(open('$config_file')); print('true' if c.get('lolcat',{}).get('enabled',False) else 'false')" 2>/dev/null; or echo "false")
+
+    set lolcat_flag ""
+    if test "$lolcat_enabled" = "true"
+        set lolcat_flag "-Lolcat"
+    end
+
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Cowsay -Text \$(Get-Fortune) -CowFile '$cow' $lolcat_flag"
+end
+
+# Call on startup
+forgum_config
+```
+
+**To toggle lolcat:** Edit your `config.json` and set `"enabled": true` under `lolcat`. No fish config changes needed.
+
 ## Advanced: tmux Status Bar
 
 If you use tmux, add this to `~/.tmux.conf`:

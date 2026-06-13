@@ -494,3 +494,94 @@ Describe "Edge Cases" {
         $f2 | Should -Not -BeNullOrEmpty
     }
 }
+
+Describe "Package Manager Support" {
+    BeforeAll {
+        $script:ProjectRoot = Split-Path $PSScriptRoot -Parent
+    }
+
+    It "winget manifest version matches module version" {
+        $yaml = Get-Content "$script:ProjectRoot/package-managers/winget/HKDEVS.Forgum.yaml" -Raw
+        $manifestVersion = ($yaml | Select-String 'PackageVersion:\s*(.+)').Matches[0].Groups[1].Value.Trim()
+        $module = Test-ModuleManifest "$script:ProjectRoot/Forgum.psd1"
+        $manifestVersion | Should -Be $module.Version.ToString()
+    }
+
+    It "scoop manifest version matches module version" {
+        $json = Get-Content "$script:ProjectRoot/package-managers/scoop/forgum.json" -Raw | ConvertFrom-Json
+        $module = Test-ModuleManifest "$script:ProjectRoot/Forgum.psd1"
+        $json.version | Should -Be $module.Version.ToString()
+    }
+
+    It "winget installer SHA256 is 64 hex chars" {
+        $yaml = Get-Content "$script:ProjectRoot/package-managers/winget/HKDEVS.Forgum.installer.yaml" -Raw
+        $sha = ($yaml | Select-String 'InstallerSha256:\s*(.+)').Matches[0].Groups[1].Value.Trim()
+        $sha | Should -Match '^[a-f0-9]{64}$'
+    }
+
+    It "scoop manifest hash is 64 hex chars" {
+        $json = Get-Content "$script:ProjectRoot/package-managers/scoop/forgum.json" -Raw | ConvertFrom-Json
+        $json.hash | Should -Match '^[a-f0-9]{64}$'
+    }
+
+    It "winget installer URL points to GitHub Release" {
+        $yaml = Get-Content "$script:ProjectRoot/package-managers/winget/HKDEVS.Forgum.installer.yaml" -Raw
+        $url = ($yaml | Select-String 'InstallerUrl:\s*(.+)').Matches[0].Groups[1].Value.Trim()
+        $url | Should -Match 'github\.com.*releases.*v1\.0\.4'
+    }
+
+    It "scoop URL points to GitHub Release" {
+        $json = Get-Content "$script:ProjectRoot/package-managers/scoop/forgum.json" -Raw | ConvertFrom-Json
+        $json.url | Should -Match 'github\.com.*releases.*v1\.0\.4'
+    }
+
+    It "proof README exists and has content" {
+        "$script:ProjectRoot/package-managers/proof/README.md" | Should -Exist
+        (Get-Content "$script:ProjectRoot/package-managers/proof/README.md" -Raw).Length | Should -BeGreaterThan 100
+    }
+
+    It "all 3 winget manifests exist" {
+        "$script:ProjectRoot/package-managers/winget/HKDEVS.Forgum.yaml" | Should -Exist
+        "$script:ProjectRoot/package-managers/winget/HKDEVS.Forgum.locale.en-US.yaml" | Should -Exist
+        "$script:ProjectRoot/package-managers/winget/HKDEVS.Forgum.installer.yaml" | Should -Exist
+    }
+}
+
+Describe "Documentation" {
+    BeforeAll {
+        $script:ProjectRoot = Split-Path $PSScriptRoot -Parent
+    }
+
+    It "README.md exists" {
+        "$script:ProjectRoot/README.md" | Should -Exist
+    }
+
+    It "CHANGELOG.md exists" {
+        "$script:ProjectRoot/CHANGELOG.md" | Should -Exist
+    }
+
+    It "CONTRIBUTING.md exists" {
+        "$script:ProjectRoot/CONTRIBUTING.md" | Should -Exist
+    }
+
+    It "LICENSE exists" {
+        "$script:ProjectRoot/LICENSE" | Should -Exist
+    }
+
+    It "wiki Home.md exists" {
+        "$script:ProjectRoot/wiki/Home.md" | Should -Exist
+    }
+
+    It "all 11 wiki files exist" {
+        $wikiFiles = @(
+            'Home.md', 'Getting-Started.md', 'Installation.md',
+            'PowerShell-Integration.md', 'Bash-Zsh-Integration.md',
+            'Fish-Integration.md', 'tmux-Integration.md',
+            'Configuration.md', 'Custom-Cows.md', 'Custom-Fortunes.md',
+            'Troubleshooting.md'
+        )
+        foreach ($f in $wikiFiles) {
+            "$script:ProjectRoot/wiki/$f" | Should -Exist
+        }
+    }
+}

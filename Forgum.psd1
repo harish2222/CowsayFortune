@@ -1,6 +1,6 @@
 @{
     RootModule        = 'Forgum.psm1'
-    ModuleVersion     = '1.0.3'
+    ModuleVersion     = '1.0.4'
     GUID              = 'f7e6b3a1-2d84-4c9f-a5e0-1b3d7c8f9e2a'
     Author            = 'HKDEVS'
     CompanyName       = 'HKDEVS'
@@ -26,13 +26,24 @@
             ProjectUri   = 'https://github.com/harish2222/Forgum'
             IconUri      = 'https://raw.githubusercontent.com/harish2222/Forgum/main/icon.png'
             ReleaseNotes = @'
-## v1.0.3
+## v1.0.4
+- Complete sample configurations for all platforms (PowerShell, Bash, Zsh, Fish, Git-Bash)
+- Wiki documentation: Sample-Configs.md with 9 use cases across 5 shells
+- Platform-specific integration guides with full code blocks
+- Package manager manifest validation tests
+- Documentation existence tests
+- Security harness tests (no Invoke-Expression, safe config paths, safe cow files)
+- Proof of legitimacy documentation for package manager reviewers
+- Winget submission (PR #387476)
+- Scoop submission (PR #18034)
+- Fixed Show-FortuneCow function not defined in setup.ps1 generated profiles
 - Fixed double output bug in Invoke-Forgum -Lolcat
-- Updated all GitHub Actions to Node.js 24 compatible versions
-- Added interactive setup script with shell configuration toggles
-- Added winget and Scoop package manager support
-- Updated Pester minimum to 5.7.0, PSScriptAnalyzer minimum to 1.24.0
-- Updated README with figlet banner and demo screenshots
+- Fixed duplicate tab completion blocks in profile.ps1
+- Fixed missing parameter names in cowpreview/cowgallery functions
+- Fixed lolcat toggle not displaying current state
+- Moved package manager docs from hidden .agent/ to visible package-managers/
+- Updated all documentation with platform-specific samples
+- Expanded test suite with security and package manager coverage
 '@
         }
     }

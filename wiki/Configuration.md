@@ -177,6 +177,69 @@ $config.lolcat.frequency = 0.2
 $config.lolcat.invert = $true
 ```
 
+**Toggle Patterns:**
+
+The easiest way to toggle lolcat is through your shell profile. These patterns let you control rainbow mode without editing `config.json` every time.
+
+**PowerShell toggle function:**
+```powershell
+# Add to your PowerShell profile
+function Toggle-Lolcat {
+    $config = Get-CFConfig
+    $config.lolcat.enabled = -not $config.lolcat.enabled
+    Set-CFConfig -Config $config
+    $status = if ($config.lolcat.enabled) { 'ON' } else { 'OFF' }
+    Write-Host "Rainbow: $status" -ForegroundColor $(if ($config.lolcat.enabled) {'Magenta'} else {'Gray'})
+}
+
+# Shortcut to run fortune with or without lolcat
+function ff {
+    $config = Get-CFConfig
+    if ($config.lolcat.enabled) {
+        Invoke-Forgum -Lolcat
+    } else {
+        Invoke-Forgum
+    }
+}
+```
+
+**Bash/Zsh toggle function:**
+```bash
+# Add to ~/.bashrc or ~/.zshrc
+toggle_lolcat() {
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; `$config = Get-CFConfig; `$config.lolcat.enabled = -not `$config.lolcat.enabled; Set-CFConfig -Config `$config; Write-Host 'Rainbow: ' + ('ON' if `$config.lolcat.enabled else 'OFF')"
+}
+
+# Shortcut to run fortune with or without lolcat
+ff() {
+    local enabled
+    enabled=$(pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; (Get-CFConfig).lolcat.enabled")
+    if [[ "$enabled" == "True" ]]; then
+        pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum -Lolcat"
+    else
+        pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum"
+    fi
+}
+```
+
+**Fish toggle function:**
+```fish
+# Add to ~/.config/fish/config.fish
+function toggle_lolcat
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; `$config = Get-CFConfig; `$config.lolcat.enabled = -not `$config.lolcat.enabled; Set-CFConfig -Config `$config; Write-Host 'Rainbow: ' -NoNewline; if (`$config.lolcat.enabled) { Write-Host 'ON' -ForegroundColor Magenta } else { Write-Host 'OFF' -ForegroundColor Gray }"
+end
+
+# Shortcut to run fortune with or without lolcat
+function ff
+    set enabled (pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; (Get-CFConfig).lolcat.enabled")
+    if test "$enabled" = "True"
+        pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum -Lolcat"
+    else
+        pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum"
+    end
+end
+```
+
 ### Output Settings
 
 | Setting | Values | What It Does |

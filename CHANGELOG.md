@@ -5,6 +5,31 @@ All notable changes to Forgum will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2026-06-13
+
+### Added
+- Complete sample configurations for all platforms (PowerShell, Bash, Zsh, Fish, Git-Bash)
+- Wiki documentation: Sample-Configs.md with 9 use cases across 5 shells
+- Platform-specific integration guides with full code blocks
+- Package manager manifest validation tests
+- Documentation existence tests
+- Security harness tests (no Invoke-Expression, safe config paths, safe cow files)
+- Proof of legitimacy documentation for package manager reviewers
+- Winget submission (PR #387476)
+- Scoop submission (PR #18034)
+
+### Fixed
+- Show-FortuneCow function not defined in setup.ps1 generated profiles
+- Double output bug in Invoke-Forgum -Lolcat
+- Duplicate tab completion blocks in profile.ps1
+- Missing parameter names in cowpreview/cowgallery functions
+- Lolcat toggle not displaying current state
+
+### Changed
+- Moved package manager docs from hidden .agent/ to visible package-managers/
+- Updated all documentation with platform-specific samples
+- Expanded test suite with security and package manager coverage
+
 ## [1.1.0] - 2026-06-12
 
 ### Added

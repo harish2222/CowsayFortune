@@ -18,6 +18,7 @@ Forgum is a fun PowerShell tool that shows your terminal a cow saying a random q
 | [Configuration](Configuration) | Change how Forgum looks and behaves |
 | [Custom Cows](Custom-Cows) | Create your own cow drawings |
 | [Custom Fortunes](Custom-Fortunes) | Add your own quotes |
+| [Sample Configs](PowerShell-Integration#sample-configurations-copy-paste-ready) | Ready-to-use startup configs for all shells |
 | [Troubleshooting](Troubleshooting) | Fix common problems |
 
 ## What You Can Do

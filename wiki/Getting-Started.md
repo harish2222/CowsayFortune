@@ -76,11 +76,56 @@ Get-Fortune
 2. **Import** — PowerShell loaded Forgum so you can use its commands
 3. **Run** — You told Forgum to show a cow with a fortune
 
+## Quick Config for Your Shell
+
+Pick your shell below to see a quick startup config.
+
+### PowerShell
+
+Add to your PowerShell profile (`$PROFILE`):
+
+```powershell
+Import-Module Forgum -ErrorAction SilentlyContinue
+Invoke-Forgum
+```
+
+### Bash / Zsh
+
+Add to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
+forgum() {
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum"
+}
+forgum
+```
+
+### Fish
+
+Add to your `~/.config/fish/config.fish`:
+
+```fish
+function forgum
+    pwsh -NoProfile -Command "Import-Module Forgum -ErrorAction SilentlyContinue; Invoke-Forgum"
+end
+forgum
+```
+
+## What's New in v1.0.4
+
+- **Sample Configurations**: Complete examples for PowerShell, Bash, Zsh, Fish, and Git-Bash
+- **Platform Guides**: Step-by-step integration instructions for every shell
+- **Security**: Enhanced security harness with 30 tests
+- **Package Managers**: Winget and Scoop submissions in progress
+
+See [Sample-Configs](Sample-Configs) for ready-to-use configuration examples across all platforms.
+
 ## Next Steps
 
 - [PowerShell Integration](PowerShell-Integration) — Make Forgum start automatically
 - [Configuration](Configuration) — Change how it looks
 - [Custom Cows](Custom-Cows) — Draw your own cows
+- [Sample-Configs](Sample-Configs) — Ready-to-use shell configurations
 
 ---
 

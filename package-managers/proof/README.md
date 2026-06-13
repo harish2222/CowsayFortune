@@ -8,7 +8,7 @@ This document provides package manager reviewers with evidence that Forgum is a 
 |-------|-------|
 | Package Name | Forgum |
 | Package Identifier (winget) | `HKDEVS.Forgum` |
-| Version | 1.0.3 |
+| Version | 1.0.4 |
 | License | MIT |
 | Author | HKDEVS |
 | Repository | https://github.com/harish2222/Forgum |
@@ -19,10 +19,10 @@ This document provides package manager reviewers with evidence that Forgum is a 
 | Claim | Proof | Link |
 |-------|-------|------|
 | Open source | MIT License file in repo | [LICENSE](./license.md) |
-| Actively maintained | 20+ commits, 2 releases | [Version History](./version-history.md) |
-| Tested | 127 tests, 0 failures | [Test Results](./test-results.md) |
+| Actively maintained | 20+ commits, 3 releases | [Version History](./version-history.md) |
+| Tested | 142 tests, 0 failures | [Test Results](./test-results.md) |
 | CI passing | 5/5 green runs on all 3 platforms | [CI Status](./ci-status.md) |
-| No lint errors | PSScriptAnalyzer 0 issues across 20 files | [Test Results](./test-results.md) |
+| No lint errors | PSScriptAnalyzer 0 issues across 22 files | [Test Results](./test-results.md) |
 | Secure | Security harness: injection, path traversal, input validation | [Security Audit](./security-audit.md) |
 | Cross-platform | Ubuntu, Windows, macOS tested | [CI Status](./ci-status.md) |
 | No malware | Pure PowerShell, no native binaries | See source code |
@@ -52,6 +52,6 @@ For winget (`microsoft/winget-pkgs`) and Scoop (`ScoopInstaller/Extras`) reviewe
 - [x] SHA256 hash matches release asset
 - [x] No bundled executables — pure PowerShell module
 - [x] CI badge shows passing status
-- [x] Test suite is comprehensive (127 tests)
+- [x] Test suite is comprehensive (142 tests)
 - [x] No known vulnerabilities (security harness passing)
 - [x] Active maintenance (recent commits and releases)

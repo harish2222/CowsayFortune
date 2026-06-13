@@ -303,3 +303,27 @@ Describe "Comprehensive Feature Matrix Tests" {
         $output | Should -Not -Match "${esc}\[38;2;"
     }
 }
+
+Describe "Platform Configuration Samples" {
+    BeforeAll {
+        $script:ProjectRoot = Join-Path (Split-Path $PSScriptRoot -Parent) ''
+    }
+
+    It "PowerShell integration doc has PowerShell code blocks" {
+        $content = Get-Content (Join-Path $script:ProjectRoot 'wiki/PowerShell-Integration.md') -Raw
+        $blocks = [regex]::Matches($content, '(?s)```powershell\r?\n(.*?)```')
+        $blocks.Count | Should -BeGreaterThan 0
+    }
+
+    It "Bash integration doc has bash code blocks" {
+        $content = Get-Content (Join-Path $script:ProjectRoot 'wiki/Bash-Zsh-Integration.md') -Raw
+        $blocks = [regex]::Matches($content, '(?s)```bash\r?\n(.*?)```')
+        $blocks.Count | Should -BeGreaterThan 0
+    }
+
+    It "Fish integration doc has fish code blocks" {
+        $content = Get-Content (Join-Path $script:ProjectRoot 'wiki/Fish-Integration.md') -Raw
+        $blocks = [regex]::Matches($content, '(?s)```fish\r?\n(.*?)```')
+        $blocks.Count | Should -BeGreaterThan 0
+    }
+}

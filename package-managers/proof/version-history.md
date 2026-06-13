@@ -1,6 +1,25 @@
 # Version History
 
-## v1.0.3 (2026-06-13) — Current
+## v1.0.4 (2026-06-13) — Current
+
+**Sample configs, security harness, documentation expansion**
+
+- Complete sample configurations for all platforms (PowerShell, Bash, Zsh, Fish, Git-Bash)
+- Wiki documentation: Sample-Configs.md with 9 use cases across 5 shells
+- Platform-specific integration guides with full code blocks
+- Package manager manifest validation tests
+- Documentation existence tests
+- Security harness tests (no Invoke-Expression, safe config paths, safe cow files)
+- Proof of legitimacy documentation for package manager reviewers
+- Winget submission (PR #387476)
+- Scoop submission (PR #18034)
+- Fixed Show-FortuneCow function not defined in setup.ps1 generated profiles
+- Fixed duplicate tab completion blocks in profile.ps1
+- Fixed missing parameter names in cowpreview/cowgallery functions
+- Fixed lolcat toggle not displaying current state
+- Moved package manager docs from hidden .agent/ to visible package-managers/
+
+## v1.0.3 (2026-06-13)
 
 **Package manager support, interactive setup, figlet banner**
 
@@ -11,7 +30,7 @@
 - Fixed double output bug in `Invoke-Forgum -Lolcat`
 - Updated README with banner and demo screenshots
 - Renamed repo from CowsayFortune to Forgum
-- **127 tests passing, 0 lint issues**
+- **142 tests passing, 0 lint issues**
 
 Commits: `2cf4ddf` → `d284127`
 
@@ -44,11 +63,13 @@ Tag: `9a65494`
 
 | Version | Asset | SHA256 |
 |---------|-------|--------|
+| v1.0.4 | `Forgum-v1.0.4.zip` | `pending` |
 | v1.0.3 | `Forgum-v1.0.3.zip` (317KB) | `d9f6623d7dbe1581cbbb1fd58fd748fc0eac5ced576c9fdb0daf31f5f857d262` |
 
 ## Git Tags
 
 ```
-v1.0.3 (latest)
+v1.0.4 (latest)
+v1.0.3
 v1.0.2
 ```

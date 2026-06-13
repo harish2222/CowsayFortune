@@ -256,3 +256,48 @@ Describe "Ghost Tests - Hostile QA" {
         $raw | Should -Match '\|\|'
     }
 }
+
+Describe "Security Harness" {
+    BeforeAll {
+        Import-Module (Join-Path (Split-Path $PSScriptRoot -Parent) 'Forgum.psd1') -Force
+        $script:ProjectRoot = Split-Path $PSScriptRoot -Parent
+    }
+
+    It "no Invoke-Expression in public functions" {
+        $publicFiles = Get-ChildItem "$script:ProjectRoot/Public/*.ps1"
+        foreach ($f in $publicFiles) {
+            $content = Get-Content $f.FullName -Raw
+            $content | Should -Not -Match 'Invoke-Expression'
+        }
+    }
+
+    It "no Invoke-Expression in private functions" {
+        $privateFiles = Get-ChildItem "$script:ProjectRoot/Private/*.ps1" -Recurse
+        foreach ($f in $privateFiles) {
+            $content = Get-Content $f.FullName -Raw
+            $content | Should -Not -Match 'Invoke-Expression'
+        }
+    }
+
+    It "config loads without error" {
+        { Get-CFConfig -ErrorAction Stop } | Should -Not -Throw
+    }
+
+    It "all .cow files are safe (no executable content)" {
+        $cowFiles = Get-ChildItem "$script:ProjectRoot/Data/Cows/*.cow" -ErrorAction SilentlyContinue
+        foreach ($f in $cowFiles) {
+            $content = Get-Content $f.FullName -Raw
+            $content | Should -Not -Match 'Invoke-Expression|Invoke-Command|Start-Process'
+        }
+    }
+
+    It "setup.ps1 has FORGUM_STARTUP_DONE guard" {
+        $content = Get-Content "$script:ProjectRoot/setup.ps1" -Raw
+        $content | Should -Match 'FORGUM_STARTUP_DONE'
+    }
+
+    It "install.ps1 does not execute remote code" {
+        $content = Get-Content "$script:ProjectRoot/install.ps1" -Raw
+        $content | Should -Not -Match 'Invoke-Expression.*http'
+    }
+}

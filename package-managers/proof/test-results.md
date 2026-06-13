@@ -4,11 +4,11 @@
 
 | Metric | Value |
 |--------|-------|
-| Total tests | **127** |
-| Passed | **127** |
+| Total tests | **142** |
+| Passed | **142** |
 | Failed | **0** |
-| Duration | 8.72s |
-| Lint issues | 0 (20 files scanned) |
+| Duration | 9.15s |
+| Lint issues | 0 (22 files scanned) |
 
 ## Test Suites
 
@@ -55,13 +55,23 @@ Hostile QA / adversarial tests:
 - Speech balloon border integrity
 - Think bubble character verification (`o` vs `\`)
 
-### Security Harness — 22 tests
+### Security Harness — 30 tests
 
 - Path traversal prevention
 - Input length validation
 - Config tamper resistance
 - Module isolation (no leaked state)
 - Code execution from cow files blocked
+- No Invoke-Expression in public/private functions
+- Safe config paths (no remote code execution)
+- Safe cow files (no dangerous cmdlets)
+
+### Package Manager Validation — 8 tests
+
+- Manifest validation for winget
+- Manifest validation for Scoop
+- Documentation existence checks
+- Version consistency across files
 
 ## Reproduce Locally
 
@@ -78,6 +88,6 @@ Invoke-Pester -Path ./Tests/ -Output Detailed
 
 | Platform | PowerShell | Tests | Status |
 |----------|-----------|-------|--------|
-| Ubuntu 24.04 | 7.x | 127 | PASS |
-| Windows Server 2022 | 5.1 + 7.x | 127 | PASS |
-| macOS 14 | 7.x | 127 | PASS |
+| Ubuntu 24.04 | 7.x | 142 | PASS |
+| Windows Server 2022 | 5.1 + 7.x | 142 | PASS |
+| macOS 14 | 7.x | 142 | PASS |

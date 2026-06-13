@@ -117,6 +117,157 @@ if ($hostWindow -eq 'Windows PowerShell' -or $hostWindow -eq 'pwsh') {
 }
 ```
 
+## Sample Configurations (Copy-Paste Ready)
+
+These are complete, ready-to-use profile snippets for common setups.
+
+### Pattern 1: Basic Forgum (Fortune Cow on Startup)
+
+```powershell
+# ============================================
+# Forgum - Basic Fortune Cow
+# ============================================
+# Shows a cow with a random fortune every time PowerShell opens.
+
+Import-Module Forgum -ErrorAction SilentlyContinue
+
+# Invoke-Forgum calls the default cow and a random fortune
+Invoke-Forgum
+```
+
+**Expected output:**
+```
+  ╭─────────────────────────────────────────╮
+  │ The best way to predict the future is   │
+  │ to invent it.                           │
+  ╰─────────────────────────────────────────╯
+            \   ^__^
+             \  (oo)\_______
+                (__)\       )\/\
+                    ||----w |
+                    ||     ||
+```
+
+### Pattern 2: Random Thoughts + Fixed Animal (tux)
+
+```powershell
+# ============================================
+# Forgum - Random Thoughts + Fixed Animal
+# ============================================
+# Always uses the tux cow with a random fortune.
+
+Import-Module Forgum -ErrorAction SilentlyContinue
+
+function Show-FortuneCow {
+    $fortune = Get-Fortune
+    Invoke-Cowsay -Text $fortune -CowFile 'tux'
+}
+
+# Call on startup
+Show-FortuneCow
+```
+
+**Expected output:**
+```
+  ╭─────────────────────────────────────────╮
+  │ The best way to predict the future is   │
+  │ to invent it.                           │
+  ╰─────────────────────────────────────────╯
+         \
+          \
+            .--.
+           |o_o |
+           |:_/ |
+          //   \ \
+         (|     | )
+        /'\_   _/`\
+        \___)=(___/
+```
+
+### Pattern 3: Random Thoughts + Fixed Animal + Lolcat
+
+```powershell
+# ============================================
+# Forgum - Random Thoughts + Fixed Animal + Rainbow
+# ============================================
+# Shows tux cow with fortune and rainbow colors.
+
+Import-Module Forgum -ErrorAction SilentlyContinue
+
+function Show-FortuneCow {
+    $fortune = Get-Fortune
+    Invoke-Cowsay -Text $fortune -CowFile 'tux' -Lolcat
+}
+
+# Call on startup
+Show-FortuneCow
+```
+
+**Expected output:** Same as Pattern 2 but with rainbow-colored text.
+
+### Pattern 4: Random Thoughts + Random Animal
+
+```powershell
+# ============================================
+# Forgum - Random Thoughts + Random Animal
+# ============================================
+# Picks a random cow each time with a random fortune.
+
+Import-Module Forgum -ErrorAction SilentlyContinue
+
+function Show-FortuneCow {
+    $fortune = Get-Fortune
+    $cow = (Get-CFCow | Get-Random).Name
+    Invoke-Cowsay -Text $fortune -CowFile $cow
+}
+
+# Call on startup
+Show-FortuneCow
+```
+
+### Pattern 5: Config-Based Toggle (Cow + Lolcat from config.json)
+
+```powershell
+# ============================================
+# Forgum - Config-Based Toggle
+# ============================================
+# Reads cow and lolcat settings from config.json.
+# Edit config.json to change cow/lolcat without touching the profile.
+
+Import-Module Forgum -ErrorAction SilentlyContinue
+
+function Show-FortuneCow {
+    $config = Get-CFConfig
+
+    # If config says random, pick random cow; otherwise use configured cow
+    if ($config.cow.random) {
+        $cow = (Get-CFCow | Get-Random).Name
+    } elseif ($config.cow.file -ne 'default') {
+        $cow = $config.cow.file
+    } else {
+        $cow = 'default'
+    }
+
+    # Build parameters
+    $params = @{
+        Text    = (Get-Fortune)
+        CowFile = $cow
+    }
+
+    # Add Lolcat flag if enabled in config
+    if ($config.lolcat.enabled) {
+        $params['Lolcat'] = $true
+    }
+
+    Invoke-Cowsay @params
+}
+
+# Call on startup
+Show-FortuneCow
+```
+
+**To toggle lolcat:** Edit your `config.json` and set `"enabled": true` under `lolcat`. No profile changes needed.
+
 ## Custom Profile Functions
 
 Add these handy shortcuts to your profile:
