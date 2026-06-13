@@ -14,14 +14,14 @@ Get-FileHash .\Forgum-v1.0.3.zip -Algorithm SHA256
 
 ## Step 2: Update Installer Manifest
 
-Update `.agent/winget/manifests/h/HKDEVS/Forgum/1.0.3/HKDEVS.Forgum.installer.yaml`:
-- Replace `COMPUTE_FROM_RELEASE_ZIP` with the actual SHA256 hash
+Update `package-managers/winget/HKDEVS.Forgum.installer.yaml`:
+- Replace hash with the actual SHA256 hash
 - Update `InstallerUrl` to the actual release URL
 
 ## Step 3: Validate Manifest
 
 ```powershell
-winget validate .agent\winget\manifests\h\HKDEVS\Forgum\1.0.3\
+winget validate package-managers\winget\
 ```
 
 ## Step 4: Test in Windows Sandbox
@@ -42,7 +42,7 @@ powershell .\Tools\SandboxTest.ps1 ..\HKDEVS\Forgum\1.0.3\
    git sparse-checkout set manifests\h\HKDEVS
    git checkout
    ```
-3. Copy manifests to `manifests/h/HKDEVS/Forgum/1.0.3/`
+3. Copy all 3 manifests from `package-managers/winget/` to `manifests/h/HKDEVS/Forgum/1.0.3/`
 4. Commit and push:
    ```powershell
    git add .

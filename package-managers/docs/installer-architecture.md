@@ -36,8 +36,8 @@ All scripts display the FORGUM figlet banner on startup:
 ## Package Manager Integration
 
 ### Winget
-- InstallerType: `inno` (Inno Setup wrapper)
-- Runs: `Forgum-v1.0.3-setup.exe /VERYSILENT /NORESTART`
+- InstallerType: `zip` (extracts PowerShell module)
+- Downloads: `Forgum-v1.0.3.zip` from GitHub Release
 - Extracts module to `~/Documents/PowerShell/Modules/Forgum/`
 - Runs `setup.ps1 -NonInteractive -Force` silently
 
@@ -51,26 +51,26 @@ All scripts display the FORGUM figlet banner on startup:
 
 ```
 Show-Banner
-  │
-  ├─ Check Forgum installed?
-  │   └─ No → error, exit
-  │
-  ├─ Load config (Get-CFConfig)
-  │
-  ├─ Toggle 1: Fortune on startup? (default: yes)
-  ├─ Toggle 2: Lolcat enabled? (default: yes)
-  ├─ Toggle 3: Default cow file (default: "default")
-  ├─ Toggle 4: Animation mode (default: "static")
-  ├─ Toggle 5: Shell aliases? (default: yes)
-  ├─ Toggle 6: Tab completion? (default: yes)
-  │
-  ├─ Apply config (Set-CFConfig)
-  │
-  └─ Update profile
-      ├─ Add Import-Module Forgum
-      ├─ Add Show-FortuneCow startup block
-      ├─ Add alias functions
-      └─ Add Register-ArgumentCompleter
+  |
+  +-- Check Forgum installed?
+  |   +-- No -> error, exit
+  |
+  +-- Load config (Get-CFConfig)
+  |
+  +-- Toggle 1: Fortune on startup? (default: yes)
+  +-- Toggle 2: Lolcat enabled? (default: yes)
+  +-- Toggle 3: Default cow file (default: "default")
+  +-- Toggle 4: Animation mode (default: "static")
+  +-- Toggle 5: Shell aliases? (default: yes)
+  +-- Toggle 6: Tab completion? (default: yes)
+  |
+  +-- Apply config (Set-CFConfig)
+  |
+  +-- Update profile
+      +-- Add Import-Module Forgum
+      +-- Add Show-FortuneCow startup block
+      +-- Add alias functions
+      +-- Add Register-ArgumentCompleter
 ```
 
 ## Profile Modification

@@ -13,7 +13,7 @@
 
 ### Step 2: Add Manifest
 
-Create `bucket/forgum.json` with content from `.agent/scoop/bucket/forgum.json`
+Create `bucket/forgum.json` with content from `package-managers/scoop/forgum.json`
 Update the `hash` field with actual SHA256.
 
 ### Step 3: Test
@@ -46,7 +46,7 @@ git push
 
 ### Step 2: Add Manifest
 
-Copy `forgum.json` to `bucket/`
+Copy `forgum.json` from `package-managers/scoop/` to `bucket/`
 
 ### Step 3: Submit PR
 
