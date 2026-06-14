@@ -162,26 +162,14 @@ jobs:
         env:
           FORGUM_NOAUTOSTART: '1'
         run: |
-          # Run all tests with detailed output and NUnit XML
-          $config = New-PesterConfiguration
-          $config.Run.Path = './Tests'
-          $config.Run.PassThru = $true
-          $config.Output.Verbosity = 'Detailed'
-          $config.CodeCoverage.Enabled = $true
-          $config.CodeCoverage.OutputPath = (Join-Path $env:RUNNER_TEMP 'coverage.xml')
-          $config.Run.TestResult = $true
-          $config.Run.TestResultOutputFormat = 'NUnitXml'
-          $config.Run.TestResultPath = Join-Path $env:RUNNER_TEMP 'test-results.xml'
-          $config.Run.Timeout = 300
-          $results = Invoke-Pester -Configuration $config
-          
+          $results = Invoke-Pester -Path './Tests' -PassThru -Output Detailed
+
           Write-Host ""
           Write-Host "========================================" -ForegroundColor Cyan
           Write-Host "Tests: $($results.TotalCount) | Passed: $($results.PassedCount) | Failed: $($results.FailedCount) | Skipped: $($results.SkippedCount)" -ForegroundColor Cyan
           Write-Host "Duration: $($results.Duration)" -ForegroundColor Cyan
-          Write-Host "Coverage: $($results.CodeCoverage.CoveragePercent)%" -ForegroundColor Cyan
           Write-Host "========================================" -ForegroundColor Cyan
-          
+
           if ($results.FailedCount -gt 0) {
             $results.TestResult | Where-Object Result -eq 'Failed' | ForEach-Object {
               Write-Host "FAILED: $($_.Name)" -ForegroundColor Red
@@ -196,25 +184,14 @@ jobs:
         env:
           FORGUM_NOAUTOSTART: '1'
         run: |
-          $config = New-PesterConfiguration
-          $config.Run.Path = './Tests'
-          $config.Run.PassThru = $true
-          $config.Output.Verbosity = 'Detailed'
-          $config.CodeCoverage.Enabled = $true
-          $config.CodeCoverage.OutputPath = (Join-Path $env:RUNNER_TEMP 'coverage.xml')
-          $config.Run.TestResult = $true
-          $config.Run.TestResultOutputFormat = 'NUnitXml'
-          $config.Run.TestResultPath = Join-Path $env:RUNNER_TEMP 'test-results.xml'
-          $config.Run.Timeout = 300
-          $results = Invoke-Pester -Configuration $config
-          
+          $results = Invoke-Pester -Path './Tests' -PassThru -Output Detailed
+
           Write-Host ""
           Write-Host "========================================" -ForegroundColor Cyan
           Write-Host "Tests: $($results.TotalCount) | Passed: $($results.PassedCount) | Failed: $($results.FailedCount) | Skipped: $($results.SkippedCount)" -ForegroundColor Cyan
           Write-Host "Duration: $($results.Duration)" -ForegroundColor Cyan
-          Write-Host "Coverage: $($results.CodeCoverage.CoveragePercent)%" -ForegroundColor Cyan
           Write-Host "========================================" -ForegroundColor Cyan
-          
+
           if ($results.FailedCount -gt 0) {
             $results.TestResult | Where-Object Result -eq 'Failed' | ForEach-Object {
               Write-Host "FAILED: $($_.Name)" -ForegroundColor Red
