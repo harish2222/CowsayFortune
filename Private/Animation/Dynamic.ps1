@@ -28,7 +28,7 @@ function Invoke-DynamicAnimation {
     $cowsPath = Join-Path $PSScriptRoot '..\..\Data\Cows'
     $fortunesPath = Join-Path $PSScriptRoot '..\..\Data\Fortunes\fortunes.txt'
     
-    $cowFiles = Get-ChildItem -Path $cowsPath -Filter '*.cow' | Select-Object -ExpandProperty FullName
+    $cowFiles = Get-ChildItem -Path $cowsPath -Filter '*.cow' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     $fortunes = Get-Content $fortunesPath -Raw -ErrorAction SilentlyContinue
     $fortuneList = if ($fortunes) { $fortunes -split '(?m)^%\s*$' | Where-Object { $_.Trim() } } else { @() }
 
@@ -43,6 +43,15 @@ function Invoke-DynamicAnimation {
     $currentCow = ''
     $currentFortune = ''
     $firstRun = $true
+    $output = ''
+
+    # Detect if we have a real console for cursor manipulation
+    $hasConsole = $true
+    try {
+        $null = [Console]::CursorTop
+    } catch {
+        $hasConsole = $false
+    }
 
     try {
         while ([DateTime]::UtcNow -lt $endTime) {
@@ -78,12 +87,23 @@ function Invoke-DynamicAnimation {
             $output = $balloon -join "`n"
             
             if ($config.lolcat.enabled) {
-                $output = Format-Lolcat -Text $output -Truecolor $config.lolcat.truecolor -Animate $config.lolcat.animate
+                $lolcatParams = @{
+                    Text      = $output
+                    Truecolor = $config.lolcat.truecolor
+                    Animate   = $config.lolcat.animate
+                }
+                $output = Format-Lolcat @lolcatParams
             }
 
-            $cursorPos = [Console]::CursorTop
-            if ($cursorPos -gt 0) {
-                [Console]::SetCursorPosition(0, $cursorPos - $balloon.Count)
+            if ($hasConsole) {
+                try {
+                    $cursorPos = [Console]::CursorTop
+                    if ($cursorPos -gt 0) {
+                        [Console]::SetCursorPosition(0, $cursorPos - $balloon.Count)
+                    }
+                } catch {
+                    # Console cursor not available, just continue
+                }
             }
             Write-Host $output -NoNewline
 

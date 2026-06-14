@@ -72,12 +72,12 @@ function Invoke-Forgum {
             Frequency = $config.lolcat.frequency
             Spread    = if ($config.lolcat.spread) { $config.lolcat.spread } else { 3.0 }
             Seed      = if ($config.lolcat.seed) { $config.lolcat.seed } else { 0 }
-            Truecolor = $config.lolcat.truecolor
-            Invert    = $config.lolcat.invert
-            Animate   = $config.lolcat.animate
             Duration  = if ($config.lolcat.duration) { $config.lolcat.duration } else { 12 }
             Speed     = if ($config.lolcat.speed) { $config.lolcat.speed } else { 20.0 }
         }
+        if ($config.lolcat.truecolor) { $lolcatParams.Truecolor = $true }
+        if ($config.lolcat.invert)    { $lolcatParams.Invert    = $true }
+        if ($config.lolcat.animate)   { $lolcatParams.Animate   = $true }
         $cowOutput = Format-Lolcat @lolcatParams
     }
 
