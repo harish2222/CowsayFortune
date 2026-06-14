@@ -77,8 +77,8 @@ function Invoke-DynamicAnimation {
 
             $output = $balloon -join "`n"
             
-            if ($config.lolcat.enabled -and (Get-Command lolcat -ErrorAction SilentlyContinue)) {
-                $output = $output | Format-Lolcat
+            if ($config.lolcat.enabled) {
+                $output = Format-Lolcat -Text $output -Truecolor $config.lolcat.truecolor -Animate $config.lolcat.animate
             }
 
             $cursorPos = [Console]::CursorTop

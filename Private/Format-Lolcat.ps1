@@ -55,7 +55,12 @@ function Format-Lolcat {
     )
 
     # Detect truecolor support
-    $useTruecolor = $Truecolor -or ($env:COLORTERM -in @('truecolor', '24bit'))
+    # Only auto-detect from COLORTERM if caller didn't explicitly set -Truecolor
+    if ($PSBoundParameters.ContainsKey('Truecolor')) {
+        $useTruecolor = $Truecolor
+    } else {
+        $useTruecolor = ($env:COLORTERM -in @('truecolor', '24bit'))
+    }
 
     # Initialize seed (0 = random, like upstream)
     $os = if ($Seed -eq 0) { Get-Random -Minimum 0 -Maximum 256 } else { $Seed }

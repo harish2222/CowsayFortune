@@ -91,12 +91,13 @@ jobs:
         shell: pwsh
         run: |
           $animFiles = Get-ChildItem ./Private/Animation/*.ps1 -ErrorAction SilentlyContinue
-          Write-Host "Animation files: $($animFiles.Count)"
-          if ($animFiles.Count -lt 11) {
-            Write-Host "Expected at least 11 animation files (3 original + 8 new)" -ForegroundColor Red
+          $expected = @('Static', 'Talking', 'Typewriter', 'SlideIn', 'Bounce', 'Dissolve', 'FadeIn', 'Blink', 'Wiggle', 'Wave', 'Disco', 'Dynamic')
+          Write-Host "Animation files found: $($animFiles.Count)"
+          Write-Host "Animation files expected: $($expected.Count)"
+          if ($animFiles.Count -lt $expected.Count) {
+            Write-Host "Expected at least $($expected.Count) animation files" -ForegroundColor Red
             exit 1
           }
-          $expected = @('Static', 'Talking', 'Typewriter', 'SlideIn', 'Bounce', 'Dissolve', 'FadeIn', 'Blink', 'Wiggle', 'Wave', 'Disco')
           foreach ($name in $expected) {
             $found = $animFiles | Where-Object { $_.BaseName -eq $name }
             if (-not $found) {
@@ -104,7 +105,7 @@ jobs:
               exit 1
             }
           }
-          Write-Host "All 11 animation files present." -ForegroundColor Green
+          Write-Host "All $($expected.Count) animation files present." -ForegroundColor Green
 
   test:
     needs: [lint, validate]
@@ -123,12 +124,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install PowerShell ${{ matrix.pwsh }}
-        uses: actions/setup-powershell@v2
-        if: matrix.pwsh != '5.1'
-        with:
-          version: ${{ matrix.pwsh }}
-
       - name: Cache Pester
         uses: actions/cache@v4
         with:
@@ -144,7 +139,7 @@ jobs:
           Get-Module -ListAvailable -Name Pester | Where-Object Version.Major -ge 5 | Select-Object Name, Version | Format-Table -AutoSize
 
       - name: Run Pester Tests
-        shell: pwsh
+        shell: ${{ (matrix.pwsh == '5.1' && runner.os == 'Windows') && 'powershell' || 'pwsh' }}
         env:
           FORGUM_NOAUTOSTART: '1'
         run: |
@@ -154,7 +149,7 @@ jobs:
           $config.Output.Verbosity = 'Detailed'
           $config.Run.TestResult = $true
           $config.Run.TestResultOutputFormat = 'NUnitXml'
-          $config.Run.TestResultPath =Join-Path $env:RUNNER_TEMP 'test-results.xml'
+          $config.Run.TestResultPath = Join-Path $env:RUNNER_TEMP 'test-results.xml'
           $config.Run.Timeout = 300
           $results = Invoke-Pester -Configuration $config
           Write-Host ""
