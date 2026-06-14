@@ -135,20 +135,64 @@ jobs:
             ~/Documents/PowerShell/Modules
           key: modules-pester-5.7-${{ runner.os }}-${{ hashFiles('**/Forgum.psd1') }}
 
-      - name: Install Pester
-        shell: ${{ (matrix.pwsh == '5.1' && runner.os == 'Windows') && 'powershell' || 'pwsh' }}
+      - name: Install Pester (pwsh)
+        if: matrix.pwsh != '5.1'
+        shell: pwsh
         run: |
           if (-not (Get-Module -ListAvailable -Name Pester | Where-Object { $_.Version.Major -ge 5 })) {
             Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser -MinimumVersion 5.7.0 -MaximumVersion 5.99.99
           }
           Get-Module -ListAvailable -Name Pester | Where-Object Version.Major -ge 5 | Select-Object Name, Version | Format-Table -AutoSize
 
-      - name: Run Pester Tests
-        shell: ${{ (matrix.pwsh == '5.1' && runner.os == 'Windows') && 'powershell' || 'pwsh' }}
+      - name: Install Pester (powershell)
+        if: matrix.pwsh == '5.1'
+        shell: powershell
+        run: |
+          if (-not (Get-Module -ListAvailable -Name Pester | Where-Object { $_.Version.Major -ge 5 })) {
+            Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser -MinimumVersion 5.7.0 -MaximumVersion 5.99.99
+          }
+          Get-Module -ListAvailable -Name Pester | Where-Object Version.Major -ge 5 | Select-Object Name, Version | Format-Table -AutoSize
+
+      - name: Run Pester Tests (pwsh)
+        if: matrix.pwsh != '5.1'
+        shell: pwsh
         env:
           FORGUM_NOAUTOSTART: '1'
         run: |
           # Run all tests with detailed output and NUnit XML
+          $config = New-PesterConfiguration
+          $config.Run.Path = './Tests'
+          $config.Run.PassThru = $true
+          $config.Output.Verbosity = 'Detailed'
+          $config.CodeCoverage.Enabled = $true
+          $config.CodeCoverage.OutputPath = (Join-Path $env:RUNNER_TEMP 'coverage.xml')
+          $config.Run.TestResult = $true
+          $config.Run.TestResultOutputFormat = 'NUnitXml'
+          $config.Run.TestResultPath = Join-Path $env:RUNNER_TEMP 'test-results.xml'
+          $config.Run.Timeout = 300
+          $results = Invoke-Pester -Configuration $config
+          
+          Write-Host ""
+          Write-Host "========================================" -ForegroundColor Cyan
+          Write-Host "Tests: $($results.TotalCount) | Passed: $($results.PassedCount) | Failed: $($results.FailedCount) | Skipped: $($results.SkippedCount)" -ForegroundColor Cyan
+          Write-Host "Duration: $($results.Duration)" -ForegroundColor Cyan
+          Write-Host "Coverage: $($results.CodeCoverage.CoveragePercent)%" -ForegroundColor Cyan
+          Write-Host "========================================" -ForegroundColor Cyan
+          
+          if ($results.FailedCount -gt 0) {
+            $results.TestResult | Where-Object Result -eq 'Failed' | ForEach-Object {
+              Write-Host "FAILED: $($_.Name)" -ForegroundColor Red
+              Write-Host "  Error: $($_.ErrorRecord.DisplayErrorMessage)" -ForegroundColor Red
+            }
+            exit 1
+          }
+
+      - name: Run Pester Tests (powershell)
+        if: matrix.pwsh == '5.1'
+        shell: powershell
+        env:
+          FORGUM_NOAUTOSTART: '1'
+        run: |
           $config = New-PesterConfiguration
           $config.Run.Path = './Tests'
           $config.Run.PassThru = $true
