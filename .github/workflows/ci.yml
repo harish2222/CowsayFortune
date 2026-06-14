@@ -41,6 +41,9 @@ jobs:
             'PSAvoidUsingWriteHost'
             'PSUseSingularNouns'
             'PSUseBOMForUnicodeEncodedFile'
+            'PSUseDeclaredVarsMoreThanAssignments'
+            'PSAvoidUsingEmptyCatchBlock'
+            'PSUseShouldProcessForStateChangingFunctions'
           )
           $results = Invoke-ScriptAnalyzer -Path . -Recurse -Severity Error,Warning -ExcludeRule $excludedRules
           if ($results) {
