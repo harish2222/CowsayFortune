@@ -50,8 +50,9 @@ function Invoke-BlinkAnimation {
     for ($frame = 0; $frame -lt $Duration; $frame++) {
         [void]$sb.Clear()
 
-        # Determine if this frame is a blink
-        $isBlink = ($frame -eq 3) -or ($frame -eq 10)
+        # Determine if this frame is a blink based on BlinkRate
+        $blinkInterval = [Math]::Max(2, [Math]::Floor(1.0 / $BlinkRate))
+        $isBlink = ($frame % $blinkInterval -eq 3 -and $frame -ge 3)
 
         for ($i = 0; $i -lt $lines.Count; $i++) {
             if ($i -gt 0) { [void]$sb.AppendLine() }

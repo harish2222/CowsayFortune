@@ -61,11 +61,11 @@ $script:ConfigCacheTTL = 30
 
 # Default config sections (module-level constant — avoids recreation per Get-CFConfig call)
 $script:DefaultConfigSections = @{
-    animation = @{ mode = 'static'; speed = 20; duration = 12; spread = 3.0; blinkRate = 0.2; amplitude = 2 }
+    animation = @{ mode = 'static'; speed = 20; duration = 12; spread = 3.0; blinkRate = 0.2; amplitude = 2; cycleInterval = 3 }
     cow = @{ file = 'default'; random = $false; mode = $null; eyes = 'oo'; tongue = '  ' }
-    fortune = @{ database = 'fortunes'; offensive = $false }
+    fortune = @{ database = 'fortunes'; databases = @('fortunes'); offensive = $false; lengthFilter = $null }
     lolcat = @{ enabled = $false; truecolor = $true; frequency = 0.1; spread = 3.0; seed = 0; invert = $false; animate = $false; duration = 12; speed = 20.0 }
-    output = @{ wordWrap = $true; maxWidth = 60 }
+    output = @{ wordWrap = $true; maxWidth = 60; noWrap = $false }
     startup = @{ enabled = $true; command = 'Invoke-Forgum' }
     shell = @{ integration = 'auto'; tmux = @{ enabled = $false; pane = 'status-right' } }
 }
@@ -74,13 +74,24 @@ $script:DefaultConfigSections = @{
 if ($env:FORGUM_NOAUTOSTART -ne '1') {
     $sb = {
         if (Get-Command Invoke-Forgum -ErrorAction Ignore) {
+            # Temporarily override config in-memory only — never write to disk
+            $savedCache = $script:ConfigCache
+            $savedCacheTime = $script:ConfigCacheTime
             $config = Get-CFConfig
             $config.cow.random = $true
             $config.animation.mode = 'static'
             $config.lolcat.enabled = $true
-            Set-CFConfig -Config $config
-            $cowText = Invoke-Forgum -Lolcat
-            if ($cowText) { [Console]::WriteLine($cowText) }
+            $script:ConfigCache = $config
+            $script:ConfigCacheTime = [datetime]::UtcNow
+            try {
+                $cowText = Invoke-Forgum -Lolcat
+                if ($cowText) { [Console]::WriteLine($cowText) }
+            }
+            finally {
+                # Restore original cache so user config is not affected
+                $script:ConfigCache = $savedCache
+                $script:ConfigCacheTime = $savedCacheTime
+            }
         }
     }
     & $sb

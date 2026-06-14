@@ -35,7 +35,7 @@ function Get-CFConfig {
         }
     }
 
-    if (-not $config) {
+    if ($null -eq $config) {
         $defaultPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Templates/default-config.json'
         if (-not (Test-Path $defaultPath)) {
             $defaultPath = Join-Path $PSScriptRoot 'Data/Templates/default-config.json'
@@ -49,6 +49,7 @@ function Get-CFConfig {
         if (-not $config.PSObject.Properties[$key] -or $null -eq $config.$key) {
             $config | Add-Member -NotePropertyName $key -NotePropertyValue ($required[$key] | ConvertTo-Json -Depth 5 | ConvertFrom-Json) -Force
         }
+        if ($null -eq $config.$key) { continue }
         foreach ($subKey in $required[$key].Keys) {
             if (-not $config.$key.PSObject.Properties[$subKey] -or $null -eq $config.$key.$subKey) {
                 $config.$key | Add-Member -NotePropertyName $subKey -NotePropertyValue $required[$key][$subKey] -Force

@@ -32,6 +32,15 @@ function Format-CowMessage {
 
         foreach ($word in $words) {
             if ($word.Length -eq 0) { continue }
+            # Handle words longer than MaxWidth by splitting them
+            while ($word.Length -gt $MaxWidth) {
+                if ($sb.Length -gt 0) {
+                    $lines.Add($sb.ToString())
+                    [void]$sb.Clear()
+                }
+                $lines.Add($word.Substring(0, $MaxWidth))
+                $word = $word.Substring($MaxWidth)
+            }
             $currentLen = $sb.Length
             if ($currentLen -eq 0) {
                 [void]$sb.Append($word)

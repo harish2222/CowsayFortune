@@ -47,9 +47,9 @@ function Set-CFConfig {
             if (Test-Path $tempPath) { Remove-Item $tempPath -Force -ErrorAction SilentlyContinue }
             throw
         }
-    }
 
-    # Invalidate cache
-    $script:ConfigCache = $null
-    $script:ConfigCacheTime = [datetime]::MinValue
+        # Invalidate cache only after successful write
+        $script:ConfigCache = $null
+        $script:ConfigCacheTime = [datetime]::MinValue
+    }
 }

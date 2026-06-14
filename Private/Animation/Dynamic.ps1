@@ -25,8 +25,9 @@ function Invoke-DynamicAnimation {
     )
 
     $config = Get-CFConfig
-    $cowsPath = Join-Path $PSScriptRoot '..\..\Data\Cows'
-    $fortunesPath = Join-Path $PSScriptRoot '..\..\Data\Fortunes\fortunes.txt'
+    $moduleRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+    $cowsPath = Join-Path $moduleRoot 'Data\Cows'
+    $fortunesPath = Join-Path $moduleRoot 'Data\Fortunes\fortunes.txt'
     
     $cowFiles = Get-ChildItem -Path $cowsPath -Filter '*.cow' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
     $fortunes = Get-Content $fortunesPath -Raw -ErrorAction SilentlyContinue
@@ -73,13 +74,13 @@ function Invoke-DynamicAnimation {
             $fortuneLines | ForEach-Object { if ($_.Length -gt $maxWidth) { $maxWidth = $_.Length } }
             $balloonWidth = [math]::Max($maxWidth, 40)
 
-            $top = ' ' + ('-' * ($balloonWidth + 2))
-            $bottom = ' ' + ('-' * ($balloonWidth + 2))
+            $top = '  ' + ('#' * ($balloonWidth + 4))
+            $bottom = '  ' + ('#' * ($balloonWidth + 4))
             $balloon = @()
             $balloon += $top
             foreach ($line in $fortuneLines) {
                 $pad = $balloonWidth - $line.Length
-                $balloon += "| $line$(' ' * $pad) |"
+                $balloon += "  || $line$(' ' * $pad) ||"
             }
             $balloon += $bottom
             $balloon += $cowLines

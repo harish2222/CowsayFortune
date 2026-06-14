@@ -41,6 +41,11 @@ function Invoke-WaveAnimation {
         return $CowOutput
     }
 
+    # No balloon detected — return original output
+    if ($balloonStart -eq -1) {
+        return $CowOutput
+    }
+
     $words = $Message -split '\s+' | Where-Object { $_.Length -gt 0 }
 
     # Build word appearance schedule: which word appears at which frame

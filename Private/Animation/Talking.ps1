@@ -60,5 +60,5 @@ function Invoke-TalkingAnimation {
     }
 
     Write-Host ""
-    return $sb.ToString()
+    return $CowOutput
 }

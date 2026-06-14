@@ -34,8 +34,11 @@ function Invoke-Forgum {
         [ValidateNotNullOrEmpty()]
         [string]$CowFile,
 
+        [ValidateNotNullOrEmpty()]
+        [ValidateLength(2,2)]
         [string]$Eyes,
 
+        [ValidateLength(2,2)]
         [string]$Tongue,
 
         [switch]$Lolcat

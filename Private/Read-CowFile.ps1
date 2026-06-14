@@ -22,11 +22,18 @@ function Read-CowFile {
 
     # Resolve path
     if ($CustomPath) {
-        $path = $CustomPath
+        $path = [System.IO.Path]::GetFullPath($CustomPath)
     }
     else {
         $cowsPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/Cows'
         $path = Join-Path $cowsPath "$CowName.cow"
+        # Security: ensure resolved path stays within Cows directory
+        $resolvedPath = [System.IO.Path]::GetFullPath($path)
+        $resolvedBase = [System.IO.Path]::GetFullPath($cowsPath)
+        if (-not $resolvedPath.StartsWith($resolvedBase, [StringComparison]::OrdinalIgnoreCase)) {
+            throw "Invalid cow name: '$CowName' resolves outside the Cows directory"
+        }
+        $path = $resolvedPath
     }
 
     if (-not (Test-Path $path)) {

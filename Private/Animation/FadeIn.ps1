@@ -28,6 +28,9 @@ function Invoke-FadeInAnimation {
     $totalLines = $lines.Count
     $esc = [char]27
 
+    # Guard against empty input
+    if ($totalLines -eq 0) { return $CowOutput }
+
     # ANSI brightness levels (dim to bright)
     $brightnessLevels = @(
         "${esc}[2m",       # Dim

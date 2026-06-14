@@ -84,7 +84,7 @@ Describe "Content Injection Tests" -Tag 'Security' {
             $output | Should -Not -Match '/bin/bash'
         }
         catch {
-            $_.Exception.Message | Should -Match 'Cow file not found|not loaded'
+            $_.Exception.Message | Should -Match 'Cow file not found|not loaded|Invalid cow name|resolves outside'
         }
     }
 

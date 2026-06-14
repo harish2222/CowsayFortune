@@ -32,26 +32,26 @@ function Invoke-DissolveAnimation {
     $lineCount = $lines.Count
 
     # Pad all lines to equal length
-    $paddedLines = @()
+    $paddedLines = [System.Collections.Generic.List[string]]::new($lines.Count)
     foreach ($line in $lines) {
-        $paddedLines += $line.PadRight($maxLen)
+        $paddedLines.Add($line.PadRight($maxLen))
     }
 
     # Build character grid as nested arrays (PS 5.1 compatible)
-    $charGrid = @()
+    $charGrid = [System.Collections.Generic.List[object]]::new($lineCount)
     for ($r = 0; $r -lt $lineCount; $r++) {
-        $row = @()
+        $row = [System.Collections.Generic.List[char]]::new($maxLen)
         for ($c = 0; $c -lt $maxLen; $c++) {
-            $row += $paddedLines[$r][$c]
+            $row.Add($paddedLines[$r][$c])
         }
-        $charGrid += ,$row
+        $charGrid.Add($row)
     }
 
     # Create shuffled list of all positions
     $totalChars = $lineCount * $maxLen
-    $positions = @()
+    $positions = [System.Collections.Generic.List[int]]::new($totalChars)
     for ($i = 0; $i -lt $totalChars; $i++) {
-        $positions += $i
+        $positions.Add($i)
     }
     # Fisher-Yates shuffle
     for ($i = $positions.Count - 1; $i -gt 0; $i--) {
@@ -65,13 +65,13 @@ function Invoke-DissolveAnimation {
     $revealedCount = 0
 
     # Display grid — starts as spaces
-    $displayGrid = @()
+    $displayGrid = [System.Collections.Generic.List[object]]::new($lineCount)
     for ($r = 0; $r -lt $lineCount; $r++) {
-        $row = @()
+        $row = [System.Collections.Generic.List[string]]::new($maxLen)
         for ($c = 0; $c -lt $maxLen; $c++) {
-            $row += ' '
+            $row.Add(' ')
         }
-        $displayGrid += ,$row
+        $displayGrid.Add($row)
     }
 
     $sb = [System.Text.StringBuilder]::new($maxLen * $lineCount * 2)

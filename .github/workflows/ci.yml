@@ -200,20 +200,6 @@ jobs:
             exit 1
           }
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results-${{ matrix.os }}-pwsh${{ matrix.pwsh }}
-          path: ${{ runner.temp }}/test-results.xml
-
-      - name: Upload coverage
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-${{ matrix.os }}-pwsh${{ matrix.pwsh }}
-          path: ${{ runner.temp }}/coverage.xml
-
   # ────────────────────────────────────────────
   # Phase 3: Package (only on tags)
   # ────────────────────────────────────────────
