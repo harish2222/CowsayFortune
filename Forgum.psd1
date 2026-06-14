@@ -1,6 +1,6 @@
 @{
     RootModule        = 'Forgum.psm1'
-    ModuleVersion     = '1.0.5'
+    ModuleVersion     = '1.0.6'
     GUID              = 'f7e6b3a1-2d84-4c9f-a5e0-1b3d7c8f9e2a'
     Author            = 'HKDEVS'
     CompanyName       = 'HKDEVS'
@@ -26,6 +26,22 @@
             ProjectUri   = 'https://github.com/harish2222/Forgum'
             IconUri      = 'https://raw.githubusercontent.com/harish2222/Forgum/main/icon.png'
             ReleaseNotes = @'
+## v1.0.6
+- Security: path traversal prevention in Read-CowFile (validates resolved paths stay in Cows dir)
+- Security: Set-CFConfig temp file race condition fix (New-TemporaryFile)
+- Bug: auto-start no longer overwrites user config on disk (in-memory only)
+- Bug: Set-CFConfig -WhatIf no longer invalidates cache
+- Bug: Invoke-Forgum ValidateLength(2,2) on Eyes/Tongue parameters
+- Bug: Talking.ps1 returns $CowOutput consistently
+- Bug: Blink.ps1 $BlinkRate parameter now actually affects timing
+- Bug: Wave.ps1 guards against no-balloon case
+- Bug: FadeIn.ps1 guards against zero totalLines division
+- Bug: Get-CFConfig null check (was falsy check)
+- Performance: Dissolve.ps1 O(n) with List[int/string] (was O(n^2) with array +=)
+- Other: Dynamic.ps1 path resolution and balloon style consistency
+- Other: Format-CowMessage handles words longer than MaxWidth
+- CI: all 6 jobs green across macOS/Linux/Windows, pwsh 5.1 + 7.4
+
 ## v1.0.5
 - Inno Setup installer for winget compatibility (EXE, no admin required)
 - One-liner install via /VERYSILENT flag
