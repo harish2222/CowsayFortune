@@ -127,11 +127,13 @@ jobs:
       - name: Cache Pester
         uses: actions/cache@v4
         with:
-          path: ~/.local/share/powershell/Modules/Pester
-          key: pester-5.7
+          path: |
+            ~/.local/share/powershell/Modules/Pester
+            ~/Documents/PowerShell/Modules/Pester
+          key: pester-5.7-${{ runner.os }}
 
       - name: Install Pester 5
-        shell: pwsh
+        shell: ${{ (matrix.pwsh == '5.1' && runner.os == 'Windows') && 'powershell' || 'pwsh' }}
         run: |
           if (-not (Get-Module -ListAvailable -Name Pester | Where-Object { $_.Version.Major -ge 5 })) {
             Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser -MinimumVersion 5.7.0 -MaximumVersion 5.99.99
